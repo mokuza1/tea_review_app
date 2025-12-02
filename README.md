@@ -95,9 +95,12 @@
 - デプロイ先（Render）
 - 使用予定のライブラリ
   - Devise（認証）
-  - omniauth-google-oauth2（SNSログインが必要なら）
-  - ActiveStorage（商品画像）
   - ransack（検索）
-  - acts-as-taggable-on（自由タグ）
   - kaminari（ページネーション）
   - Stimulus/Turbo（フロント）
+  - ActiveStorage（商品画像アップロード）
+    - AWS S3（画像ストレージ）
+  - ImageProcessing（画像リサイズ・最適化）
+  要検討
+  - omniauth-google-oauth2（SNSログインが必要なら）
+  - acts-as-taggable-on（自由タグ）
