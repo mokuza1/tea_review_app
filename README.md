@@ -104,3 +104,6 @@
   要検討
   - omniauth-google-oauth2（SNSログインが必要なら）
   - acts-as-taggable-on（自由タグ）
+
+## 画面遷移図
+参考figma：https://www.figma.com/design/gcZCgMaVid3iVncASX5k0p/%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=m6drLg3N6stMioQk-1
