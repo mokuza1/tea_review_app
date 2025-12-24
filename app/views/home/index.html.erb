@@ -1,0 +1,15 @@
+<div class="container mx-auto p-8 text-center">
+  <h1 class="text-4xl font-bold mb-8">デプロイ成功！</h1>
+  <p class="mb-8">開発中アプリケーションです。将来的に検索機能が追加されます。</p>
+  
+  <!-- 将来の検索フォーム用プレースホルダー -->
+  <div class="max-w-md mx-auto bg-gray-100 p-6 rounded-lg mb-8">
+    <p>検索フォームがここに配置予定（Ransack使用）</p>
+    <%= form_with url: '#', local: true, class: 'mt-4' do |f| %>
+      <%= f.search_field :q, placeholder: '検索キーワード', class: 'w-full p-2 border rounded' %>
+      <%= f.submit '検索', class: 'ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600' %>
+    <% end %>
+  </div>
+  
+  <p class="text-sm text-gray-600">© 2025</p>
+</div>
