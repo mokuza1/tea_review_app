@@ -10,9 +10,9 @@
 
     <!-- ログイン / 新規登録（仮） -->
     <div class="flex items-center space-x-4 text-sm font-medium">
-      <a href="#" class="text-gray-700 hover:text-gray-900">
-        ログイン
-      </a>
+      <%= link_to "ログイン",
+              new_user_session_path,
+              class: "text-gray-700 hover:text-gray-900" %>
 
       <a href="#"
          class="rounded-md bg-gray-900 px-4 py-2 text-white hover:bg-gray-700">
