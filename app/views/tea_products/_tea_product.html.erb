@@ -1,0 +1,24 @@
+<div class="flex bg-white rounded-lg shadow-sm border overflow-hidden">
+  <!-- 画像 -->
+  <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center">
+    <span class="text-xs text-gray-400">No Image</span>
+  </div>
+
+  <!-- テキスト -->
+  <div class="p-4 flex-1">
+    <h2 class="text-lg font-semibold">
+      <%= tea_product.name %>
+    </h2>
+
+    <% if tea_product.brand.present? %>
+      <p class="text-sm text-gray-500 mt-1">
+        <%= tea_product.brand.name_ja || tea_product.brand.name_en %>
+      </p>
+    <% end %>
+
+<!-- 補助情報（将来拡張用） -->
+    <div class="text-xs text-gray-400 mt-2">
+      登録日：<%= l tea_product.created_at, format: :short %>
+    </div>
+  </div>
+</div>

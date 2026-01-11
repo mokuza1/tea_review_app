@@ -3,38 +3,13 @@
     公開中のお茶一覧
   </h1>
 
-  <div class="space-y-4">
-    <% @tea_products.each do |tea| %>
-      <div class="flex bg-white rounded-lg shadow-sm border overflow-hidden">
-
-        <!-- 画像プレースホルダー -->
-        <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center">
-          <span class="text-xs text-gray-400">
-            No Image
-          </span>
-        </div>
-
-        <!-- 右側コンテンツ -->
-        <div class="flex flex-col justify-between p-4 flex-1">
-          <div>
-            <h2 class="text-lg font-semibold text-gray-800">
-              <%= tea.name %>
-            </h2>
-
-            <% if tea.brand.present? %>
-              <p class="text-sm text-gray-500 mt-1">
-                <%= tea.brand.name_ja || tea.brand.name_en %>
-              </p>
-            <% end %>
-          </div>
-
-          <!-- 補助情報（将来拡張用） -->
-          <div class="text-xs text-gray-400 mt-2">
-            登録日：<%= l tea.created_at, format: :short %>
-          </div>
-        </div>
-
-      </div>
-    <% end %>
-  </div>
+  <% if @tea_products.present? %>
+    <div class="space-y-4">
+      <%= render @tea_products %>
+    </div>
+  <% else %>
+    <div class="text-center py-8 text-gray-500">
+      公開中の紅茶がまだありません
+    </div>
+  <% end %>
 </div>
