@@ -1,0 +1,15 @@
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-6">
+    公開中のお茶一覧
+  </h1>
+
+  <% if @tea_products.present? %>
+    <div class="space-y-4">
+      <%= render @tea_products %>
+    </div>
+  <% else %>
+    <div class="text-center py-8 text-gray-500">
+      公開中の紅茶がまだありません
+    </div>
+  <% end %>
+</div>
