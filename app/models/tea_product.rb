@@ -3,6 +3,9 @@ class TeaProduct < ApplicationRecord
   belongs_to :approved_by, class_name: "User", optional: true
   belongs_to :brand, optional: true
 
+  has_many :tea_product_flavors, dependent: :destroy
+  has_many :flavors, through: :tea_product_flavors
+
   enum :status, {
     draft: 0,
     pending: 10,
