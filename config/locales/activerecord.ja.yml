@@ -8,4 +8,14 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード（確認）
-        
+      tea_product:
+        tea_types:
+          leaf: "茶葉"
+          tea_bag: "ティーバッグ"
+          powder: "粉末"
+          liquid: "リキッド"
+          bottle: "ボトル"
+        caffeine_levels:
+          caffeinated: "カフェインあり"
+          non_caffeinated: "ノンカフェイン"
+          decaffeinated: "カフェインレス"
