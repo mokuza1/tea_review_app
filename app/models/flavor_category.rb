@@ -1,0 +1,2 @@
+class FlavorCategory < ApplicationRecord
+end
