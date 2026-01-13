@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_13_162754) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_13_165517) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_162754) do
     t.datetime "updated_at", null: false
     t.index ["flavor_category_id", "name"], name: "index_flavors_on_flavor_category_id_and_name", unique: true
     t.index ["flavor_category_id"], name: "index_flavors_on_flavor_category_id"
+  end
+
+  create_table "tea_product_flavors", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "flavor_id", null: false
+    t.bigint "tea_product_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flavor_id"], name: "index_tea_product_flavors_on_flavor_id"
+    t.index ["tea_product_id", "flavor_id"], name: "index_tea_product_flavors_on_tea_product_id_and_flavor_id", unique: true
+    t.index ["tea_product_id"], name: "index_tea_product_flavors_on_tea_product_id"
   end
 
   create_table "tea_products", force: :cascade do |t|
@@ -79,6 +89,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_162754) do
   add_foreign_key "brands", "users"
   add_foreign_key "brands", "users", column: "approved_by_id"
   add_foreign_key "flavors", "flavor_categories"
+  add_foreign_key "tea_product_flavors", "flavors"
+  add_foreign_key "tea_product_flavors", "tea_products"
   add_foreign_key "tea_products", "brands"
   add_foreign_key "tea_products", "users"
   add_foreign_key "tea_products", "users", column: "approved_by_id"
