@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_13_165517) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_14_122841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_165517) do
     t.datetime "updated_at", null: false
     t.index ["flavor_category_id", "name"], name: "index_flavors_on_flavor_category_id_and_name", unique: true
     t.index ["flavor_category_id"], name: "index_flavors_on_flavor_category_id"
+  end
+
+  create_table "purchase_locations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "location_type", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["location_type"], name: "index_purchase_locations_on_location_type"
+    t.index ["name"], name: "index_purchase_locations_on_name", unique: true
   end
 
   create_table "tea_product_flavors", force: :cascade do |t|
