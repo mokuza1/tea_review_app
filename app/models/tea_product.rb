@@ -5,6 +5,8 @@ class TeaProduct < ApplicationRecord
 
   has_many :tea_product_flavors, dependent: :destroy
   has_many :flavors, through: :tea_product_flavors
+  has_many :tea_product_purchase_locations, dependent: :destroy
+  has_many :purchase_locations, through: :tea_product_purchase_locations
 
   enum :status, {
     draft: 0,
