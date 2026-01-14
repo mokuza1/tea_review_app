@@ -2,7 +2,7 @@ class PurchaseLocation < ApplicationRecord
   has_many :tea_product_purchase_locations, dependent: :destroy
   has_many :tea_products, through: :tea_product_purchase_locations
 
-  enum location_type: {
+  enum :location_type, {
     supermarket: 0,          # スーパーマーケット
     convenience_store: 10,    # コンビニエンスストア
     department_store: 20,     # 百貨店（高島屋、三越）
