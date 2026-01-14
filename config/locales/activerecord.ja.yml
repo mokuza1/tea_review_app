@@ -19,3 +19,13 @@ ja:
           caffeinated: "カフェインあり"
           non_caffeinated: "ノンカフェイン"
           decaffeinated: "カフェインレス"
+  enums:
+    purchase_location:
+      location_type:
+        supermarket: "スーパーマーケット"
+        convenience_store: "コンビニエンスストア"
+        department_store: "百貨店（高島屋・三越）"
+        tea_specialty_store: "紅茶専門店"
+        specialty_store: "専門店（カルディ・成城石井など）"
+        online_shop: "ネット通販"
+        other: "その他"
