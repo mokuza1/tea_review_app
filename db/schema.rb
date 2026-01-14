@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_14_122841) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_14_123726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_14_122841) do
     t.index ["tea_product_id"], name: "index_tea_product_flavors_on_tea_product_id"
   end
 
+  create_table "tea_product_purchase_locations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "purchase_location_id", null: false
+    t.bigint "tea_product_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_location_id"], name: "index_tea_product_purchase_locations_on_purchase_location_id"
+    t.index ["tea_product_id", "purchase_location_id"], name: "index_tppl_on_product_and_location", unique: true
+    t.index ["tea_product_id"], name: "index_tea_product_purchase_locations_on_tea_product_id"
+  end
+
   create_table "tea_products", force: :cascade do |t|
     t.datetime "approved_at"
     t.bigint "approved_by_id"
@@ -100,6 +110,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_14_122841) do
   add_foreign_key "flavors", "flavor_categories"
   add_foreign_key "tea_product_flavors", "flavors"
   add_foreign_key "tea_product_flavors", "tea_products"
+  add_foreign_key "tea_product_purchase_locations", "purchase_locations"
+  add_foreign_key "tea_product_purchase_locations", "tea_products"
   add_foreign_key "tea_products", "brands"
   add_foreign_key "tea_products", "users"
   add_foreign_key "tea_products", "users", column: "approved_by_id"
