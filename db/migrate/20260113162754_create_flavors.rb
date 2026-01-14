@@ -7,6 +7,6 @@ class CreateFlavors < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :flavors, [:flavor_category_id, :name], unique: true
+    add_index :flavors, [ :flavor_category_id, :name ], unique: true
   end
 end

@@ -8,7 +8,7 @@ class CreateTeaProductFlavors < ActiveRecord::Migration[8.1]
     end
 
     add_index :tea_product_flavors,
-              [:tea_product_id, :flavor_id],
+              [ :tea_product_id, :flavor_id ],
               unique: true
   end
 end
