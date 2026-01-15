@@ -45,6 +45,53 @@
       </p>
     <% end %>
 
+     <!-- フレーバー -->
+    <% if @tea_product.flavors.any? %>
+      <div class="text-gray-600">
+        フレーバー：
+        <div class="mt-2 space-y-2">
+          <% @tea_product.flavors
+              .includes(:flavor_category)
+              .group_by(&:flavor_category)
+              .each do |category, flavors| %>
+
+            <div>
+              <p class="font-medium text-gray-700">
+                <%= category.name %>
+              </p>
+              <ul class="flex flex-wrap gap-2 mt-1">
+                <% flavors.each do |flavor| %>
+                  <li class="px-2 py-1 text-sm bg-gray-100 rounded">
+                    <%= flavor.name %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- 購入場所 -->
+    <% if @tea_product.purchase_locations.any? %>
+      <div class="text-gray-600">
+        購入場所：
+        <ul class="mt-2 space-y-1">
+          <% @tea_product.purchase_locations.each do |location| %>
+            <li class="flex items-center gap-2">
+              <span class="text-sm text-gray-500">
+                <%= t("enums.purchase_location.location_type.#{location.location_type}") %>
+              </span>
+              <span class="font-medium">
+                <%= location.name %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
   </div>
 
   <!-- 戻るリンク -->
