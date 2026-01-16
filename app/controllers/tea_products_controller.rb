@@ -19,6 +19,6 @@ class TeaProductsController < ApplicationController
       .includes(:brand, :purchase_locations, flavors: :flavor_category)
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to tea_products_path, alert: '商品が見つかりませんでした'
+    redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   end
 end
