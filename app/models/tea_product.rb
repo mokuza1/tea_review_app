@@ -3,6 +3,11 @@ class TeaProduct < ApplicationRecord
   belongs_to :approved_by, class_name: "User", optional: true
   belongs_to :brand, optional: true
 
+  has_many :tea_product_flavors, dependent: :destroy
+  has_many :flavors, through: :tea_product_flavors
+  has_many :tea_product_purchase_locations, dependent: :destroy
+  has_many :purchase_locations, through: :tea_product_purchase_locations
+
   enum :status, {
     draft: 0,
     pending: 10,
@@ -30,6 +35,16 @@ class TeaProduct < ApplicationRecord
 
   # コールバック
   before_save :set_approved_at, if: :will_be_published?
+
+  # TeaProduct認可ロジック
+  scope :viewable_by, ->(user) {
+  if user
+    where(status: statuses[:published])
+      .or(where(user_id: user.id))
+  else
+    published
+  end
+  }
 
   private
 

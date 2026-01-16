@@ -105,4 +105,114 @@ end
 
 puts "TeaProducts created: 20"
 
+# =====================================
+# FlavorCategories / Flavors
+# =====================================
+puts "Creating flavor categories & flavors..."
+
+flavor_data = {
+  "フルーツ系" => %w[アップル ピーチ ベリー レモン オレンジ],
+  "フローラル系" => %w[ローズ ジャスミン ラベンダー],
+  "スパイス系" => %w[シナモン ジンジャー カルダモン],
+  "ナッツ・甘味系" => %w[バニラ キャラメル アーモンド],
+  "その他" => %w[スモーキー ハーブ]
+}
+
+flavor_categories = flavor_data.map do |category_name, flavors|
+  category = FlavorCategory.find_or_create_by!(name: category_name)
+
+  flavors.each do |flavor_name|
+    Flavor.find_or_create_by!(
+      name: flavor_name,
+      flavor_category: category
+    )
+  end
+
+  category
+end
+
+puts "FlavorCategories created: #{FlavorCategory.count}"
+puts "Flavors created: #{Flavor.count}"
+
+# =====================================
+# PurchaseLocations（enum 前提）
+# =====================================
+puts "Creating purchase locations..."
+
+purchase_locations_data = [
+  # スーパーマーケット
+  { name: "イオン", location_type: :supermarket },
+  { name: "西友", location_type: :supermarket },
+
+  # コンビニ
+  { name: "セブンイレブン", location_type: :convenience_store },
+  { name: "ファミリーマート", location_type: :convenience_store },
+
+  # 百貨店
+  { name: "高島屋", location_type: :department_store },
+  { name: "三越", location_type: :department_store },
+
+  # 紅茶専門店
+  { name: "ルピシア", location_type: :tea_specialty_store },
+  { name: "マリアージュ フレール", location_type: :tea_specialty_store },
+
+  # 専門店（カルディ・成城石井など）
+  { name: "カルディ", location_type: :specialty_store },
+  { name: "成城石井", location_type: :specialty_store },
+
+  # ネット通販
+  { name: "Amazon", location_type: :online_shop },
+  { name: "楽天市場", location_type: :online_shop },
+
+  # その他
+  { name: "イベント限定販売", location_type: :other }
+]
+
+purchase_locations_data.each do |attrs|
+  PurchaseLocation.find_or_create_by!(name: attrs[:name]) do |pl|
+    pl.location_type = attrs[:location_type]
+  end
+end
+
+puts "PurchaseLocations created: #{PurchaseLocation.count}"
+
+# =====================================
+# TeaProductFlavors
+# =====================================
+puts "Linking tea products with flavors..."
+
+published_products = TeaProduct.where(status: :published)
+all_flavors = Flavor.all
+
+published_products.each do |product|
+  # 2〜4個のフレーバーをランダム付与
+  all_flavors.sample(rand(2..4)).each do |flavor|
+    TeaProductFlavor.find_or_create_by!(
+      tea_product: product,
+      flavor: flavor
+    )
+  end
+end
+
+puts "TeaProductFlavors created: #{TeaProductFlavor.count}"
+
+# =====================================
+# TeaProductPurchaseLocations
+# =====================================
+puts "Linking tea products with purchase locations..."
+
+all_locations = PurchaseLocation.all
+
+published_products.each do |product|
+  # 1〜3件の購入場所をランダム付与
+  all_locations.sample(rand(1..3)).each do |location|
+    TeaProductPurchaseLocation.find_or_create_by!(
+      tea_product: product,
+      purchase_location: location
+    )
+  end
+end
+
+puts "TeaProductPurchaseLocations created: #{TeaProductPurchaseLocation.count}"
+
 puts "✅ Seeding completed successfully!"
