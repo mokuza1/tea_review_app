@@ -51,7 +51,6 @@
         フレーバー：
         <div class="mt-2 space-y-2">
           <% @tea_product.flavors
-              .includes(:flavor_category)
               .group_by(&:flavor_category)
               .each do |category, flavors| %>
 

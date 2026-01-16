@@ -36,6 +36,16 @@ class TeaProduct < ApplicationRecord
   # コールバック
   before_save :set_approved_at, if: :will_be_published?
 
+  # TeaProduct認可ロジック
+  scope :viewable_by, ->(user) {
+  if user
+    where(status: statuses[:published])
+      .or(where(user_id: user.id))
+  else
+    published
+  end
+  }
+
   private
 
   def set_approved_at
