@@ -2,30 +2,64 @@ ja:
   activerecord:
     models:
       user: ユーザー
+      tea_product: 紅茶商品
+      purchase_location: 購入場所
+
     attributes:
+      # --------------------
+      # User
+      # --------------------
       user:
         name: 名前
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード（確認）
+
+      # --------------------
+      # TeaProduct
+      # --------------------
       tea_product:
-        tea_types:
-          leaf: "茶葉"
-          tea_bag: "ティーバッグ"
-          powder: "粉末"
-          liquid: "リキッド"
-          bottle: "ボトル"
-        caffeine_levels:
-          caffeinated: "カフェインあり"
-          non_caffeinated: "ノンカフェイン"
-          decaffeinated: "カフェインレス"
-  enums:
-    purchase_location:
-      location_type:
-        supermarket: "スーパーマーケット"
-        convenience_store: "コンビニエンスストア"
-        department_store: "百貨店（高島屋・三越）"
-        tea_specialty_store: "紅茶専門店"
-        specialty_store: "専門店（カルディ・成城石井など）"
-        online_shop: "ネット通販"
-        other: "その他"
+        # 通常の属性（ラベル用）
+        name: 商品名
+        status: ステータス
+        tea_type: 種類
+        caffeine_level: カフェイン
+        brand: ブランド
+
+        # enum: status
+        status:
+          draft: 下書き
+          pending: 承認待ち
+          published: 公開中
+
+        # enum: tea_type
+        tea_type:
+          leaf: 茶葉
+          tea_bag: ティーバッグ
+          powder: 粉末
+          liquid: リキッド
+          bottle: ボトル
+
+        # enum: caffeine_level
+        caffeine_level:
+          caffeinated: カフェインあり
+          non_caffeinated: カフェインなし
+          decaffeinated: デカフェイン
+
+      # --------------------
+      # PurchaseLocation
+      # --------------------
+      purchase_location:
+        # 通常の属性（ラベル用）
+        name: 場所名
+        location_type: 種別
+
+        # enum: location_type
+        location_type:
+          supermarket: スーパーマーケット
+          convenience_store: コンビニエンスストア
+          department_store: 百貨店（高島屋・三越）
+          tea_specialty_store: 紅茶専門店
+          specialty_store: 専門店（カルディ・成城石井など）
+          online_shop: ネット通販
+          other: その他

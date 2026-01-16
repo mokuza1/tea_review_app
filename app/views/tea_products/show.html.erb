@@ -30,7 +30,7 @@
       <p class="text-gray-600">
         タイプ：
         <span class="font-medium">
-          <%= @tea_product.enum_i18n(:tea_type) %>
+           <%= @tea_product.enum_i18n(:tea_type) %>
         </span>
       </p>
     <% end %>
@@ -81,7 +81,7 @@
           <% @tea_product.purchase_locations.each do |location| %>
             <li class="flex items-center gap-2">
               <span class="text-sm text-gray-500">
-                <%= t("enums.purchase_location.location_type.#{location.location_type}") %>
+                <%= location.enum_i18n(:location_type) %>
               </span>
               <span class="font-medium">
                 <%= location.name %>
