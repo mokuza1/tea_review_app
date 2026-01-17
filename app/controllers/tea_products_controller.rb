@@ -6,6 +6,7 @@ class TeaProductsController < ApplicationController
       .published
       .includes(:brand)
       .order(created_at: :desc)
+      .page(params[:page])
   end
 
   def show
