@@ -2,7 +2,6 @@ class TeaProductsController < ApplicationController
   before_action :set_tea_product, only: :show
 
   def index
-    # brakeman:ignore:DynamicRenderPath
     @tea_products = TeaProduct
       .published
       .includes(:brand)
