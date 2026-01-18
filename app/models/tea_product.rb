@@ -11,6 +11,7 @@ class TeaProduct < ApplicationRecord
   enum :status, {
     draft: 0,
     pending: 10,
+    rejected: 15,
     published: 20
   }
 
