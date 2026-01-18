@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+  </head>
+
+  <body>
+    <header>
+      <h1>管理画面</h1>
+      <nav>
+        <%= link_to "Dashboard", admin_root_path %> |
+        <%= link_to "TeaProducts", admin_tea_products_path %> |
+        <%= link_to "Brands", admin_brands_path %> |
+        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
+      </nav>
+    </header>
+
+    <%= yield %>
+  </body>
+</html>
