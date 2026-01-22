@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Admin Dashboard</title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "admin", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "admin", "data-turbo-track": "reload", defer: true %>
+  </head>
+
+  <body class="admin bg-gray-100 text-gray-900">
+    <%= render "admin/shared/header" %>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>
