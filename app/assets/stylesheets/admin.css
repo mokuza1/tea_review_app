@@ -1,0 +1,13 @@
+/* 管理画面専用 */
+body.admin {
+  background-color: #f9fafb;
+}
+
+.admin-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* 管理画面専用の微調整 */
+body {
+  font-feature-settings: "palt";
+}
