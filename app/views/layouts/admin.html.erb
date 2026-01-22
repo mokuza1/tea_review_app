@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <title>Admin</title>
+    <title>Admin Dashboard</title>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "admin", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "admin", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
-    <header>
-      <h1>管理画面</h1>
-      <nav>
-        <%= link_to "Dashboard", admin_root_path %> |
-        <%= link_to "TeaProducts", admin_tea_products_path %> |
-        <%= link_to "Brands", admin_brands_path %> |
-        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
-      </nav>
-    </header>
+  <body class="admin bg-gray-100 text-gray-900">
+    <%= render "admin/shared/header" %>
 
-    <%= yield %>
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <%= yield %>
+    </main>
   </body>
 </html>
