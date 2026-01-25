@@ -1,4 +1,5 @@
 class Brand < ApplicationRecord
+  class InvalidStatusTransition < StandardError; end
   belongs_to :user
   belongs_to :approved_by,
              class_name: "User",
