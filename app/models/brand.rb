@@ -12,6 +12,10 @@ class Brand < ApplicationRecord
 
   validate :name_ja_or_name_en_present
 
+  def display_name
+    name_ja.presence || name_en
+  end
+
   private
 
   def name_ja_or_name_en_present
