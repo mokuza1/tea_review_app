@@ -1,4 +1,5 @@
 class TeaProduct < ApplicationRecord
+  class InvalidStatusTransition < StandardError; end
   belongs_to :user
   belongs_to :approved_by, class_name: "User", optional: true
   belongs_to :brand, optional: true
@@ -46,6 +47,48 @@ class TeaProduct < ApplicationRecord
     published
   end
   }
+
+  # ===========
+  # 一般ユーザー側
+  # ===========
+
+  # rejected 状態の商品を編集したら draft に戻す
+  def update_with_resubmission!(params)
+    transaction do
+      update!(params)
+      update!(status: :draft) if rejected?
+    end
+  end
+
+  def submit!
+    raise InvalidStatusTransition unless draft?
+
+    update!(status: :pending)
+  end
+
+  # ===========
+  # 管理者側
+  # ===========
+
+  def approve!(admin)
+    raise InvalidStatusTransition unless pending?
+
+    update!(
+      status: :published,
+      approved_by: admin,
+      approved_at: Time.current
+    )
+  end
+
+  def reject!(admin)
+    raise InvalidStatusTransition unless pending?
+
+    update!(
+      status: :rejected,
+      approved_by: admin,
+      approved_at: Time.current
+    )
+  end
 
   private
 
