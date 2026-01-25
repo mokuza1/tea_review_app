@@ -7,12 +7,28 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "home#index"
-  resources :tea_products, only: %i[index show]
+
+  resources :tea_products, only: %i[index show update] do
+    member do
+      patch :submit
+    end
+  end
 
   namespace :admin do
     root "dashboard#index"
 
-    resources :tea_products, only: %i[index show update]
-    resources :brands, only: %i[index show update]
+    resources :tea_products, only: %i[index show] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
+
+    resources :brands, only: %i[index show] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
   end
 end
