@@ -1,0 +1,44 @@
+<h2 class="text-xl font-bold mb-6">
+  TeaProducts 管理
+</h2>
+
+<table class="w-full border border-gray-200 text-sm">
+  <thead class="bg-gray-50">
+    <tr>
+      <th class="p-2 border">名前</th>
+      <th class="p-2 border">投稿者</th>
+      <th class="p-2 border">ステータス</th>
+      <th class="p-2 border">操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tea_products.each do |tea_product| %>
+      <tr class="border-t">
+        <td class="p-2"><%= tea_product.name %></td>
+        <td class="p-2"><%= tea_product.user.name %></td>
+        <td class="p-2"><%= tea_product.status %></td>
+
+        <td class="p-2 space-x-2">
+          <% if tea_product.pending? %>
+            <%= button_to "承認",
+                  approve_admin_tea_product_path(tea_product),
+                  method: :patch,
+                  class: "px-3 py-1 bg-green-600 text-white rounded text-xs" %>
+
+            <%= button_to "却下",
+                  reject_admin_tea_product_path(tea_product),
+                  method: :patch,
+                  class: "px-3 py-1 bg-red-600 text-white rounded text-xs" %>
+
+            <%= link_to "詳細",
+                  admin_tea_product_path(tea_product),
+                  class: "text-blue-600 hover:underline text-xs" %>
+          <% else %>
+            -
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
