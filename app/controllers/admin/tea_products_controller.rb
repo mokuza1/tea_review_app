@@ -1,7 +1,7 @@
 class Admin::TeaProductsController < Admin::BaseController
   def index
     @tea_products = TeaProduct
-    .includes(:user, :brand)
+    .includes(:user)
     .order(created_at: :desc)
 
     @tea_products = @tea_products.where(status: params[:status]) if params[:status].present?
