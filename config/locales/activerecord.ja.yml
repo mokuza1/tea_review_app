@@ -3,6 +3,7 @@ ja:
     models:
       user: ユーザー
       tea_product: 紅茶商品
+      brand: ブランド
       purchase_location: 購入場所
 
     attributes:
@@ -30,6 +31,7 @@ ja:
         status:
           draft: 下書き
           pending: 承認待ち
+          rejected: 却下
           published: 公開中
 
         # enum: tea_type
@@ -45,6 +47,25 @@ ja:
           caffeinated: カフェインあり
           non_caffeinated: カフェインなし
           decaffeinated: デカフェイン
+
+      # --------------------
+      # Brand
+      # --------------------
+      brand:
+        user: 投稿者
+        approved_by: 承認者
+        name_ja: 日本語名
+        name_en: 英語名
+        country: 国名
+        description: 説明
+        approved_at: 承認日時
+        status: ステータス
+        # enum: status
+        status:
+          draft: 下書き
+          pending: 承認待ち
+          rejected: 却下
+          published: 公開中
 
       # --------------------
       # PurchaseLocation

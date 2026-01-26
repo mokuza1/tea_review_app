@@ -5,6 +5,8 @@ class Brand < ApplicationRecord
              class_name: "User",
              optional: true
 
+  validate :name_ja_or_name_en_present
+
   enum :status, {
     draft: 0,
     pending: 10,
@@ -12,7 +14,9 @@ class Brand < ApplicationRecord
     published: 20
   }
 
-  validate :name_ja_or_name_en_present
+  def status_i18n
+    enum_i18n(:status)
+  end
 
   def approve!(admin)
     raise InvalidStatusTransition unless pending?
