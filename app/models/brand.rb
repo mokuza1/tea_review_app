@@ -14,10 +14,6 @@ class Brand < ApplicationRecord
     published: 20
   }
 
-  def status_i18n
-    enum_i18n(:status)
-  end
-
   def approve!(admin)
     raise InvalidStatusTransition unless pending?
 
