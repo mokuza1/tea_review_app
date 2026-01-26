@@ -1,4 +1,5 @@
 class TeaProductsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_tea_product, only: :show
 
   def index
@@ -10,6 +11,24 @@ class TeaProductsController < ApplicationController
   end
 
   def show
+  end
+
+  def update
+    @tea_product = current_user.tea_products.find(params[:id])
+    @tea_product.update_with_resubmission!(tea_product_params)
+
+    redirect_to tea_products_path, notice: "商品を更新しました"
+  rescue ActiveRecord::RecordInvalid
+    render :edit
+  end
+
+  def submit
+    @tea_product = current_user.tea_products.find(params[:id])
+    @tea_product.submit!
+
+    redirect_to tea_products_path, notice: "申請しました"
+  rescue InvalidStatusTransition
+    redirect_to tea_products_path, alert: "申請できない状態です"
   end
 
   private
