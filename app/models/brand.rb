@@ -14,6 +14,27 @@ class Brand < ApplicationRecord
     published: 20
   }
 
+  # ===========
+  # 一般ユーザー側
+  # ===========
+
+  def update_with_resubmission!(params)
+    transaction do
+      update!(params)
+      update!(status: :draft) if rejected?
+    end
+  end
+
+  def submit!
+    raise InvalidStatusTransition unless draft?
+
+    update!(status: :pending)
+  end
+
+  # ===========
+  # 管理者側
+  # ===========
+
   def approve!(admin)
     raise InvalidStatusTransition unless pending?
 

@@ -14,6 +14,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :brands, only: %i[update] do
+    member do
+      patch :submit
+    end
+  end
+
   namespace :admin do
     root "dashboard#index"
 
