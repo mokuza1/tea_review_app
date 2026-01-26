@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :brands, only: %i[index show] do
+    resources :brands, only: %i[index show update] do
       member do
         patch :approve
         patch :reject
