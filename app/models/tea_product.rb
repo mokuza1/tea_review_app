@@ -48,6 +48,10 @@ class TeaProduct < ApplicationRecord
   end
   }
 
+  def status_i18n
+    enum_i18n(:status)
+  end
+
   # ===========
   # 一般ユーザー側
   # ===========

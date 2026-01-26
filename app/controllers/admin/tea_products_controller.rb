@@ -8,7 +8,12 @@ class Admin::TeaProductsController < Admin::BaseController
   end
 
   def show
-    @tea_product = TeaProduct.find(params[:id])
+    @tea_product = TeaProduct.includes(
+      :user,
+      :brand,
+      :purchase_locations,
+      flavors: :flavor_category
+    ).find(params[:id])
   end
 
   def approve

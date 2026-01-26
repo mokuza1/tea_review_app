@@ -17,7 +17,7 @@
       <tr class="border-t">
         <td class="p-2"><%= tea_product.name %></td>
         <td class="p-2"><%= tea_product.user.name %></td>
-        <td class="p-2"><%= tea_product.status %></td>
+        <td class="p-2"><%= tea_product.enum_i18n(:status) %></td>
 
         <td class="p-2 space-x-2">
           <% if tea_product.pending? %>
@@ -30,13 +30,11 @@
                   reject_admin_tea_product_path(tea_product),
                   method: :patch,
                   class: "px-3 py-1 bg-red-600 text-white rounded text-xs" %>
-
-            <%= link_to "詳細",
-                  admin_tea_product_path(tea_product),
-                  class: "text-blue-600 hover:underline text-xs" %>
-          <% else %>
-            -
           <% end %>
+
+          <%= link_to "詳細",
+                admin_tea_product_path(tea_product),
+                class: "text-blue-600 hover:underline text-xs" %>
         </td>
       </tr>
     <% end %>

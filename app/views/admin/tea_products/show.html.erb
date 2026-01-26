@@ -27,9 +27,68 @@
       </div>
 
       <div>
+        <dt class="text-gray-500">茶葉タイプ</dt>
+        <dd class="font-medium">
+          <%= @tea_product.enum_i18n(:tea_type) %>
+        </dd>
+      </div>
+
+      <div>
+        <dt class="text-gray-500">カフェインレベル</dt>
+        <dd class="font-medium">
+          <%= @tea_product.enum_i18n(:caffeine_level) %>
+        </dd>
+      </div>
+
+<!-- フレーバー：カテゴリごとに表示 -->
+      <div class="sm:col-span-2">
+        <dt class="text-gray-500">フレーバー</dt>
+        <dd class="font-medium">
+          <% if @tea_product.flavors.any? %>
+            <% @tea_product.flavors.group_by(&:flavor_category).each do |category, flavors| %>
+              <div class="mb-3">
+                <div class="text-sm font-semibold text-gray-600 mb-1">
+                  <%= category.name %>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <% flavors.each do |flavor| %>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                      <%= flavor.name %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            未設定
+          <% end %>
+        </dd>
+      </div>
+
+      <div class="sm:col-span-2">
+        <dt class="text-gray-500">購入場所</dt>
+        <dd class="font-medium">
+          <% if @tea_product.purchase_locations.any? %>
+            <div class="space-y-2">
+              <% @tea_product.purchase_locations.each do |location| %>
+                <div>
+                  <span class="inline-block px-2 py-1 bg-gray-100 rounded text-xs mr-2">
+                    <%= location.enum_i18n(:location_type) || "未設定" %>
+                  </span>
+                  <%= location.name %>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            未設定
+          <% end %>
+        </dd>
+      </div>
+
+      <div>
         <dt class="text-gray-500">ステータス</dt>
         <dd class="font-medium">
-          <%= @tea_product.status %>
+          <%= @tea_product.enum_i18n(:status) %>
         </dd>
       </div>
     </dl>
