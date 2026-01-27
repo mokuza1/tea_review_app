@@ -1,0 +1,9 @@
+<h1>編集</h1>
+<%= render "form", tea_product: @tea_product %>
+
+<% if @tea_product.draft? %>
+  <%= button_to "申請する",
+        submit_tea_product_path(@tea_product),
+        method: :patch,
+        data: { confirm: "申請しますか？" } %>
+<% end %>

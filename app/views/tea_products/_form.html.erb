@@ -1,0 +1,13 @@
+<%= form_with model: tea_product do |f| %>
+  <% if tea_product.errors.any? %>
+    <ul class="text-red-500">
+      <% tea_product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div>
+    <%= f.submit "保存" %>
+  </div>
+<% end %>
