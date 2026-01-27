@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resources :tea_products, only: %i[index show update] do
+  resources :tea_products, only: %i[index show new create edit update] do
     member do
       patch :submit
     end
