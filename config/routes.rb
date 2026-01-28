@@ -18,6 +18,10 @@ Rails.application.routes.draw do
     member do
       patch :submit
     end
+
+    collection do
+      get :search
+    end
   end
 
   namespace :admin do

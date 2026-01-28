@@ -20,6 +20,25 @@ class BrandsController < ApplicationController
     redirect_to brands_path, alert: "申請できない状態です"
   end
 
+  def search
+    q = params[:q].to_s.strip
+
+    brands = Brand.published
+                  .where(
+                    "name_ja LIKE :q OR name_en LIKE :q",
+                    q: "%#{q}%"
+                  )
+                  .order(Arel.sql("COALESCE(name_ja, name_en) ASC"))
+                  .limit(10)
+
+    render json: brands.map { |brand|
+      {
+        id: brand.id,
+        name: brand.display_name
+      }
+    }
+  end
+
   private
 
   def brand_params

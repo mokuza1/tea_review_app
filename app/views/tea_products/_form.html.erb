@@ -7,6 +7,35 @@
     </ul>
   <% end %>
 
+  <div
+    data-controller="brand-suggest"
+    data-brand-suggest-url-value="/brands/search"
+  >
+    <label class="block font-bold mb-1">
+      ブランド
+    </label>
+
+    <input
+      type="text"
+     data-brand-suggest-target="input"
+      data-action="input->brand-suggest#search keyup->brand-suggest#search"
+      placeholder="ブランド名を入力"
+      class="border p-2 w-full"
+      autocomplete="off"
+    >
+
+    <input
+      type="hidden"
+      name="tea_product[brand_id]"
+      data-brand-suggest-target="hidden"
+    >
+
+    <ul
+      data-brand-suggest-target="list"
+      class="border bg-white mt-1 max-h-40 overflow-y-auto"
+    ></ul>
+  </div>
+
   <div>
     <%= f.submit "保存" %>
   </div>
