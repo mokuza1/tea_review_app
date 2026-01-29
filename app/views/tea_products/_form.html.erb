@@ -37,6 +37,36 @@
     ></ul>
   </div>
 
+  <div
+    data-controller="flavor-select"
+    data-flavor-select-url-value="/flavor_categories"
+  >
+    <div>
+      <label class="font-bold">フレーバーカテゴリ</label>
+
+      <select
+        data-action="change->flavor-select#load"
+        class="border p-2 w-full"
+      >
+        <option value="">選択してください</option>
+        <% FlavorCategory.order(:name).each do |category| %>
+          <option value="<%= category.id %>">
+            <%= category.name %>
+          </option>
+         <% end %>
+      </select>
+    </div>
+
+    <div class="mt-4">
+      <label class="font-bold">フレーバー</label>
+
+      <div
+        data-flavor-select-target="list"
+        class="mt-2 space-y-1"
+      ></div>
+    </div>
+  </div>
+
   <div>
     <%= f.submit "保存" %>
   </div>

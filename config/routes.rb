@@ -24,6 +24,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :flavor_categories, only: [] do
+    resources :flavors, only: :index
+  end
+
   namespace :admin do
     root "dashboard#index"
 
