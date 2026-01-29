@@ -23,12 +23,34 @@ class TeaProductsController < ApplicationController
     @tea_product = current_user.tea_products.build(tea_product_params)
     @tea_product.status = :draft
 
-    if @tea_product.save
-      redirect_to edit_tea_product_path(@tea_product),
-                  notice: "下書きを作成しました"
-    else
-      render :new
+    ActiveRecord::Base.transaction do
+      if @tea_product.brand_id.present?
+
+      else
+        # ==================================
+        # 新規ブランドを同時作成（draft）
+        # ==================================
+        brand_name = params[:brand_name].to_s.strip
+
+        raise ActiveRecord::Rollback, "ブランド名が未入力です" if brand_name.blank?
+
+        brand = Brand.create!(
+          name_ja: brand_name,
+          status: :draft,
+          user: current_user
+        )
+
+        @tea_product.brand = brand
+      end
+
+      @tea_product.save!
     end
+
+    redirect_to edit_tea_product_path(@tea_product),
+                notice: "下書きを作成しました"
+  rescue ActiveRecord::RecordInvalid
+    flash.now[:alert] = "保存に失敗しました"
+    render :new, status: :unprocessable_entity
   end
 
   def edit
