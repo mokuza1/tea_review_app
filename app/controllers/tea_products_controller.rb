@@ -21,19 +21,32 @@ class TeaProductsController < ApplicationController
 
   def create
     @tea_product = current_user.tea_products.build(tea_product_params)
+
+    brand_id   = @tea_product.brand_id
+    brand_name = params[:brand_name].to_s.strip
+
+    # ==================================
+    # brand_id / brand_name 排他チェック
+    # ==================================
+    if brand_id.blank? && brand_name.blank?
+      flash.now[:alert] = "ブランドを選択するか、新しく入力してください"
+      render :new, status: :unprocessable_entity and return
+    end
+
+    if brand_id.present? && brand_name.present?
+      flash.now[:alert] = "既存ブランドを選ぶか、新規ブランド入力のどちらかにしてください"
+      render :new, status: :unprocessable_entity and return
+    end
+
     @tea_product.status = :draft
 
     ActiveRecord::Base.transaction do
-      if @tea_product.brand_id.present?
-
+      if brand_id.present?
+        # 既存ブランドを使用（何もしない）
       else
         # ==================================
         # 新規ブランドを同時作成（draft）
         # ==================================
-        brand_name = params[:brand_name].to_s.strip
-
-        raise ActiveRecord::Rollback, "ブランド名が未入力です" if brand_name.blank?
-
         brand = Brand.create!(
           name_ja: brand_name,
           status: :draft,
