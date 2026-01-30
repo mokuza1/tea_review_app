@@ -7,6 +7,11 @@
     </ul>
   <% end %>
 
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
   <div
     data-controller="brand-suggest"
     data-brand-suggest-url-value="/brands/search"
@@ -35,6 +40,30 @@
       data-brand-suggest-target="list"
       class="border bg-white mt-1 max-h-40 overflow-y-auto"
     ></ul>
+  </div>
+
+  <div>
+    <%= f.label :tea_type, "茶葉タイプ" %>
+
+    <%= f.select :tea_type,
+          TeaProduct.tea_types.keys.map { |k|
+            location = TeaProduct.new(tea_type: k)
+            [location.enum_i18n(:tea_type), k]
+          },
+          { include_blank: "選択してください" },
+          class: "border p-2 w-full" %>
+  </div>
+
+  <div>
+    <%= f.label :caffeine_level, "カフェイン" %>
+
+    <%= f.select :caffeine_level,
+          TeaProduct.caffeine_levels.keys.map { |k|
+            location = TeaProduct.new(caffeine_level: k)
+            [location.enum_i18n(:caffeine_level), k]
+          },
+          { include_blank: "選択してください" },
+          class: "border p-2 w-full" %>
   </div>
 
   <div
@@ -89,6 +118,15 @@
             placeholder: "例：カルディ コーヒーファーム",
             class: "border p-2 w-full" %>
     </div>
+  </div>
+
+  <div>
+    <%= f.label :description, "説明・レビュー" %>
+
+    <%= f.text_area :description,
+          rows: 6,
+          placeholder: "香り・味・後味・おすすめポイントなど自由に書いてください",
+          class: "border p-2 w-full" %>
   </div>
 
   <div>
