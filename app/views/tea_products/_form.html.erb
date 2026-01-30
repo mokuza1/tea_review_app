@@ -67,6 +67,27 @@
     </div>
   </div>
 
+  <div class="space-y-4">
+    <!-- 購入場所の種類（enum） -->
+    <div>
+      <%= f.label :location_type, "購入場所の種類" %>
+      <%= f.select :location_type,
+            PurchaseLocation.location_types.keys.map { |k|
+              location = PurchaseLocation.new(location_type: k)
+              [location.enum_i18n(:location_type), k]
+            },
+            { include_blank: "選択してください" },
+            class: "border p-2 w-full" %>
+    </div>
+
+    <div>
+      <%= f.label :name, "具体的な店名（例：成城石井 ）" %>
+      <%= f.text_field :name,
+            placeholder: "例：カルディ コーヒーファーム",
+            class: "border p-2 w-full" %>
+    </div>
+  </div>
+
   <div>
     <%= f.submit "保存" %>
   </div>
