@@ -2,7 +2,21 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["list"]
-  static values = { url: String }
+  static values = {
+    url: String,
+    selectedIds: String
+  }
+
+  connect() {
+    // edit 画面用：既存フレーバーIDを保持
+    this.selectedFlavorIds = []
+
+    if (this.hasSelectedIdsValue) {
+      this.selectedFlavorIds = this.selectedIdsValue
+        .split(",")
+        .map(id => parseInt(id))
+    }
+  }
 
   load(event) {
     const categoryId = event.target.value
@@ -25,6 +39,11 @@ export default class extends Controller {
       checkbox.name = "tea_product[flavor_ids][]"
       checkbox.value = flavor.id
       checkbox.classList.add("mr-2")
+
+      // ★ edit 画面での復元ポイント
+      if (this.selectedFlavorIds.includes(flavor.id)) {
+        checkbox.checked = true
+      }
 
       label.appendChild(checkbox)
       label.appendChild(document.createTextNode(flavor.name))
