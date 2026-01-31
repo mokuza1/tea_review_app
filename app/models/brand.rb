@@ -5,6 +5,8 @@ class Brand < ApplicationRecord
              class_name: "User",
              optional: true
 
+  has_many :tea_products
+
   validate :name_ja_or_name_en_present
 
   enum :status, {
