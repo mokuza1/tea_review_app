@@ -22,8 +22,8 @@ class TeaProductsController < ApplicationController
   def create
     @tea_product = current_user.tea_products.build(tea_product_params)
 
-    brand_id   = @tea_product.brand_id
-    brand_name = params[:brand_name].to_s.strip
+    brand_id = @tea_product.brand_id.presence
+    brand_name = tea_product_params[:brand_name].to_s.strip
 
     # ==================================
     # brand_id / brand_name 排他チェック
@@ -74,11 +74,37 @@ class TeaProductsController < ApplicationController
 
   def update
     @tea_product = current_user.tea_products.find(params[:id])
-    @tea_product.update_with_resubmission!(tea_product_params)
 
-    redirect_to tea_products_path, notice: "商品を更新しました"
+    normalized = tea_product_params.dup
+
+    brand_id   = normalized.delete(:brand_id).presence
+    brand_name = normalized.delete(:brand_name).to_s.strip
+
+    ActiveRecord::Base.transaction do
+      current_brand = @tea_product.brand
+      if brand_id.present?
+        @tea_product.brand = Brand.find(brand_id)
+
+      elsif brand_name.present?
+        if current_brand&.display_name == brand_name
+            # 変更なし → 何もしない(修正可能性)
+        else
+          brand = Brand.create!(
+            name_ja: brand_name,
+            status: :draft,
+            user: current_user
+          )
+          @tea_product.brand = brand
+        end
+      end
+
+      @tea_product.update_with_resubmission!(normalized)
+    end
+
+   redirect_to edit_tea_product_path(@tea_product),
+                notice: "商品を更新しました"
   rescue ActiveRecord::RecordInvalid
-    render :edit
+    render :edit, status: :unprocessable_entity
   end
 
   def submit
@@ -106,11 +132,12 @@ class TeaProductsController < ApplicationController
     params.require(:tea_product).permit(
       :name,
       :brand_id,
+      :brand_name,
       :tea_type,
       :caffeine_level,
       :description,
       flavor_ids: [],
-      purchase_location_ids: []
+      #purchase_location_ids: []
     )
   end
 end
