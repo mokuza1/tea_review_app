@@ -2,6 +2,7 @@ class TeaProduct < ApplicationRecord
   class InvalidStatusTransition < StandardError; end
 
   attr_accessor :brand_name
+  attr_accessor :selected_flavor_category_id
 
   belongs_to :user
   belongs_to :approved_by, class_name: "User", optional: true

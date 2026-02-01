@@ -1,26 +1,39 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["list"]
+  static targets = ["list", "category"]
   static values = {
     url: String,
-    selectedIds: String
+    selectedIds: String,
+    categoryId: Number
   }
 
   connect() {
-    // edit 画面用：既存フレーバーIDを保持
     this.selectedFlavorIds = []
 
     if (this.hasSelectedIdsValue) {
       this.selectedFlavorIds = this.selectedIdsValue
         .split(",")
         .map(id => parseInt(id))
+        .filter(id => !isNaN(id))
+    }
+
+    // edit画面用：大カテゴリ復元 & 自動ロード
+    if (this.hasCategoryIdValue && this.categoryTarget.value === "") {
+      this.categoryTarget.value = this.categoryIdValue
+      this.load({ target: this.categoryTarget })
     }
   }
 
   load(event) {
     const categoryId = event.target.value
     this.listTarget.innerHTML = ""
+
+    // hidden field に同期
+    const hidden = this.element.querySelector(
+      'input[name="tea_product[selected_flavor_category_id]"]'
+    )
+    if (hidden) hidden.value = categoryId
 
     if (!categoryId) return
 
@@ -40,7 +53,6 @@ export default class extends Controller {
       checkbox.value = flavor.id
       checkbox.classList.add("mr-2")
 
-      // ★ edit 画面での復元ポイント
       if (this.selectedFlavorIds.includes(flavor.id)) {
         checkbox.checked = true
       }

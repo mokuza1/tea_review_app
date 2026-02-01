@@ -67,6 +67,13 @@ class TeaProductsController < ApplicationController
   end
 
   def edit
+    @tea_product = current_user.tea_products
+      .includes(flavors: :flavor_category)
+      .find(params[:id])
+
+    @tea_product.selected_flavor_category_id ||=
+      @tea_product.flavors.first&.flavor_category_id
+
     unless @tea_product.draft? || @tea_product.rejected?
       redirect_to tea_products_path, alert: "編集できない状態です"
     end
@@ -104,6 +111,9 @@ class TeaProductsController < ApplicationController
    redirect_to edit_tea_product_path(@tea_product),
                 notice: "商品を更新しました"
   rescue ActiveRecord::RecordInvalid
+      # ★ 再描画用の復元
+    @tea_product.selected_flavor_category_id =
+      params.dig(:tea_product, :selected_flavor_category_id)
     render :edit, status: :unprocessable_entity
   end
 
@@ -136,6 +146,7 @@ class TeaProductsController < ApplicationController
       :tea_type,
       :caffeine_level,
       :description,
+      :selected_flavor_category_id,
       flavor_ids: [],
       #purchase_location_ids: []
     )

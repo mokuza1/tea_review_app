@@ -72,12 +72,17 @@
     data-controller="flavor-select"
     data-flavor-select-url-value="/flavor_categories"
     data-flavor-select-selected-ids-value="<%= @tea_product.flavor_ids.join(',') %>"
+    data-flavor-select-category-id-value="<%= @tea_product.selected_flavor_category_id %>"
   >
+
+    <%= f.hidden_field :selected_flavor_category_id %>
+
     <div>
       <label class="font-bold">フレーバーカテゴリ</label>
 
       <select
         data-action="change->flavor-select#load"
+        data-flavor-select-target="category"
         class="border p-2 w-full"
       >
         <option value="">選択してください</option>
