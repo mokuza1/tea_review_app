@@ -40,7 +40,7 @@ class TeaProduct < ApplicationRecord
   validates :caffeine_level, presence: true, unless: :draft?
 
   # コールバック
-  before_save :set_approved_at, if: :will_be_published?
+  # before_save :set_approved_at, if: :will_be_published?
 
   # TeaProduct認可ロジック
   scope :viewable_by, ->(user) {
