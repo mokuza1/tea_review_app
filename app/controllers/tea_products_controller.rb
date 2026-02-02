@@ -68,7 +68,10 @@ class TeaProductsController < ApplicationController
 
   def edit
     @tea_product = current_user.tea_products
-      .includes(flavors: :flavor_category)
+      .includes(
+        flavors: :flavor_category,
+        purchase_locations: []
+      )
       .find(params[:id])
 
     @tea_product.selected_flavor_category_id ||=
@@ -86,6 +89,7 @@ class TeaProductsController < ApplicationController
 
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
+    purchase_location_params = normalized.delete(:purchase_location)
 
     ActiveRecord::Base.transaction do
       current_brand = @tea_product.brand
@@ -94,7 +98,7 @@ class TeaProductsController < ApplicationController
 
       elsif brand_name.present?
         if current_brand&.display_name == brand_name
-            # 変更なし → 何もしない(修正可能性)
+            # 変更なし → 何もしない(修正可能性あり)
         else
           brand = Brand.create!(
             name_ja: brand_name,
@@ -105,13 +109,22 @@ class TeaProductsController < ApplicationController
         end
       end
 
+      # ---- TeaProduct 本体更新 ----
       @tea_product.update_with_resubmission!(normalized)
+
+      # ---- 購入場所更新 ----
+      if purchase_location_params.present?
+        save_purchase_location!(
+          tea_product: @tea_product,
+          params: purchase_location_params
+        )
+      end
     end
 
-   redirect_to edit_tea_product_path(@tea_product),
+    redirect_to edit_tea_product_path(@tea_product),
                 notice: "商品を更新しました"
   rescue ActiveRecord::RecordInvalid
-      # ★ 再描画用の復元
+      # 再描画用（フレーバー大カテゴリ保持）
     @tea_product.selected_flavor_category_id =
       params.dig(:tea_product, :selected_flavor_category_id)
     render :edit, status: :unprocessable_entity
@@ -138,6 +151,34 @@ class TeaProductsController < ApplicationController
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   end
 
+  def save_purchase_location!(tea_product:, params:)
+    location_type = params[:location_type]
+    name          = params[:name].to_s.strip
+
+    # 両方必須（DB設計と完全一致）
+    return if location_type.blank? || name.blank?
+
+    # 既存の購入場所（1件前提）
+    existing = tea_product.purchase_locations.first
+
+    if existing
+      existing.update!(
+        location_type: location_type,
+        name: name
+      )
+    else
+      location = PurchaseLocation.create!(
+        location_type: location_type,
+        name: name
+      )
+
+      TeaProductPurchaseLocation.create!(
+        tea_product: tea_product,
+        purchase_location: location
+      )
+    end
+  end
+
   def tea_product_params
     params.require(:tea_product).permit(
       :name,
@@ -148,7 +189,10 @@ class TeaProductsController < ApplicationController
       :description,
       :selected_flavor_category_id,
       flavor_ids: [],
-      #purchase_location_ids: []
+      purchase_location: [
+      :location_type,
+      :name
+      ]
     )
   end
 end

@@ -12,6 +12,6 @@ class PurchaseLocation < ApplicationRecord
     other: 60                 # その他
   }
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
   validates :location_type, presence: true
 end

@@ -104,26 +104,48 @@
     </div>
   </div>
 
- <!-- <div class="space-y-4">
-     購入場所の種類（enum）
-    <div>
-      <%= f.label :location_type, "購入場所の種類" %>
-      <%= f.select :location_type,
-            PurchaseLocation.location_types.keys.map { |k|
-              location = PurchaseLocation.new(location_type: k)
-              [location.enum_i18n(:location_type), k]
-            },
-            { include_blank: "選択してください" },
-            class: "border p-2 w-full" %>
+  <% purchase_location =
+       @tea_product.purchase_locations.first ||
+       @tea_product.purchase_locations.build %>
+
+  <div class="mb-8">
+    <h3 class="font-bold text-lg mb-2">購入場所</h3>
+
+    <!-- location_type -->
+    <div class="mb-4">
+      <label class="font-bold block mb-1">
+        購入場所の種類
+      </label>
+
+      <%= select_tag "tea_product[purchase_location][location_type]",
+        options_for_select(
+          PurchaseLocation.location_types.keys.map { |k|
+            [
+              PurchaseLocation.new(location_type: k)
+                .enum_i18n(:location_type),
+              k
+            ]
+          },
+          purchase_location.location_type
+        ),
+        prompt: "選択してください",
+        class: "border p-2 w-full"
+      %>
     </div>
 
+    <!-- name -->
     <div>
-      <%= f.label :name, "具体的な店名（例：成城石井 ）" %>
-      <%= f.text_field :name,
-            placeholder: "例：カルディ コーヒーファーム",
-            class: "border p-2 w-full" %>
+      <label class="font-bold block mb-1">
+        店名（必須）
+      </label>
+
+      <%= text_field_tag "tea_product[purchase_location][name]",
+        purchase_location.name,
+        placeholder: "例：成城石井 新宿店、Amazon など",
+        class: "border p-2 w-full"
+      %>
     </div>
-  </div> -->
+  </div>
 
   <div>
     <%= f.label :description, "説明・レビュー" %>
