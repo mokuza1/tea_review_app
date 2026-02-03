@@ -20,10 +20,13 @@ class TeaProductsController < ApplicationController
   end
 
   def create
-    @tea_product = current_user.tea_products.build(tea_product_params)
+    normalized = tea_product_params.dup
 
-    brand_id = @tea_product.brand_id.presence
-    brand_name = tea_product_params[:brand_name].to_s.strip
+    brand_id   = normalized.delete(:brand_id).presence
+    brand_name = normalized.delete(:brand_name).to_s.strip
+    purchase_location_params = normalized.delete(:purchase_location)
+
+    @tea_product = current_user.tea_products.build(normalized)
 
     # ==================================
     # brand_id / brand_name 排他チェック
@@ -54,6 +57,13 @@ class TeaProductsController < ApplicationController
         )
 
         @tea_product.brand = brand
+
+        if purchase_location_params.present?
+          save_purchase_location!(
+            tea_product: @tea_product,
+            params: purchase_location_params
+          )
+        end
       end
 
       @tea_product.save!
@@ -69,7 +79,7 @@ class TeaProductsController < ApplicationController
   def edit
     @tea_product = current_user.tea_products
       .includes(
-        flavors: :flavor_category,
+        :flavors,
         purchase_locations: []
       )
       .find(params[:id])
@@ -136,7 +146,9 @@ class TeaProductsController < ApplicationController
     SubmitTeaProductService.new(tea_product).call!
 
     redirect_to tea_products_path, notice: "申請しました"
-  rescue InvalidStatusTransition
+  rescue ActiveRecord::RecordNotFound
+    redirect_to tea_products_path, alert: "商品が見つかりませんでした"
+  rescue TeaProduct::InvalidStatusTransition
     redirect_to tea_products_path, alert: "申請できない状態です"
   end
 
@@ -145,7 +157,7 @@ class TeaProductsController < ApplicationController
   def set_tea_product
     @tea_product = TeaProduct
       .viewable_by(current_user)
-      .includes(:brand, :purchase_locations, flavors: :flavor_category)
+      .includes(:brand, :purchase_locations, :flavors)
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"

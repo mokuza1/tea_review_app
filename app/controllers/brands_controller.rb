@@ -7,8 +7,10 @@ class BrandsController < ApplicationController
 
     redirect_to brands_path,
       notice: "ブランドを更新しました。再申請する場合は「申請する」を押してください"
+  rescue ActiveRecord::RecordNotFound
+    redirect_to brands_path, alert: "ブランドが見つかりませんでした"
   rescue ActiveRecord::RecordInvalid
-    render :edit
+    render :edit, status: :unprocessable_entity
   end
 
   def submit
@@ -16,6 +18,8 @@ class BrandsController < ApplicationController
     @brand.submit!
 
     redirect_to brands_path, notice: "ブランドを申請しました"
+  rescue ActiveRecord::RecordNotFound
+    redirect_to brands_path, alert: "ブランドが見つかりませんでした"
   rescue Brand::InvalidStatusTransition
     redirect_to brands_path, alert: "申請できない状態です"
   end
