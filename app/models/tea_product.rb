@@ -34,10 +34,17 @@ class TeaProduct < ApplicationRecord
     decaffeinated: 20
   }
 
-  validates :name, presence: true, unless: :draft?
+  validates :name, presence: true, length: { maximum: 100 }, unless: :draft?
   validates :brand, presence: true, unless: :draft?
   validates :tea_type, presence: true, unless: :draft?
   validates :caffeine_level, presence: true, unless: :draft?
+  validates :selected_flavor_category_id,  presence: true,  unless: :draft?
+  validates :description, length: { maximum: 1000 }, allow_blank: true
+
+  validate :brand_must_be_published_or_pending_with_self, unless: :draft?
+  validate :at_least_one_flavor, unless: :draft?
+  validate :flavors_belong_to_selected_category, unless: :draft?
+  validate :only_one_purchase_location
 
   # コールバック
   # before_save :set_approved_at, if: :will_be_published?
@@ -107,5 +114,36 @@ class TeaProduct < ApplicationRecord
   def will_be_published?
     # statusがpublishedに変更される時だけtrueを返す
     status_changed? && published?
+  end
+
+  # Brand は published または同時申請（pending）中のみ許可
+  def brand_must_be_published_or_pending_with_self
+    return if brand.blank?
+
+    return if brand.published?
+    return if brand.pending? # SubmitTeaProductService 経由を想定
+
+    errors.add(:brand, "は承認済み、または申請中のものを選択してください")
+  end
+
+  def at_least_one_flavor
+    if flavors.empty?
+      errors.add(:base, "フレーバーを1つ以上選択してください")
+    end
+  end
+
+  # フレーバーは選択した大カテゴリに属している必要あり
+  def flavors_belong_to_selected_category
+    return if flavors.empty?
+
+    if flavors.any? { |f| f.flavor_category_id != selected_flavor_category_id }
+      errors.add(:base, "選択したフレーバーがカテゴリと一致していません")
+    end
+  end
+
+  def only_one_purchase_location
+    if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
+      errors.add(:base, "購入場所は1件のみ登録できます")
+    end
   end
 end

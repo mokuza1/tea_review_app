@@ -26,6 +26,7 @@ ja:
         tea_type: 種類
         caffeine_level: カフェイン
         brand: ブランド
+        selected_flavor_category_id: フレーバーカテゴリ
 
         # enum: status
         status:
@@ -84,3 +85,10 @@ ja:
           specialty_store: 専門店（カルディ・成城石井など）
           online_shop: ネット通販
           other: その他
+
+    errors:
+      models:
+        tea_product:
+          attributes:
+            name:
+              blank: "商品名を入力してください"

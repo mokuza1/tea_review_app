@@ -12,6 +12,6 @@ class PurchaseLocation < ApplicationRecord
     other: 60                 # その他
   }
 
-  validates :name, presence: true
+  validates :name, presence: true, length: { minimum: 1, maximum: 100 }
   validates :location_type, presence: true
 end
