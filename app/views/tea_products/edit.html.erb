@@ -1,9 +1,13 @@
 <h1>編集</h1>
 <%= render "form", tea_product: @tea_product %>
 
+<p class="text-sm text-gray-500">
+  ※ 申請前に必ず「保存」を押してください。
+  保存されていない変更は反映されません。
+</p>
 <% if @tea_product.draft? %>
   <%= button_to "申請する",
         submit_tea_product_path(@tea_product),
         method: :patch,
-        data: { confirm: "申請しますか？" } %>
+        data: { turbo_confirm: "申請しますか？" } %>
 <% end %>

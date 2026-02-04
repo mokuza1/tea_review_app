@@ -145,7 +145,7 @@ class TeaProductsController < ApplicationController
 
     SubmitTeaProductService.new(tea_product).call!
 
-    redirect_to tea_products_path, notice: "申請しました"
+    redirect_to tea_products_path, notice: "申請しました（最後に保存した内容が申請されます）"
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   rescue TeaProduct::InvalidStatusTransition

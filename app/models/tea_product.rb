@@ -38,7 +38,7 @@ class TeaProduct < ApplicationRecord
   validates :brand, presence: true, unless: :draft?
   validates :tea_type, presence: true, unless: :draft?
   validates :caffeine_level, presence: true, unless: :draft?
-  validates :selected_flavor_category_id,  presence: true,  unless: :draft?
+  # validates :selected_flavor_category_id,  presence: true,  unless: :draft?
   validates :description, length: { maximum: 1000 }, allow_blank: true
 
   validate :brand_must_be_published_or_pending_with_self, unless: :draft?
@@ -78,6 +78,7 @@ class TeaProduct < ApplicationRecord
   def submit!
     raise InvalidStatusTransition unless draft?
 
+    validate_for_submit!
     update!(status: :pending)
   end
 
@@ -136,8 +137,10 @@ class TeaProduct < ApplicationRecord
   def flavors_belong_to_selected_category
     return if flavors.empty?
 
-    if flavors.any? { |f| f.flavor_category_id != selected_flavor_category_id }
-      errors.add(:base, "選択したフレーバーがカテゴリと一致していません")
+    category_ids = flavors.map(&:flavor_category_id).uniq
+
+    if category_ids.size > 1
+      errors.add(:base, "フレーバーは同一カテゴリ内で選択してください")
     end
   end
 
@@ -145,5 +148,9 @@ class TeaProduct < ApplicationRecord
     if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
       errors.add(:base, "購入場所は1件のみ登録できます")
     end
+  end
+
+  def validate_for_submit!
+    raise ActiveRecord::RecordInvalid, self unless valid?
   end
 end
