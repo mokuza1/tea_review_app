@@ -34,10 +34,10 @@ class TeaProduct < ApplicationRecord
     decaffeinated: 20
   }
 
-  validates :name, presence: true, length: { maximum: 100 }, unless: :draft?
-  validates :brand, presence: true, unless: :draft?
-  validates :tea_type, presence: true, unless: :draft?
-  validates :caffeine_level, presence: true, unless: :draft?
+  validates :name, presence: { message: "を入力してください" }, length: { maximum: 100 }, unless: :draft?
+  validates :brand, presence: { message: "を選択してください" }, unless: :draft?
+  validates :tea_type, presence: { message: "を選択してください" }, unless: :draft?
+  validates :caffeine_level, presence: { message: "を選択してください" }, unless: :draft?
   # validates :selected_flavor_category_id,  presence: true,  unless: :draft?
   validates :description, length: { maximum: 1000 }, allow_blank: true
 
@@ -75,11 +75,12 @@ class TeaProduct < ApplicationRecord
     end
   end
 
-  def submit!
-    raise InvalidStatusTransition unless draft?
+  def submit
+    return false unless draft?
+    return false unless valid?
 
-    validate_for_submit!
-    update!(status: :pending)
+    self.status = :pending
+    save
   end
 
   # ===========
@@ -150,7 +151,7 @@ class TeaProduct < ApplicationRecord
     end
   end
 
-  def validate_for_submit!
-    raise ActiveRecord::RecordInvalid, self unless valid?
-  end
+  # def validate_for_submit!
+    # raise ActiveRecord::RecordInvalid, self unless valid?
+  # end
 end

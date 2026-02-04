@@ -38,10 +38,11 @@ class Brand < ApplicationRecord
     end
   end
 
-  def submit!
-    raise InvalidStatusTransition unless draft?
+  def submit
+    return false unless draft?
 
-    update!(status: :pending)
+    self.status = :pending
+    valid? && save
   end
 
   # ===========

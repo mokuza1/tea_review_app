@@ -141,15 +141,16 @@ class TeaProductsController < ApplicationController
   end
 
   def submit
-    tea_product = current_user.tea_products.find(params[:id])
+    @tea_product = current_user.tea_products.find(params[:id])
 
-    SubmitTeaProductService.new(tea_product).call!
-
-    redirect_to tea_products_path, notice: "申請しました（最後に保存した内容が申請されます）"
+    if SubmitTeaProductService.new(@tea_product).call
+      redirect_to tea_products_path,
+                  notice: "申請しました（最後に保存した内容が申請されます）"
+    else
+      render :edit, status: :unprocessable_entity
+    end
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
-  rescue TeaProduct::InvalidStatusTransition
-    redirect_to tea_products_path, alert: "申請できない状態です"
   end
 
   private

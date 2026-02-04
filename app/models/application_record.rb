@@ -9,7 +9,7 @@ class ApplicationRecord < ActiveRecord::Base
     return if enum_key.blank?
 
     I18n.t(
-      "activerecord.attributes.#{self.class.model_name.i18n_key}.#{enum_name}.#{enum_key}"
+      "activerecord.enums.#{self.class.model_name.i18n_key}.#{enum_name}.#{enum_key}"
     )
   end
 end
