@@ -1,5 +1,8 @@
 class Brand < ApplicationRecord
   class InvalidStatusTransition < StandardError; end
+
+  include PreventableDestroyIfPublished
+
   belongs_to :user
   belongs_to :approved_by,
              class_name: "User",
@@ -13,8 +16,6 @@ class Brand < ApplicationRecord
   validates :description, length: { maximum: 1000 }, allow_blank: true
 
   validate :name_ja_or_name_en_present
-
-  before_destroy :prevent_destroy_if_published
 
   enum :status, {
     draft: 0,
@@ -74,13 +75,6 @@ class Brand < ApplicationRecord
   def name_ja_or_name_en_present
     if name_ja.blank? && name_en.blank?
       errors.add(:base, "ブランド名（日本語または英語）のいずれかを入力してください")
-    end
-  end
-
-  def prevent_destroy_if_published
-    if published?
-      errors.add(:base, "承認済みブランドは削除できません")
-      throw(:abort)
     end
   end
 end

@@ -1,6 +1,8 @@
 class TeaProduct < ApplicationRecord
   class InvalidStatusTransition < StandardError; end
 
+  include PreventableDestroyIfPublished
+
   attr_accessor :brand_name
   attr_accessor :selected_flavor_category_id
 
@@ -44,7 +46,8 @@ class TeaProduct < ApplicationRecord
   validate :brand_must_be_published_or_pending_with_self, unless: :draft?
   validate :at_least_one_flavor, unless: :draft?
   validate :flavors_belong_to_selected_category, unless: :draft?
-  validate :only_one_purchase_location
+  # validate :only_one_purchase_location
+  validate :validate_purchase_locations, unless: :draft?
 
   # コールバック
   # before_save :set_approved_at, if: :will_be_published?
@@ -148,11 +151,20 @@ class TeaProduct < ApplicationRecord
     end
   end
 
-  def only_one_purchase_location
-    if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
+  def validate_purchase_locations
+    active_locations = tea_product_purchase_locations.reject(&:marked_for_destruction?)
+  
+    if active_locations.empty?
+      errors.add(:base, "購入場所を1件登録してください")
+    elsif active_locations.size > 1
       errors.add(:base, "購入場所は1件のみ登録できます")
     end
   end
+  #def only_one_purchase_location
+   # if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
+    #  errors.add(:base, "購入場所は1件のみ登録できます")
+   # end
+  #end
 
   # def validate_for_submit!
     # raise ActiveRecord::RecordInvalid, self unless valid?
