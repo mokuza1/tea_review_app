@@ -18,9 +18,18 @@ export default class extends Controller {
         .filter(id => !isNaN(id))
     }
 
-    // edit画面用：大カテゴリ復元 & 自動ロード
-    if (this.hasCategoryIdValue && this.categoryTarget.value === "") {
-      this.categoryTarget.value = this.categoryIdValue
+    // ★ 追加：hidden field からも拾う
+    const hidden = this.element.querySelector(
+      'input[name="tea_product[selected_flavor_category_id]"]'
+    )
+
+    const categoryId =
+      hidden?.value ||
+      this.categoryTarget.value ||
+      this.categoryIdValue
+
+    if (categoryId) {
+      this.categoryTarget.value = categoryId
       this.load({ target: this.categoryTarget })
     }
   }
@@ -43,6 +52,7 @@ export default class extends Controller {
   }
 
   render(flavors) {
+    this.listTarget.innerHTML = ""
     flavors.forEach(flavor => {
       const label = document.createElement("label")
       label.classList.add("block")

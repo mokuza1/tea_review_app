@@ -1,6 +1,7 @@
 class TeaProductsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_tea_product, only: %i[show edit]
+  before_action :prepare_edit_form, only: %i[edit update submit]
 
   def index
     @tea_products = TeaProduct
@@ -77,15 +78,12 @@ class TeaProductsController < ApplicationController
   end
 
   def edit
-    @tea_product = current_user.tea_products
-      .includes(
-        :flavors,
-        purchase_locations: []
-      )
-      .find(params[:id])
-
-    @tea_product.selected_flavor_category_id ||=
-      @tea_product.flavors.first&.flavor_category_id
+   # @tea_product = current_user.tea_products
+     # .includes(
+       # :flavors,
+       # purchase_locations: []
+     # )
+     # .find(params[:id])
 
     unless @tea_product.draft? || @tea_product.rejected?
       redirect_to tea_products_path, alert: "編集できない状態です"
@@ -134,9 +132,7 @@ class TeaProductsController < ApplicationController
     redirect_to edit_tea_product_path(@tea_product),
                 notice: "商品を更新しました"
   rescue ActiveRecord::RecordInvalid
-      # 再描画用（フレーバー大カテゴリ保持）
-    @tea_product.selected_flavor_category_id =
-      params.dig(:tea_product, :selected_flavor_category_id)
+    prepare_edit_form
     render :edit, status: :unprocessable_entity
   end
 
@@ -147,6 +143,7 @@ class TeaProductsController < ApplicationController
       redirect_to tea_products_path,
                   notice: "申請しました（最後に保存した内容が申請されます）"
     else
+      prepare_edit_form
       render :edit, status: :unprocessable_entity
     end
   rescue ActiveRecord::RecordNotFound
@@ -162,6 +159,16 @@ class TeaProductsController < ApplicationController
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
+  end
+
+  # 大カテゴリ再描画
+  def prepare_edit_form
+    return unless @tea_product
+
+    @tea_product.selected_flavor_category_id =
+      params.dig(:tea_product, :selected_flavor_category_id) ||
+      @tea_product.selected_flavor_category_id ||
+      @tea_product.flavors.first&.flavor_category_id
   end
 
   def save_purchase_location!(tea_product:, params:)

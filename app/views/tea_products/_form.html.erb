@@ -75,7 +75,8 @@
     data-flavor-select-category-id-value="<%= @tea_product.selected_flavor_category_id %>"
   >
 
-    <%= f.hidden_field :selected_flavor_category_id %>
+    <%= f.hidden_field :selected_flavor_category_id,
+      value: @tea_product.selected_flavor_category_id %>
 
     <div>
       <label class="font-bold">フレーバーカテゴリ</label>
@@ -87,7 +88,10 @@
       >
         <option value="">選択してください</option>
         <% FlavorCategory.order(:name).each do |category| %>
-          <option value="<%= category.id %>">
+          <option
+            value="<%= category.id %>"
+            <%= "selected" if category.id == @tea_product.selected_flavor_category_id.to_i %>
+          >
             <%= category.name %>
           </option>
         <% end %>

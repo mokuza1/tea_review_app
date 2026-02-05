@@ -69,6 +69,9 @@ class TeaProduct < ApplicationRecord
 
   # rejected 状態の商品を編集したら draft に戻す
   def update_with_resubmission!(params)
+    self.selected_flavor_category_id =
+      params[:selected_flavor_category_id]
+
     transaction do
       update!(params)
       update!(status: :draft) if rejected?
