@@ -1,9 +1,19 @@
 class Brand < ApplicationRecord
   class InvalidStatusTransition < StandardError; end
+
+  include PreventableDestroyIfPublished
+
   belongs_to :user
   belongs_to :approved_by,
              class_name: "User",
              optional: true
+
+  has_many :tea_products
+
+  validates :name_ja, length: { maximum: 255 }, allow_blank: true
+  validates :name_en, length: { maximum: 255 }, allow_blank: true
+  validates :country, length: { maximum: 100 }, allow_blank: true
+  validates :description, length: { maximum: 1000 }, allow_blank: true
 
   validate :name_ja_or_name_en_present
 
@@ -13,6 +23,10 @@ class Brand < ApplicationRecord
     rejected: 15,
     published: 20
   }
+
+  def display_name
+    name_ja.presence || name_en
+  end
 
   # ===========
   # 一般ユーザー側
@@ -25,10 +39,11 @@ class Brand < ApplicationRecord
     end
   end
 
-  def submit!
-    raise InvalidStatusTransition unless draft?
+  def submit
+    return false unless draft?
 
-    update!(status: :pending)
+    self.status = :pending
+    valid? && save
   end
 
   # ===========
@@ -53,10 +68,6 @@ class Brand < ApplicationRecord
       approved_by: admin,
       approved_at: Time.current
     )
-  end
-
-  def display_name
-    name_ja.presence || name_en
   end
 
   private

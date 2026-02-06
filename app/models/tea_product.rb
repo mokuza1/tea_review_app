@@ -1,5 +1,11 @@
 class TeaProduct < ApplicationRecord
   class InvalidStatusTransition < StandardError; end
+
+  include PreventableDestroyIfPublished
+
+  attr_accessor :brand_name
+  attr_accessor :selected_flavor_category_id
+
   belongs_to :user
   belongs_to :approved_by, class_name: "User", optional: true
   belongs_to :brand, optional: true
@@ -30,13 +36,21 @@ class TeaProduct < ApplicationRecord
     decaffeinated: 20
   }
 
-  validates :name, presence: true, unless: :draft?
-  validates :brand, presence: true, unless: :draft?
-  validates :tea_type, presence: true, unless: :draft?
-  validates :caffeine_level, presence: true, unless: :draft?
+  validates :name, presence: { message: "を入力してください" }, length: { maximum: 100 }, unless: :draft?
+  validates :brand, presence: { message: "を選択してください" }, unless: :draft?
+  validates :tea_type, presence: { message: "を選択してください" }, inclusion: { in: tea_types.keys }, unless: :draft?
+  validates :caffeine_level, presence: { message: "を選択してください" }, inclusion: { in: caffeine_levels.keys }, unless: :draft?
+  # validates :selected_flavor_category_id,  presence: true,  unless: :draft?
+  validates :description, length: { maximum: 1000 }, allow_blank: true
+
+  validate :brand_must_be_published_or_pending_with_self, unless: :draft?
+  validate :at_least_one_flavor, unless: :draft?
+  validate :flavors_belong_to_selected_category, unless: :draft?
+  # validate :only_one_purchase_location
+  validate :validate_purchase_locations, unless: :draft?
 
   # コールバック
-  before_save :set_approved_at, if: :will_be_published?
+  # before_save :set_approved_at, if: :will_be_published?
 
   # TeaProduct認可ロジック
   scope :viewable_by, ->(user) {
@@ -58,16 +72,21 @@ class TeaProduct < ApplicationRecord
 
   # rejected 状態の商品を編集したら draft に戻す
   def update_with_resubmission!(params)
+    self.selected_flavor_category_id =
+      params[:selected_flavor_category_id]
+
     transaction do
       update!(params)
       update!(status: :draft) if rejected?
     end
   end
 
-  def submit!
-    raise InvalidStatusTransition unless draft?
+  def submit
+    return false unless draft?
+    return false unless valid?
 
-    update!(status: :pending)
+    self.status = :pending
+    save
   end
 
   # ===========
@@ -104,4 +123,50 @@ class TeaProduct < ApplicationRecord
     # statusがpublishedに変更される時だけtrueを返す
     status_changed? && published?
   end
+
+  # Brand は published または同時申請（pending）中のみ許可
+  def brand_must_be_published_or_pending_with_self
+    return if brand.blank?
+
+    return if brand.published?
+    return if brand.pending? # SubmitTeaProductService 経由を想定
+
+    errors.add(:brand, "は承認済み、または申請中のものを選択してください")
+  end
+
+  def at_least_one_flavor
+    if flavors.empty?
+      errors.add(:base, "フレーバーを1つ以上選択してください")
+    end
+  end
+
+  # フレーバーは選択した大カテゴリに属している必要あり
+  def flavors_belong_to_selected_category
+    return if flavors.empty?
+
+    category_ids = flavors.map(&:flavor_category_id).uniq
+
+    if category_ids.size > 1
+      errors.add(:base, "フレーバーは同一カテゴリ内で選択してください")
+    end
+  end
+
+  def validate_purchase_locations
+    active_locations = tea_product_purchase_locations.reject(&:marked_for_destruction?)
+
+    if active_locations.empty?
+      errors.add(:base, "購入場所を1件登録してください")
+    elsif active_locations.size > 1
+      errors.add(:base, "購入場所は1件のみ登録できます")
+    end
+  end
+  # def only_one_purchase_location
+  # if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
+  # errors.add(:base, "購入場所は1件のみ登録できます")
+  # end
+  # end
+
+  # def validate_for_submit!
+  # raise ActiveRecord::RecordInvalid, self unless valid?
+  # end
 end

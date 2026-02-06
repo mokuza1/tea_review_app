@@ -6,7 +6,11 @@ ja:
       brand: ブランド
       purchase_location: 購入場所
 
+    # =========================
+    # 属性名（ラベル）
+    # =========================
     attributes:
+
       # --------------------
       # User
       # --------------------
@@ -20,33 +24,12 @@ ja:
       # TeaProduct
       # --------------------
       tea_product:
-        # 通常の属性（ラベル用）
         name: 商品名
         status: ステータス
-        tea_type: 種類
+        tea_type: 茶葉タイプ
         caffeine_level: カフェイン
         brand: ブランド
-
-        # enum: status
-        status:
-          draft: 下書き
-          pending: 承認待ち
-          rejected: 却下
-          published: 公開中
-
-        # enum: tea_type
-        tea_type:
-          leaf: 茶葉
-          tea_bag: ティーバッグ
-          powder: 粉末
-          liquid: リキッド
-          bottle: ボトル
-
-        # enum: caffeine_level
-        caffeine_level:
-          caffeinated: カフェインあり
-          non_caffeinated: カフェインなし
-          decaffeinated: デカフェイン
+        selected_flavor_category_id: フレーバーカテゴリ
 
       # --------------------
       # Brand
@@ -60,22 +43,46 @@ ja:
         description: 説明
         approved_at: 承認日時
         status: ステータス
-        # enum: status
+
+      # --------------------
+      # PurchaseLocation
+      # --------------------
+      purchase_location:
+        name: 場所名
+        location_type: 種別
+
+    # =========================
+    # enum 翻訳
+    # =========================
+    enums:
+
+      tea_product:
         status:
           draft: 下書き
           pending: 承認待ち
           rejected: 却下
           published: 公開中
 
-      # --------------------
-      # PurchaseLocation
-      # --------------------
-      purchase_location:
-        # 通常の属性（ラベル用）
-        name: 場所名
-        location_type: 種別
+        tea_type:
+          leaf: 茶葉
+          tea_bag: ティーバッグ
+          powder: 粉末
+          liquid: リキッド
+          bottle: ボトル
 
-        # enum: location_type
+        caffeine_level:
+          caffeinated: カフェインあり
+          non_caffeinated: カフェインなし
+          decaffeinated: デカフェイン
+
+      brand:
+        status:
+          draft: 下書き
+          pending: 承認待ち
+          rejected: 却下
+          published: 公開中
+
+      purchase_location:
         location_type:
           supermarket: スーパーマーケット
           convenience_store: コンビニエンスストア
@@ -84,3 +91,13 @@ ja:
           specialty_store: 専門店（カルディ・成城石井など）
           online_shop: ネット通販
           other: その他
+
+    # =========================
+    # エラーメッセージ
+    # =========================
+    errors:
+      models:
+        tea_product:
+          attributes:
+            name:
+              blank: "商品名を入力してください"

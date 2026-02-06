@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resources :tea_products, only: %i[index show update] do
+  resources :tea_products, only: %i[index show new create edit update] do
     member do
       patch :submit
     end
@@ -18,6 +18,14 @@ Rails.application.routes.draw do
     member do
       patch :submit
     end
+
+    collection do
+      get :search
+    end
+  end
+
+  resources :flavor_categories, only: [] do
+    resources :flavors, only: :index
   end
 
   namespace :admin do
