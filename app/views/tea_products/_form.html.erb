@@ -1,4 +1,4 @@
-<%= form_with model: tea_product do |f| %>
+<%= form_with model: tea_product, local: true do |f| %>
   <% if tea_product.errors.any? %>
     <ul class="text-red-500">
       <% tea_product.errors.full_messages.each do |msg| %>
@@ -108,9 +108,7 @@
     </div>
   </div>
 
-  <% purchase_location =
-       @tea_product.purchase_locations.first ||
-       @tea_product.purchase_locations.build %>
+  <% purchase_location = @tea_product.purchase_locations.first %>
 
   <div class="mb-8">
     <h3 class="font-bold text-lg mb-2">購入場所</h3>
@@ -130,7 +128,7 @@
               k
             ]
           },
-          purchase_location.location_type
+          purchase_location&.location_type
         ),
         prompt: "選択してください",
         class: "border p-2 w-full"

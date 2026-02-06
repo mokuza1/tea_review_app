@@ -5,7 +5,7 @@
   ※ 申請前に必ず「保存」を押してください。
   保存されていない変更は反映されません。
 </p>
-<% if @tea_product.draft? %>
+<% if @tea_product.draft? || @tea_product.rejected? %>
   <%= button_to "申請する",
         submit_tea_product_path(@tea_product),
         method: :patch,
