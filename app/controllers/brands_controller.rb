@@ -15,7 +15,7 @@ class BrandsController < ApplicationController
 
   def submit
     @brand = current_user.brands.find(params[:id])
-    @brand.submit!
+    @brand.submit
 
     redirect_to brands_path, notice: "ブランドを申請しました"
   rescue ActiveRecord::RecordNotFound

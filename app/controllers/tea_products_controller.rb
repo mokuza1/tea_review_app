@@ -46,6 +46,7 @@ class TeaProductsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       if brand_id.present?
+        @tea_product.brand = Brand.find(brand_id)
         # 既存ブランドを使用（何もしない）
       else
         # ==================================
@@ -58,13 +59,13 @@ class TeaProductsController < ApplicationController
         )
 
         @tea_product.brand = brand
+      end
 
-        if purchase_location_params.present?
+      if purchase_location_params.present?
           save_purchase_location!(
             tea_product: @tea_product,
             params: purchase_location_params
           )
-        end
       end
 
       @tea_product.save!
@@ -187,7 +188,7 @@ class TeaProductsController < ApplicationController
         name: name
       )
     else
-      location = PurchaseLocation.create!(
+      location = PurchaseLocation.find_or_create_by!(
         location_type: location_type,
         name: name
       )
