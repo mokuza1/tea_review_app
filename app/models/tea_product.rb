@@ -38,8 +38,8 @@ class TeaProduct < ApplicationRecord
 
   validates :name, presence: { message: "を入力してください" }, length: { maximum: 100 }, unless: :draft?
   validates :brand, presence: { message: "を選択してください" }, unless: :draft?
-  validates :tea_type, presence: { message: "を選択してください" }, unless: :draft?
-  validates :caffeine_level, presence: { message: "を選択してください" }, unless: :draft?
+  validates :tea_type, presence: { message: "を選択してください" }, inclusion: { in: tea_types.keys }, unless: :draft?
+  validates :caffeine_level, presence: { message: "を選択してください" }, inclusion: { in: caffeine_levels.keys }, unless: :draft?
   # validates :selected_flavor_category_id,  presence: true,  unless: :draft?
   validates :description, length: { maximum: 1000 }, allow_blank: true
 

@@ -5,13 +5,17 @@ class SubmitTeaProductService
   end
 
   def call
-      ActiveRecord::Base.transaction do
-        return false unless submit_brand_if_needed
-        return false unless @tea_product.submit
-      end
+    success = false
 
-      true
+    ActiveRecord::Base.transaction do
+      raise ActiveRecord::Rollback unless submit_brand_if_needed
+      raise ActiveRecord::Rollback unless @tea_product.submit
+
+      success = true
     end
+
+    success
+  end
 
   private
 
