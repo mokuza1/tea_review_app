@@ -79,13 +79,6 @@ class TeaProductsController < ApplicationController
   end
 
   def edit
-   # @tea_product = current_user.tea_products
-     # .includes(
-       # :flavors,
-       # purchase_locations: []
-     # )
-     # .find(params[:id])
-
     unless @tea_product.draft? || @tea_product.rejected?
       redirect_to tea_products_path, alert: "編集できない状態です"
     end
@@ -107,7 +100,7 @@ class TeaProductsController < ApplicationController
 
       elsif brand_name.present?
         if current_brand&.display_name == brand_name
-            # 変更なし → 何もしない(修正可能性あり)
+          # 変更なし → 何もしない(修正可能性あり)
         else
           brand = Brand.create!(
             name_ja: brand_name,

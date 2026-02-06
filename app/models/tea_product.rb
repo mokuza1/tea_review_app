@@ -153,20 +153,20 @@ class TeaProduct < ApplicationRecord
 
   def validate_purchase_locations
     active_locations = tea_product_purchase_locations.reject(&:marked_for_destruction?)
-  
+
     if active_locations.empty?
       errors.add(:base, "購入場所を1件登録してください")
     elsif active_locations.size > 1
       errors.add(:base, "購入場所は1件のみ登録できます")
     end
   end
-  #def only_one_purchase_location
-   # if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
-    #  errors.add(:base, "購入場所は1件のみ登録できます")
-   # end
-  #end
+  # def only_one_purchase_location
+  # if tea_product_purchase_locations.reject(&:marked_for_destruction?).size > 1
+  # errors.add(:base, "購入場所は1件のみ登録できます")
+  # end
+  # end
 
   # def validate_for_submit!
-    # raise ActiveRecord::RecordInvalid, self unless valid?
+  # raise ActiveRecord::RecordInvalid, self unless valid?
   # end
 end
