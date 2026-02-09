@@ -1,4 +1,4 @@
-<%= link_to tea_product_path(tea_product), class: "block" do %>
+<%= link_to tea_product_path(tea_product, q: params[:q]&.to_unsafe_h), class: "block" do %>
   <div class="flex bg-white rounded-lg shadow-sm border overflow-hidden hover:bg-gray-50 transition">
     <!-- 画像 -->
     <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center">
