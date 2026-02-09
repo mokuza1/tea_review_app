@@ -28,6 +28,10 @@ class Brand < ApplicationRecord
     name_ja.presence || name_en
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name_ja name_en]
+  end
+
   # ===========
   # 一般ユーザー側
   # ===========

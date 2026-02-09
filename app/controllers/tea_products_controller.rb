@@ -4,11 +4,11 @@ class TeaProductsController < ApplicationController
   before_action :prepare_edit_form, only: %i[edit update submit]
 
   def index
-    @tea_products = TeaProduct
-      .published
-      .includes(:brand)
-      .order(created_at: :desc)
-      .page(params[:page])
+    @q = TeaProduct.where(status: :published).ransack(params[:q])
+    @tea_products = @q.result(distinct: true)
+                      .includes(:brand)
+                      .order(created_at: :desc)
+                      .page(params[:page])
   end
 
   def show
