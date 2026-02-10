@@ -4,11 +4,15 @@ class TeaProductsController < ApplicationController
   before_action :prepare_edit_form, only: %i[edit update submit]
 
   def index
-    @q = TeaProduct.where(status: :published).ransack(params[:q])
+    base_scope = TeaProduct.where(status: :published)
+
+    @q = base_scope.includes(:brand).ransack(search_params)
+
     @tea_products = @q.result(distinct: true)
-                      .includes(:brand)
                       .order(created_at: :desc)
                       .page(params[:page])
+    @brands = Brand.published.order(:name_ja)
+    @flavor_categories = FlavorCategory.includes(:flavors)
   end
 
   def show
@@ -207,6 +211,17 @@ class TeaProductsController < ApplicationController
       :location_type,
       :name
       ]
+    )
+  end
+
+  def search_params
+    return {} unless params[:q]
+
+    # URL引き継ぎ用（to_unsafe_h 前提）
+    params[:q].to_unsafe_h.slice(
+      "name_cont",
+      "brand_id_eq",
+      "flavors_id_eq"
     )
   end
 end

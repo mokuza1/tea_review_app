@@ -68,12 +68,12 @@ class TeaProduct < ApplicationRecord
 
   # 検索可能カラム
   def self.ransackable_attributes(auth_object = nil)
-    %w[name]
+    %w[name brand_id]
   end
 
   # 関連先で検索許可
   def self.ransackable_associations(auth_object = nil)
-    %w[brand]
+    %w[brand flavors]
   end
 
   # ===========
