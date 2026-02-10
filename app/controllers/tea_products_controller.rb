@@ -116,7 +116,11 @@ class TeaProductsController < ApplicationController
       end
 
       # ---- TeaProduct 本体更新 ----
-      @tea_product.update_with_resubmission!(normalized)
+      if @tea_product.rejected?
+        @tea_product.update_with_resubmission!(normalized)
+      else
+        @tea_product.update!(normalized)
+      end
 
       # ---- 購入場所更新 ----
       if purchase_location_params.present?
@@ -127,8 +131,13 @@ class TeaProductsController < ApplicationController
       end
     end
 
-    redirect_to edit_tea_product_path(@tea_product),
-                notice: "商品を更新しました"
+    if @tea_product.rejected?
+      redirect_to mypage_path,
+                  notice: "再申請用に下書きへ戻しました"
+    else
+      redirect_to edit_tea_product_path(@tea_product),
+                  notice: "商品を更新しました"
+    end
   rescue ActiveRecord::RecordInvalid
     prepare_edit_form
     render :edit, status: :unprocessable_entity
@@ -153,7 +162,7 @@ class TeaProductsController < ApplicationController
   def set_tea_product
     @tea_product = TeaProduct
       .viewable_by(current_user)
-      .includes(:brand, :purchase_locations, flavors: :flavor_category)
+      .includes(:brand, :purchase_locations, :flavors)
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"

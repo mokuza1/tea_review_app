@@ -1,0 +1,52 @@
+<div class="max-w-5xl mx-auto px-4 mb-16">
+  <h1 class="text-xl font-bold mb-6">
+    マイページ
+  </h1>
+
+  <h2 class="text-lg font-semibold mb-3">
+    自分の投稿一覧
+  </h2>
+
+  <table class="w-full border border-gray-300 text-sm">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="border p-2 w-36">画像</th>
+        <th class="border p-2">商品名</th>
+        <th class="border p-2 w-32">ステータス</th>
+        <th class="border p-2 w-32">操作</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @tea_products.each do |tea| %>
+        <tr>
+          <td class="border p-2">
+            <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center">
+              <span class="text-xs text-gray-400">No Image</span>
+            </div>
+          </td>
+
+          <td class="border p-2">
+            <%= link_to tea.name, tea_product_path(tea),
+                  class: "text-blue-600 hover:underline" %>
+          </td>
+
+          <td class="border p-2">
+            <%= tea.status_i18n %>
+          </td>
+
+          <td class="border p-2">
+            <% if tea.draft? || tea.rejected? %>
+              <%= link_to "編集",
+                    edit_tea_product_path(tea),
+                    class: "text-blue-600 hover:underline" %>
+            <% else %>
+              -
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</div>
