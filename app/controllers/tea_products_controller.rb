@@ -221,7 +221,8 @@ class TeaProductsController < ApplicationController
     params[:q].to_unsafe_h.slice(
       "name_or_brand_name_ja_or_brand_name_en_cont",
       "brand_id_eq",
-      "flavors_id_eq"
+      "flavors_id_eq",
+      "flavors_flavor_category_id_eq"
     )
   end
 end

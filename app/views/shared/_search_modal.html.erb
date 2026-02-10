@@ -18,26 +18,46 @@
       <div data-controller="flavor">
         <% @flavor_categories.each do |category| %>
 
-          <button
-            data-action="click->flavor#toggle"
-            class="w-full text-left font-semibold">
-            ▽ <%= category.name %>
-          </button>
+          <!-- 大カテゴリブロック -->
+          <div>
 
-          <div class="hidden ml-4">
+            <!-- ヘッダー行 -->
+            <div class="flex items-center justify-between">
 
-            <% category.flavors.each do |flavor| %>
-              <%= link_to flavor.name,
+              <!-- ▽ 開閉ボタン -->
+              <button
+                data-action="click->flavor#toggle"
+                class="font-semibold">
+                ▽
+              </button>
+
+              <!-- 大カテゴリ検索 -->
+              <%= link_to category.name,
                 tea_products_path(
                   q: (params[:q]&.to_unsafe_h || {}).merge(
-                    flavors_id_eq: flavor.id
+                    flavors_flavor_category_id_eq: category.id
                   )
                 ),
-                class: "block py-1 text-sm" %>
-            <% end %>
+                class: "font-semibold flex-1 ml-2 text-left hover:underline" %>
+
+            </div>
+
+            <!-- 👇 ここが toggle 対象（ボタンの直後に置く） -->
+            <div class="hidden ml-6">
+
+              <% category.flavors.each do |flavor| %>
+                <%= link_to flavor.name,
+                  tea_products_path(
+                    q: (params[:q]&.to_unsafe_h || {}).merge(
+                      flavors_id_eq: flavor.id
+                    )
+                  ),
+                  class: "block py-1 text-sm" %>
+              <% end %>
+
+            </div>
 
           </div>
-
         <% end %>
       </div>
 
