@@ -142,7 +142,7 @@
       </label>
 
       <%= text_field_tag "tea_product[purchase_location][name]",
-        purchase_location.name,
+        purchase_location&.name,
         placeholder: "例：成城石井 新宿店、Amazon など",
         class: "border p-2 w-full"
       %>
