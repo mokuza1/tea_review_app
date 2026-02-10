@@ -219,7 +219,7 @@ class TeaProductsController < ApplicationController
 
     # URL引き継ぎ用（to_unsafe_h 前提）
     params[:q].to_unsafe_h.slice(
-      "name_cont",
+      "name_or_brand_name_ja_or_brand_name_en_cont",
       "brand_id_eq",
       "flavors_id_eq"
     )
