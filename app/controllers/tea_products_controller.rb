@@ -1,5 +1,5 @@
 class TeaProductsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: %i[index show]
   before_action :set_tea_product, only: %i[show edit]
   before_action :prepare_edit_form, only: %i[edit update submit]
 
