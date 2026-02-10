@@ -95,8 +95,8 @@
 
   <!-- 戻るリンク -->
   <div class="mt-6">
-    <%= link_to "一覧へ戻る",
-                tea_products_path,
+    <%= link_to "検索結果に戻る",
+                tea_products_path(q: params[:q]&.to_unsafe_h),
                 class: "text-sm text-blue-600 hover:underline" %>
   </div>
 

@@ -24,8 +24,14 @@ class Brand < ApplicationRecord
     published: 20
   }
 
+  scope :published, -> { where(status: :published) }
+
   def display_name
     name_ja.presence || name_en
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id name_ja name_en]
   end
 
   # ===========

@@ -1,0 +1,84 @@
+<div
+  data-modal-target="overlay"
+  class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
+
+  <div class="bg-white w-full max-w-lg p-6 rounded-lg relative">
+
+    <button
+      data-action="click->modal#close"
+      class="absolute top-2 right-2">
+      ✕
+    </button>
+
+    <!-- 🌿 フレーバー -->
+    <div data-modal-target="flavorPanel" class="hidden">
+
+      <h2 class="font-bold mb-4">フレーバー</h2>
+
+      <div data-controller="flavor">
+        <% @flavor_categories.each do |category| %>
+
+          <!-- 大カテゴリブロック -->
+          <div>
+
+            <!-- ヘッダー行 -->
+            <div class="flex items-center justify-between">
+
+              <!-- ▽ 開閉ボタン -->
+              <button
+                data-action="click->flavor#toggle"
+                class="font-semibold">
+                ▽
+              </button>
+
+              <!-- 大カテゴリ検索 -->
+              <%= link_to category.name,
+                tea_products_path(
+                  q: (params[:q]&.to_unsafe_h || {}).merge(
+                    flavors_flavor_category_id_eq: category.id
+                  )
+                ),
+                class: "font-semibold flex-1 ml-2 text-left hover:underline" %>
+
+            </div>
+
+            <!-- 👇 ここが toggle 対象（ボタンの直後に置く） -->
+            <div class="hidden ml-6">
+
+              <% category.flavors.each do |flavor| %>
+                <%= link_to flavor.name,
+                  tea_products_path(
+                    q: (params[:q]&.to_unsafe_h || {}).merge(
+                      flavors_id_eq: flavor.id
+                    )
+                  ),
+                  class: "block py-1 text-sm" %>
+              <% end %>
+
+            </div>
+
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+
+    <!-- 🏷 ブランド -->
+    <div data-modal-target="brandPanel" class="hidden">
+
+      <h2 class="font-bold mb-4">ブランド</h2>
+
+      <% @brands.each do |brand| %>
+        <%= link_to brand.name_ja || brand.name_en,
+          tea_products_path(
+            q: (params[:q]&.to_unsafe_h || {}).merge(
+              brand_id_eq: brand.id
+            )
+          ),
+          class: "block py-1 text-sm" %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>

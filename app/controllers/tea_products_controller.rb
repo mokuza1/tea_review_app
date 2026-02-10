@@ -1,14 +1,18 @@
 class TeaProductsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: %i[index show]
   before_action :set_tea_product, only: %i[show edit]
   before_action :prepare_edit_form, only: %i[edit update submit]
 
   def index
-    @tea_products = TeaProduct
-      .published
-      .includes(:brand)
-      .order(created_at: :desc)
-      .page(params[:page])
+    base_scope = TeaProduct.where(status: :published)
+
+    @q = base_scope.includes(:brand).ransack(search_params)
+
+    @tea_products = @q.result(distinct: true)
+                      .order(created_at: :desc)
+                      .page(params[:page])
+    @brands = Brand.published.order(:name_ja)
+    @flavor_categories = FlavorCategory.includes(:flavors)
   end
 
   def show
@@ -149,7 +153,7 @@ class TeaProductsController < ApplicationController
   def set_tea_product
     @tea_product = TeaProduct
       .viewable_by(current_user)
-      .includes(:brand, :purchase_locations, :flavors)
+      .includes(:brand, :purchase_locations, flavors: :flavor_category)
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
@@ -207,6 +211,18 @@ class TeaProductsController < ApplicationController
       :location_type,
       :name
       ]
+    )
+  end
+
+  def search_params
+    return {} unless params[:q]
+
+    # URL引き継ぎ用（to_unsafe_h 前提）
+    params[:q].to_unsafe_h.slice(
+      "name_or_brand_name_ja_or_brand_name_en_cont",
+      "brand_id_eq",
+      "flavors_id_eq",
+      "flavors_flavor_category_id_eq"
     )
   end
 end
