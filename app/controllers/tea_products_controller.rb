@@ -215,6 +215,7 @@ class TeaProductsController < ApplicationController
       :caffeine_level,
       :description,
       :selected_flavor_category_id,
+      :image,
       flavor_ids: [],
       purchase_location: [
       :location_type,

@@ -7,6 +7,10 @@
     </ul>
   <% end %>
 
+  <%= form_with model: @tea_product do |f| %>
+    <%= f.file_field :image, accept: "image/*" %>
+  <% end %>
+
   <div>
     <%= f.label :name %>
     <%= f.text_field :name %>
