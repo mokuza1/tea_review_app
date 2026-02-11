@@ -53,7 +53,7 @@
     <% end %>
 
      <!-- フレーバー -->
-    <% if @tea_product.flavors.any? %>
+    <% if @tea_product.flavors.present? %>
       <div class="text-gray-600">
         フレーバー：
         <div class="mt-2 space-y-2">
@@ -80,7 +80,7 @@
     <% end %>
 
     <!-- 購入場所 -->
-    <% if @tea_product.purchase_locations.any? %>
+    <% if @tea_product.purchase_locations.present? %>
       <div class="text-gray-600">
         購入場所：
         <ul class="mt-2 space-y-1">

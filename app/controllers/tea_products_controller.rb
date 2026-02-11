@@ -1,6 +1,6 @@
 class TeaProductsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_tea_product, only: %i[show edit]
+  before_action :set_tea_product, only: %i[edit update]
   before_action :prepare_edit_form, only: %i[edit update submit]
 
   def index
@@ -16,6 +16,9 @@ class TeaProductsController < ApplicationController
   end
 
   def show
+    @tea_product = TeaProduct
+      .includes(:brand, :purchase_locations, flavors: :flavor_category)
+      .find(params[:id])
   end
 
   def new
@@ -162,7 +165,7 @@ class TeaProductsController < ApplicationController
   def set_tea_product
     @tea_product = TeaProduct
       .viewable_by(current_user)
-      .includes(:brand, :purchase_locations, :flavors)
+      .includes(:brand)
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
