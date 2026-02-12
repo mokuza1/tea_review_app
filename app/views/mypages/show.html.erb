@@ -24,7 +24,7 @@
             <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden">
 
               <% if tea.image.attached? %>
-                <%= image_tag tea.image.variant(resize_to_fill: [128, 128]),
+                <%= image_tag tea.image,
                       class: "w-full h-full object-cover" %>
               <% else %>
                 <span class="text-xs text-gray-400">No Image</span>

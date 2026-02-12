@@ -4,7 +4,7 @@
   <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center mb-8">
 
     <% if @tea_product.image.attached? %>
-      <%= image_tag @tea_product.image.variant(resize_to_limit: [800, 400]),
+      <%= image_tag @tea_product.image,
             class: "w-full h-full object-cover rounded-lg" %>
     <% else %>
       <span class="text-sm text-gray-400">

@@ -10,7 +10,7 @@
   <!-- 既存画像表示 -->
   <% if tea_product.image.attached? %>
     <div class="mb-2">
-      <%= image_tag tea_product.image.variant(resize_to_limit: [200, 200]),
+      <%= image_tag tea_product.image,
             class: "rounded border" %>
     </div>
   <% end %>
