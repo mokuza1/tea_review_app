@@ -6,7 +6,7 @@ class TeaProductsController < ApplicationController
   def index
     base_scope = TeaProduct.where(status: :published)
 
-    @q = base_scope.includes(:brand).ransack(search_params)
+    @q = base_scope.includes(:brand, :image_attachment).ransack(search_params)
 
     @tea_products = @q.result(distinct: true)
                       .order(created_at: :desc)
