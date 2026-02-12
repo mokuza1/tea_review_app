@@ -150,7 +150,7 @@ class TeaProductsController < ApplicationController
     @tea_product = current_user.tea_products.find(params[:id])
 
     if SubmitTeaProductService.new(@tea_product).call
-      redirect_to tea_products_path,
+      redirect_to mypage_path,
                   notice: "申請しました（最後に保存した内容が申請されます）"
     else
       prepare_edit_form
