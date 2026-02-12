@@ -8,7 +8,7 @@
   <% end %>
 
   <!-- 既存画像表示 -->
-  <% if tea_product.image.attached? %>
+  <% if tea_product.persisted? && tea_product.image.attached? %>
     <div class="mb-2">
       <%= image_tag tea_product.image,
             class: "rounded border" %>
