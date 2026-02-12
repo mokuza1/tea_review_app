@@ -15,6 +15,8 @@ class TeaProduct < ApplicationRecord
   has_many :tea_product_purchase_locations, dependent: :destroy
   has_many :purchase_locations, through: :tea_product_purchase_locations
 
+  has_one_attached :image
+
   enum :status, {
     draft: 0,
     pending: 10,
@@ -48,6 +50,7 @@ class TeaProduct < ApplicationRecord
   validate :flavors_belong_to_selected_category, unless: :draft?
   # validate :only_one_purchase_location
   validate :validate_purchase_locations, unless: :draft?
+  validate :image_type
 
   # コールバック
   # before_save :set_approved_at, if: :will_be_published?
@@ -168,6 +171,18 @@ class TeaProduct < ApplicationRecord
       errors.add(:base, "購入場所を1件登録してください")
     elsif active_locations.size > 1
       errors.add(:base, "購入場所は1件のみ登録できます")
+    end
+  end
+
+  def image_type
+    return unless image.attached?
+
+    unless image.content_type.in?(%w[image/png image/jpeg image/webp])
+      errors.add(:image, "はPNG/JPEG/WEBPのみ対応しています")
+    end
+
+    if image.blob.byte_size > 5.megabytes
+      errors.add(:image, "は5MB以内にしてください")
     end
   end
   # def only_one_purchase_location

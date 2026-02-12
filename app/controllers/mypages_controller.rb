@@ -5,6 +5,7 @@ class MypagesController < ApplicationController
     @tea_products =
       current_user
         .tea_products
+        .includes(:image_attachment)
         .order(created_at: :desc)
   end
 end

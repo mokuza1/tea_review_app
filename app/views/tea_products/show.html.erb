@@ -2,9 +2,16 @@
 
   <!-- 上部：画像 -->
   <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center mb-8">
-    <span class="text-sm text-gray-400">
-      No Image
-    </span>
+
+    <% if @tea_product.image.attached? %>
+      <%= image_tag @tea_product.image,
+            class: "w-full h-full object-cover rounded-lg" %>
+    <% else %>
+      <span class="text-sm text-gray-400">
+        No Image
+      </span>
+    <% end %>
+
   </div>
 
   <!-- 商品情報 -->
@@ -46,7 +53,7 @@
     <% end %>
 
      <!-- フレーバー -->
-    <% if @tea_product.flavors.any? %>
+    <% if @tea_product.flavors.present? %>
       <div class="text-gray-600">
         フレーバー：
         <div class="mt-2 space-y-2">
@@ -73,7 +80,7 @@
     <% end %>
 
     <!-- 購入場所 -->
-    <% if @tea_product.purchase_locations.any? %>
+    <% if @tea_product.purchase_locations.present? %>
       <div class="text-gray-600">
         購入場所：
         <ul class="mt-2 space-y-1">

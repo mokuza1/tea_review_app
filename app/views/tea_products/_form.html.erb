@@ -7,6 +7,19 @@
     </ul>
   <% end %>
 
+  <!-- 既存画像表示 -->
+  <% if tea_product.persisted? && tea_product.image.attached? %>
+    <div class="mb-2">
+      <%= image_tag tea_product.image,
+            class: "rounded border" %>
+    </div>
+  <% end %>
+
+  <!-- 画像アップロード -->
+  <div class="mb-4">
+    <%= f.file_field :image, accept: "image/*" %>
+  </div>
+
   <div>
     <%= f.label :name %>
     <%= f.text_field :name %>

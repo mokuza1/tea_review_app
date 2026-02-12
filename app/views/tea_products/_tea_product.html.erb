@@ -1,8 +1,13 @@
 <%= link_to tea_product_path(tea_product, q: params[:q]&.to_unsafe_h), class: "block" do %>
   <div class="flex bg-white rounded-lg shadow-sm border overflow-hidden hover:bg-gray-50 transition">
     <!-- 画像 -->
-    <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center">
-      <span class="text-xs text-gray-400">No Image</span>
+    <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden">
+      <% if tea_product.image.attached? %>
+        <%= image_tag tea_product.image,
+              class: "w-full h-full object-cover" %>
+      <% else %>
+        <span class="text-xs text-gray-400">No Image</span>
+      <% end %>
     </div>
 
     <!-- テキスト -->
