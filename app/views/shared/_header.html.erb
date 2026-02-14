@@ -1,28 +1,26 @@
-<header class="w-full border-b bg-white">
-  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+<header class="w-full border-b-2 border-[#365442]/20 bg-[#F2F4F0]">
+  <div class="mx-auto max-w-7xl flex items-center justify-between px-6 py-3 md:min-h-20">
 
-    <!-- ロゴ（仮） -->
-    <div class="text-xl font-bold text-gray-900">
-      <%= link_to "MyApp", root_path, class: "hover:opacity-80" %>
+    <div class="text-2xl font-serif font-bold text-[#365442] tracking-tighter opacity-90">
+      <%= link_to "みんなの紅茶図鑑", root_path, class: "hover:opacity-70 transition" %>
     </div>
 
-    <div class="flex items-center space-x-4 text-sm font-medium">
-          <%= link_to "投稿",
-                new_tea_product_path,
-                class: "text-blue-600 hover:text-blue-700" %>
+    <div class="flex flex-col md:flex-row items-end md:items-center gap-3 md:gap-0 md:space-x-6 text-base font-medium text-[#433D3C]">
 
-          <% if user_signed_in? %>
-            <%= link_to "マイページ",
-                  mypage_path,
-                  class: "text-gray-700 hover:text-gray-900" %>
-          <% end %>
+      <%= link_to "投稿する",
+            new_tea_product_path,
+            class: "px-4 py-2 text-[#A75F29] font-serif tracking-wider border border-transparent hover:border-[#A75F29]/30 rounded transition" %>
 
-    <!-- ログアウト -->
-    <div class="flex items-center space-x-4 text-sm font-medium">
+      <%= link_to "マイページ",
+            mypage_path,
+            class: "px-4 py-2 hover:text-[#365442] font-serif tracking-wider transition" %>
+
       <%= link_to "ログアウト",
-                destroy_user_session_path,
-                data: { turbo_method: :delete },
-                class: "text-gray-700 hover:text-gray-900" %>
+            destroy_user_session_path,
+            data: { turbo_method: :delete },
+            class: "px-4 py-2 text-gray-500 hover:text-red-800 text-sm font-sans transition" %>
+
     </div>
+
   </div>
 </header>
