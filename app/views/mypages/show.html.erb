@@ -1,59 +1,97 @@
-<div class="max-w-5xl mx-auto px-4 mb-16">
-  <h1 class="text-xl font-bold mb-6">
-    マイページ
-  </h1>
+<div class="min-h-screen bg-[#F1EFE9] py-8 md:py-12">
+  <div class="max-w-4xl mx-auto px-4 mb-16">
 
-  <h2 class="text-lg font-semibold mb-3">
-    自分の投稿一覧
-  </h2>
+    <div class="mb-10 border-b-2 border-[#B5A89A] pb-6">
+      <h1 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] tracking-widest">
+        MY ARCHIVE
+      </h1>
+      <p class="text-xs font-bold text-[#8C7B6C] mt-1 uppercase tracking-[0.2em]">
+        マイページ / 投稿管理
+      </p>
+    </div>
 
-  <table class="w-full border border-gray-300 text-sm">
-    <thead class="bg-gray-100">
-      <tr>
-        <th class="border p-2 w-36">画像</th>
-        <th class="border p-2">商品名</th>
-        <th class="border p-2 w-32">ステータス</th>
-        <th class="border p-2 w-32">操作</th>
-      </tr>
-    </thead>
+    <h2 class="text-base font-bold text-[#365442] mb-6 flex items-center gap-2">
+      <span class="w-1.5 h-4 bg-[#A75F29] rounded-full"></span>
+      自分の投稿一覧
+    </h2>
 
-    <tbody>
-      <% @tea_products.each do |tea| %>
-        <tr>
-          <td class="border p-2">
-            <div class="w-32 h-32 flex-shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden">
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm min-w-[650px] border-collapse">
+          
+          <thead class="bg-[#F9F7F2] border-b-2 border-[#D6CEC5]">
+            <tr>
+              <th class="p-4 w-32 text-center font-bold text-[#365442] tracking-wider">画像</th>
+              <th class="p-4 text-left font-bold text-[#365442] tracking-wider">紅茶名 / 商品詳細</th>
+              <th class="p-4 w-32 text-center font-bold text-[#365442] tracking-wider">ステータス</th>
+              <th class="p-4 w-32 text-center font-bold text-[#365442] tracking-wider">操作</th>
+            </tr>
+          </thead>
 
-              <% if tea.image.attached? %>
-                <%= image_tag tea.image,
-                      class: "w-full h-full object-cover" %>
-              <% else %>
-                <span class="text-xs text-gray-400">No Image</span>
-              <% end %>
+          <tbody class="divide-y-2 divide-[#F1EFE9]">
+            <% @tea_products.each do |tea| %>
+              <tr class="hover:bg-[#FDFBF9] transition-colors">
+                
+                <td class="p-4 text-center">
+                  <div class="w-20 h-20 mx-auto bg-[#F1EFE9] border-2 border-[#D6CEC5] flex items-center justify-center overflow-hidden rounded shadow-sm">
+                    <% if tea.image.attached? %>
+                      <%= image_tag tea.image, class: "w-full h-full object-cover" %>
+                    <% else %>
+                      <span class="text-[10px] font-bold text-[#B5A89A] uppercase">No Image</span>
+                    <% end %>
+                  </div>
+                </td>
 
-            </div>
-          </td>
+                <td class="p-4">
+                  <%= link_to tea_product_path(tea), class: "group" do %>
+                    <span class="text-base font-bold text-[#365442] group-hover:text-[#A75F29] group-hover:underline transition decoration-2">
+                      <%= tea.name %>
+                    </span>
+                    <div class="text-[10px] text-[#8C7B6C] mt-1 font-semibold uppercase tracking-tighter">
+                      Created at: <%= tea.created_at.strftime("%Y.%m.%d") %>
+                    </div>
+                  <% end %>
+                </td>
 
-          <td class="border p-2">
-            <%= link_to tea.name, tea_product_path(tea),
-                  class: "text-blue-600 hover:underline" %>
-          </td>
+                <td class="p-4 text-center">
+                  <% 
+                    status_styles = case tea.status
+                      when "draft"     then "bg-[#EBE5DE] text-[#5D554E] border-[#B5A89A]"
+                      when "pending"   then "bg-[#FFF9F2] text-[#A75F29] border-[#E0943D]"
+                      when "published" then "bg-[#E9F0EC] text-[#365442] border-[#365442]"
+                      when "rejected"  then "bg-red-50 text-red-700 border-red-200"
+                      else "bg-gray-100 text-gray-600 border-gray-300"
+                    end 
+                  %>
+                  <span class="px-3 py-1 rounded border font-bold text-[11px] tracking-wider inline-block <%= status_styles %>">
+                    <%= tea.status_i18n %>
+                  </span>
+                </td>
 
-          <td class="border p-2">
-            <%= tea.status_i18n %>
-          </td>
+                <td class="p-4 text-center">
+                  <% if tea.draft? || tea.rejected? %>
+                    <%= link_to edit_tea_product_path(tea), 
+                        class: "inline-block bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] 
+                               text-xs font-bold px-4 py-2 rounded shadow transition tracking-widest" do %>
+                      編集
+                    <% end %>
+                  <% else %>
+                    <span class="text-[#B5A89A] text-xs font-serif italic">- Locked -</span>
+                  <% end %>
+                </td>
 
-          <td class="border p-2">
-            <% if tea.draft? || tea.rejected? %>
-              <%= link_to "編集",
-                    edit_tea_product_path(tea),
-                    class: "text-blue-600 hover:underline" %>
-            <% else %>
-              -
+              </tr>
             <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
+    <div class="mt-10 text-center">
+      <%= link_to "新規投稿を作成する", new_tea_product_path, 
+          class: "inline-block border-2 border-[#365442] text-[#365442] hover:bg-[#365442] hover:text-white
+                 font-bold px-8 py-3 rounded-lg transition-all duration-300 tracking-widest" %>
+    </div>
+
+  </div>
 </div>

@@ -1,41 +1,107 @@
-<div class="container mx-auto p-8 text-center">
-  <h1 class="text-4xl font-bold mb-8">デプロイ成功！</h1>
-  <p class="mb-8">開発中アプリケーションです。将来的に検索機能が追加されます。</p>
-  
-  <!-- 将来の検索フォーム用プレースホルダー -->
-  <div class="max-w-md mx-auto bg-gray-100 p-6 rounded-lg mb-8">
+<div class="min-h-screen bg-[#F9F7F2] text-[#433D3C] flex flex-col font-sans">
 
-    <%= search_form_for @q,
-          url: tea_products_path,
-          method: :get,
-          class: "flex gap-2" do |f| %>
+  <section class="relative w-full h-[220px] md:h-[300px] mb-28 border-b-4 border-[#365442]">
 
-      <%= f.search_field :name_or_brand_name_ja_or_brand_name_en_cont,
-            placeholder: "商品名・ブランド名で検索",
-            class: "w-full p-2 border rounded" %>
+    <div
+      class="absolute inset-0 bg-center bg-cover"
+      style="background-image: url('<%= asset_path("home_top.png") %>')">
+    </div>
 
-      <%= f.submit "検索",
-            class: "bg-blue-500 text-white px-4 py-2 rounded" %>
+    <div class="absolute inset-0 bg-gradient-to-r from-[#1a2e22]/90 to-[#3b2f2f]/40"></div>
 
-    <% end %>
-  </div>
+    <div class="relative z-10 h-full flex flex-col items-start justify-center text-left px-8 max-w-4xl mx-auto w-full">
 
-  <div data-controller="modal" class="mb-6 flex gap-4">
+      <div class="w-12 h-1 bg-[#C5A065] mb-4"></div>
 
-    <button
-      data-action="click->modal#openFlavor"
-      class="px-4 py-2 bg-green-500 text-white rounded">
-      フレーバー
-    </button>
+      <h1 class="text-3xl md:text-5xl font-serif font-medium text-[#F9F7F2] mb-3 tracking-widest drop-shadow-md">
+        みんなの紅茶図鑑
+      </h1>
 
-    <button
-      data-action="click->modal#openBrand"
-      class="px-4 py-2 bg-blue-500 text-white rounded">
-      ブランド
-    </button>
+      <p class="text-sm md:text-lg text-white tracking-wider font-light drop-shadow-md">
+        Trace & Archive Your Tea Journey
+      </p>
+
+    </div>
+
+  </section>
+
+  <section class="px-6 mb-20 -mt-16 relative z-20">
+    <div class="max-w-2xl mx-auto bg-[#FBF8F1] shadow-[0_8px_30px_rgb(54,84,66,0.15)] border-2 border-[#D6CEC5] rounded-xl p-8">
+
+      <%= search_form_for @q,
+            url: tea_products_path,
+            method: :get,
+            class: "flex flex-col sm:flex-row gap-4" do |f| %>
+
+        <%= f.search_field :name_or_brand_name_ja_or_brand_name_en_cont,
+              placeholder: "商品名・ブランド名で検索...",
+              class: "w-full p-4 rounded-lg bg-white border border-[#D6Cec5] text-[#433D3C] placeholder-gray-400 focus:ring-1 focus:ring-[#365442] focus:border-[#365442] focus:outline-none transition shadow-inner" %>
+
+        <%= f.submit "検索",
+              class: "bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-serif tracking-widest px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 cursor-pointer border border-[#2A4034]" %>
+
+      <% end %>
+    </div>
+  </section>
+
+  <div data-controller="modal">
+
+    <section class="px-6 mb-24">
+      <div class="max-w-4xl mx-auto flex flex-wrap justify-center gap-8 md:gap-16">
+
+        <button
+          type="button"
+          data-action="click->modal#openFlavor"
+          class="relative w-64 aspect-square sm:w-64 overflow-hidden rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group border border-[#EBE5DE]">
+
+          <div
+            class="absolute inset-0 bg-center bg-cover transition-transform duration-700 group-hover:scale-110"
+            style="background-image: url('<%= asset_path("flavor.png") %>')">
+          </div>
+
+          <div
+            class="absolute inset-0 bg-[#365442]/0 group-hover:bg-[#365442]/40 transition duration-500">
+          </div>
+
+          <span
+            class="absolute top-4 left-0 z-10 bg-[#F9F7F2]/95 text-[#365442] text-sm md:text-base font-serif tracking-widest px-6 py-2 shadow-sm border-r border-b border-[#D6CEC5]">
+            FLAVOR
+            <span class="block text-xs text-[#8C7B6C] font-sans mt-0.5">フレーバーから探す</span>
+          </span>
+          
+          <div class="absolute inset-4 border border-white/30 pointer-events-none opacity-0 group-hover:opacity-100 transition duration-500"></div>
+
+        </button>
+
+        <button
+          type="button"
+          data-action="click->modal#openBrand"
+          class="relative w-64 aspect-square sm:w-64 overflow-hidden rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group border border-[#EBE5DE]">
+
+          <div
+            class="absolute inset-0 bg-center bg-cover transition-transform duration-700 group-hover:scale-110"
+            style="background-image: url('<%= asset_path("brand.png") %>')">
+          </div>
+
+          <div
+            class="absolute inset-0 bg-[#365442]/0 group-hover:bg-[#365442]/40 transition duration-500">
+          </div>
+
+          <span
+            class="absolute top-4 left-0 z-10 bg-[#F9F7F2]/95 text-[#365442] text-sm md:text-base font-serif tracking-widest px-6 py-2 shadow-sm border-r border-b border-[#D6CEC5]">
+            BRAND
+            <span class="block text-xs text-[#8C7B6C] font-sans mt-0.5">ブランドから探す</span>
+          </span>
+
+          <div class="absolute inset-4 border border-white/30 pointer-events-none opacity-0 group-hover:opacity-100 transition duration-500"></div>
+
+        </button>
+
+      </div>
+    </section>
 
     <%= render "shared/search_modal" %>
+
   </div>
 
-  <p class="text-sm text-gray-600">© 2025</p>
 </div>

@@ -1,35 +1,73 @@
-<h2><%= t("devise.registrations.new.title") %></h2>
+<div class="min-h-screen bg-[#F1EFE9] flex items-start justify-center px-4 pt-24 pb-12">
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <div class="w-full max-w-md bg-white border-2 border-[#B5A89A] rounded-lg shadow-xl p-8 md:p-10">
 
-  <div class="mb-4">
-    <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_field :name,
-          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-serif font-bold text-[#365442] tracking-widest">
+        CREATE ACCOUNT
+      </h2>
+      <p class="text-[10px] text-[#8C7B6C] font-bold mt-1 uppercase tracking-[0.2em]">
+        <%= t("devise.registrations.new.title") %>
+      </p>
+      <div class="mt-4 w-10 h-[1px] bg-[#D6CEC5] mx-auto"></div>
+    </div>
+
+    <%= form_for(resource,
+          as: resource_name,
+          url: registration_path(resource_name)) do |f| %>
+
+      <div class="mb-6">
+        <%= render "devise/shared/error_messages", resource: resource %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :name, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+        <%= f.text_field :name,
+              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold" %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :email, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+        <%= f.email_field :email,
+              autofocus: true,
+              autocomplete: "email",
+              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold" %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :password, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+        <% if @minimum_password_length %>
+          <p class="text-[10px] text-[#8C7B6C] mb-2 font-bold italic">
+            * <%= @minimum_password_length %>文字以上
+          </p>
+        <% end %>
+        <%= f.password_field :password,
+              autocomplete: "new-password",
+              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold" %>
+      </div>
+
+      <div class="mb-8">
+        <%= f.label :password_confirmation, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+        <%= f.password_field :password_confirmation,
+              autocomplete: "new-password",
+              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold" %>
+      </div>
+
+      <div>
+        <%= f.submit t("devise.registrations.new.submit"),
+              class: "w-full bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-bold
+                     py-4 rounded shadow-lg transition tracking-[0.2em] cursor-pointer" %>
+      </div>
+
+    <% end %>
+
+    <div class="mt-8 text-center text-xs font-bold text-[#8C7B6C] tracking-wider divide-x divide-[#D6CEC5]">
+      <%= render "devise/shared/links" %>
+    </div>
+
   </div>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit t("devise.registrations.new.submit") %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
