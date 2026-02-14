@@ -1,26 +1,58 @@
-<h2><%= t("devise.sessions.new.sign_in") %></h2>
+<div class="min-h-screen bg-[#F1EFE9] flex items-start justify-center px-4 pt-24 pb-12">
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+  <div class="w-full max-w-md bg-white border-2 border-[#B5A89A] rounded-lg shadow-xl p-8 md:p-10">
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-serif font-bold text-[#365442] tracking-widest">
+        MEMBER LOGIN
+      </h2>
+      <p class="text-[10px] text-[#8C7B6C] font-bold mt-1 uppercase tracking-[0.2em]">
+        <%= t("devise.sessions.new.sign_in") %>
+      </p>
+      <div class="mt-4 w-10 h-[1px] bg-[#D6CEC5] mx-auto"></div>
     </div>
-  <% end %>
 
-  <div class="actions">
-    <%= f.submit t("devise.sessions.new.sign_in") %>
+    <%= form_for(resource,
+          as: resource_name,
+          url: session_path(resource_name)) do |f| %>
+
+      <div class="mb-5">
+        <%= f.label :email, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+        <%= f.email_field :email,
+              autofocus: true,
+              autocomplete: "email",
+              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold" %>
+      </div>
+
+      <div class="mb-5">
+        <%= f.label :password, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+        <%= f.password_field :password,
+              autocomplete: "current-password",
+              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="flex items-center gap-3 mb-8">
+          <%= f.check_box :remember_me,
+                class: "w-4 h-4 rounded border-2 border-[#D6CEC5] text-[#365442] focus:ring-[#365442]" %>
+          <%= f.label :remember_me, class: "text-xs font-bold text-[#8C7B6C] tracking-wide" %>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.submit t("devise.sessions.new.sign_in"),
+              class: "w-full bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-bold
+                     py-4 rounded shadow-lg transition tracking-[0.2em] cursor-pointer" %>
+      </div>
+
+    <% end %>
+
+    <div class="mt-8 text-center text-xs font-bold text-[#8C7B6C] tracking-wider divide-x divide-[#D6CEC5]">
+      <%= render "devise/shared/links" %>
+    </div>
+
   </div>
-<% end %>
+</div>
 
-<%= render "devise/shared/links" %>
