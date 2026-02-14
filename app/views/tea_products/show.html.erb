@@ -1,110 +1,181 @@
-<div class="max-w-4xl mx-auto px-4 py-8">
+<div class="min-h-screen bg-[#F1EFE9] flex flex-col">
 
-  <!-- 上部：画像 -->
-  <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center mb-8">
+  <section class="px-6 py-12 md:py-20 flex-grow">
+    <div class="max-w-4xl mx-auto">
 
-    <% if @tea_product.image.attached? %>
-      <%= image_tag @tea_product.image,
-            class: "w-full h-full object-cover rounded-lg" %>
-    <% else %>
-      <span class="text-sm text-gray-400">
-        No Image
-      </span>
-    <% end %>
+      <div
+        class="bg-white border-2 border-[#D6CEC5]
+               rounded-xl shadow-[0_20px_60px_rgba(54,84,66,0.12)] p-8 md:p-16 relative overflow-hidden">
+        
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#365442]/5 rounded-full blur-3xl pointer-events-none"></div>
 
-  </div>
+        <div class="flex flex-col sm:flex-row gap-8 md:gap-12 mb-12 border-b border-[#EBE5DE] pb-10">
 
-  <!-- 商品情報 -->
-  <div class="bg-white rounded-lg shadow-sm border p-6 space-y-4">
+          <div
+            class="w-full sm:w-64 aspect-square flex-shrink-0
+                   bg-[#F2F0EB] border border-[#D6CEC5] shadow-inner rounded-lg overflow-hidden
+                   flex items-center justify-center relative group">
 
-    <!-- 紅茶名 -->
-    <h1 class="text-2xl font-bold text-gray-800">
-      <%= @tea_product.name %>
-    </h1>
+            <% if @tea_product.image.attached? %>
+               <div class="w-full h-full mix-blend-multiply transition duration-700 group-hover:scale-105">
+                 <%= image_tag @tea_product.image,
+                     class: "w-full h-full object-cover" %>
+               </div>
+               <div class="absolute inset-0 bg-gradient-to-tr from-[#365442]/10 to-transparent opacity-0 group-hover:opacity-40 transition"></div>
+            <% else %>
+              <div class="text-center">
+                <span class="block text-2xl mb-1 text-[#D6CEC5]">☕</span>
+                <span class="text-xs font-serif tracking-widest text-[#998B7D]">NO IMAGE</span>
+              </div>
+            <% end %>
 
-    <!-- ブランド名 -->
-    <% if @tea_product.brand.present? %>
-      <p class="text-gray-600">
-        ブランド：
-        <span class="font-medium">
-          <%= @tea_product.brand.name_ja.presence || @tea_product.brand.name_en %>
-        </span>
-      </p>
-    <% end %>
+          </div>
 
-    <!-- タイプ -->
-    <% if @tea_product.tea_type.present? %>
-      <p class="text-gray-600">
-        タイプ：
-        <span class="font-medium">
-           <%= @tea_product.enum_i18n(:tea_type) %>
-        </span>
-      </p>
-    <% end %>
+          <div class="flex-1 pt-2 flex flex-col justify-center">
 
-    <!-- カフェイン -->
-    <% if @tea_product.caffeine_level.present? %>
-      <p class="text-gray-600">
-        カフェイン：
-        <span class="font-medium">
-          <%= @tea_product.enum_i18n(:caffeine_level) %>
-        </span>
-      </p>
-    <% end %>
-
-     <!-- フレーバー -->
-    <% if @tea_product.flavors.present? %>
-      <div class="text-gray-600">
-        フレーバー：
-        <div class="mt-2 space-y-2">
-          <% @tea_product.flavors
-              .group_by(&:flavor_category)
-              .each do |category, flavors| %>
-
-            <div>
-              <p class="font-medium text-gray-700">
-                <%= category.name %>
+            <% if @tea_product.brand.present? %>
+              <p class="text-sm font-bold text-[#A75F29] tracking-widest uppercase mb-3 flex items-center gap-2">
+                <span class="w-8 h-[1px] bg-[#A75F29]/50"></span>
+                <%= @tea_product.brand.name_ja.presence || @tea_product.brand.name_en %>
               </p>
-              <ul class="flex flex-wrap gap-2 mt-1">
-                <% flavors.each do |flavor| %>
-                  <li class="px-2 py-1 text-sm bg-gray-100 rounded">
-                    <%= flavor.name %>
-                  </li>
-                <% end %>
-              </ul>
+            <% end %>
+
+            <h1 class="text-3xl md:text-4xl font-serif font-medium text-[#365442] mb-6 leading-tight">
+              <%= @tea_product.name %>
+            </h1>
+
+          </div>
+
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-x-12 gap-y-8 mb-12">
+
+          <% if @tea_product.tea_type.present? %>
+            <div class="border-l-2 border-[#D6CEC5] pl-4">
+              <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-2">
+                TEA TYPE
+              </p>
+              <span
+                class="inline-block text-lg font-serif text-[#433D3C]">
+                <%= @tea_product.enum_i18n(:tea_type) %>
+              </span>
+            </div>
+          <% end %>
+
+          <% if @tea_product.caffeine_level.present? %>
+            <div class="border-l-2 border-[#D6CEC5] pl-4">
+              <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-2">
+                CAFFEINE
+              </p>
+              <span
+                class="inline-block text-lg font-serif text-[#433D3C]">
+                <%= @tea_product.enum_i18n(:caffeine_level) %>
+              </span>
+            </div>
+          <% end %>
+
+        </div>
+
+        <% if @tea_product.flavors.present? %>
+          <div class="mb-12 bg-[#F6F4F0] rounded-lg p-6 border border-[#EBE5DE]/50">
+
+            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-4 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#365442]"></span>
+              FLAVOR NOTES
+            </p>
+
+            <div class="space-y-4">
+
+              <% @tea_product.flavors
+                  .group_by(&:flavor_category)
+                  .each do |category, flavors| %>
+
+                <div class="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-6">
+
+                  <span
+                    class="text-sm font-bold text-[#365442] min-w-[80px] pt-1">
+                    <%= category.name %> :
+                  </span>
+
+                  <ul class="flex flex-wrap gap-2">
+                    <% flavors.each do |flavor| %>
+                      <li
+                        class="px-3 py-1 text-sm
+                               bg-white border border-[#D6CEC5]
+                               text-[#5C5046]
+                               rounded shadow-sm">
+                        <%= flavor.name %>
+                      </li>
+                    <% end %>
+                  </ul>
+
+                </div>
+
+              <% end %>
+
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tea_product.purchase_locations.present? %>
+          <div class="mb-12">
+
+            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-4 border-b border-[#EBE5DE] pb-2">
+              PURCHASED AT
+            </p>
+
+            <ul class="space-y-3">
+              <% @tea_product.purchase_locations.each do |location| %>
+                <li class="flex items-center gap-4 text-[#433D3C]">
+                  
+                  <span
+                    class="text-xs bg-[#365442] text-[#F9F7F2]
+                           px-2 py-1 rounded
+                           font-serif tracking-wider min-w-[60px] text-center">
+                    <%= location.enum_i18n(:location_type) %>
+                  </span>
+
+                  <span class="text-base font-medium border-b border-dotted border-[#8C7B6C]">
+                    <%= location.name %>
+                  </span>
+
+                </li>
+              <% end %>
+            </ul>
+
+          </div>
+        <% end %>
+
+        <% if @tea_product.description.present? %>
+          <div>
+
+            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-3">
+              DESCRIPTION
+            </p>
+
+            <div class="text-[#433D3C] leading-loose font-serif text-justify text-base md:text-lg">
+              <%= simple_format(@tea_product.description) %>
             </div>
 
-          <% end %>
+          </div>
+        <% end %>
         </div>
+
+      <div class="text-center mt-12">
+        <%= link_to tea_products_path(q: params[:q]&.to_unsafe_h),
+              class: "group inline-flex items-center gap-2 text-[#365442] hover:text-[#2A4034] transition" do %>
+          
+          <span class="w-8 h-8 rounded-full border border-[#365442] flex items-center justify-center group-hover:bg-[#365442] group-hover:text-[#F9F7F2] transition duration-300">
+            ←
+          </span>
+          <span class="font-serif tracking-widest text-sm border-b border-transparent group-hover:border-[#365442] transition">
+            BACK TO LIST
+          </span>
+
+        <% end %>
       </div>
-    <% end %>
 
-    <!-- 購入場所 -->
-    <% if @tea_product.purchase_locations.present? %>
-      <div class="text-gray-600">
-        購入場所：
-        <ul class="mt-2 space-y-1">
-          <% @tea_product.purchase_locations.each do |location| %>
-            <li class="flex items-center gap-2">
-              <span class="text-sm text-gray-500">
-                <%= location.enum_i18n(:location_type) %>
-              </span>
-              <span class="font-medium">
-                <%= location.name %>
-              </span>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-  </div>
-
-  <!-- 戻るリンク -->
-  <div class="mt-6">
-    <%= link_to "検索結果に戻る",
-                tea_products_path(q: params[:q]&.to_unsafe_h),
-                class: "text-sm text-blue-600 hover:underline" %>
-  </div>
+    </div>
+  </section>
 
 </div>
