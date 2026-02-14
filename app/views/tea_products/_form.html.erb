@@ -1,177 +1,174 @@
-<%= form_with model: tea_product, local: true do |f| %>
-  <% if tea_product.errors.any? %>
-    <ul class="text-red-500">
-      <% tea_product.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+<div class="bg-white border-[3px] border-[#B5A89A] rounded-lg shadow-[0_15px_40px_rgba(54,84,66,0.08)] p-8 md:p-12">
+
+  <h2 class="text-2xl font-serif font-bold text-[#365442] mb-10 text-center border-b-2 border-[#F1EFE9] pb-6">
+    Registration Form / 登録フォーム
+  </h2>
+
+  <%= form_with model: tea_product, local: true do |f| %>
+
+    <% if tea_product.errors.any? %>
+      <div class="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 mb-8 font-serif text-sm">
+        <p class="font-bold mb-1">入力内容に不備があります：</p>
+        <ul class="list-disc list-inside opacity-90 font-semibold">
+          <% tea_product.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-12 border-b-2 border-[#F1EFE9] pb-8">
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-4">
+        Visual Record / 画像
+      </label>
+      
+      <% if tea_product.persisted? && tea_product.image.attached? %>
+        <div class="mb-4">
+          <%= image_tag tea_product.image,
+                class: "w-40 h-40 object-cover rounded border-2 border-[#D6CEC5] shadow-sm" %>
+        </div>
       <% end %>
-    </ul>
-  <% end %>
 
-  <!-- 既存画像表示 -->
-  <% if tea_product.persisted? && tea_product.image.attached? %>
-    <div class="mb-2">
-      <%= image_tag tea_product.image,
-            class: "rounded border" %>
+      <%= f.file_field :image,
+            accept: "image/*",
+            class: "block w-full text-sm font-bold text-[#8C7B6C]
+                   file:mr-4 file:py-2 file:px-4
+                   file:rounded file:border-2 file:border-[#365442]
+                   file:text-xs file:font-bold file:tracking-widest
+                   file:bg-[#365442] file:text-white
+                   hover:file:bg-[#2A4034] cursor-pointer" %>
     </div>
-  <% end %>
 
-  <!-- 画像アップロード -->
-  <div class="mb-4">
-    <%= f.file_field :image, accept: "image/*" %>
-  </div>
+    <div class="mb-10">
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+        Tea Name / 紅茶名
+      </label>
+      <%= f.text_field :name,
+            class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                   focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold text-lg" %>
+    </div>
 
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-
-  <div
-    data-controller="brand-suggest"
-    data-brand-suggest-url-value="/brands/search"
-  >
-    <label class="block font-bold mb-1">
-      ブランド
-    </label>
-
-    <input
-      type="text"
-      name="tea_product[brand_name]"
-      value="<%= tea_product.brand&.display_name || tea_product.brand_name %>"
-      data-brand-suggest-target="input"
-      data-action="input->brand-suggest#search keyup->brand-suggest#search"
-      placeholder="ブランド名を入力"
-      class="border p-2 w-full"
-      autocomplete="off"
-    >
-
-    <input
-      type="hidden"
-      name="tea_product[brand_id]"
-      value="<%= tea_product.brand_id %>"
-      data-brand-suggest-target="hidden"
-    >
-
-    <ul
-      data-brand-suggest-target="list"
-      class="border bg-white mt-1 max-h-40 overflow-y-auto"
-    ></ul>
-  </div>
-
-  <div>
-    <%= f.label :tea_type, "茶葉タイプ" %>
-
-    <%= f.select :tea_type,
-          TeaProduct.tea_types.keys.map { |k|
-            location = TeaProduct.new(tea_type: k)
-            [location.enum_i18n(:tea_type), k]
-          },
-          { include_blank: "選択してください" },
-          class: "border p-2 w-full" %>
-  </div>
-
-  <div>
-    <%= f.label :caffeine_level, "カフェイン" %>
-
-    <%= f.select :caffeine_level,
-          TeaProduct.caffeine_levels.keys.map { |k|
-            location = TeaProduct.new(caffeine_level: k)
-            [location.enum_i18n(:caffeine_level), k]
-          },
-          { include_blank: "選択してください" },
-          class: "border p-2 w-full" %>
-  </div>
-
-  <div
-    data-controller="flavor-select"
-    data-flavor-select-url-value="/flavor_categories"
-    data-flavor-select-selected-ids-value="<%= @tea_product.flavor_ids.join(',') %>"
-    data-flavor-select-category-id-value="<%= @tea_product.selected_flavor_category_id %>"
-  >
-
-    <%= f.hidden_field :selected_flavor_category_id,
-      value: @tea_product.selected_flavor_category_id %>
-
-    <div>
-      <label class="font-bold">フレーバーカテゴリ</label>
-
-      <select
-        data-action="change->flavor-select#load"
-        data-flavor-select-target="category"
-        class="border p-2 w-full"
+    <div class="mb-10" data-controller="brand-suggest" data-brand-suggest-url-value="/brands/search">
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+        Manufacturer & Brand / ブランド
+      </label>
+      <input
+        type="text"
+        name="tea_product[brand_name]"
+        value="<%= tea_product.brand&.display_name || tea_product.brand_name %>"
+        data-brand-suggest-target="input"
+        data-action="input->brand-suggest#search keyup->brand-suggest#search"
+        placeholder="ブランド名を入力..."
+        class="w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+               focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition font-semibold"
+        autocomplete="off"
       >
-        <option value="">選択してください</option>
-        <% FlavorCategory.order(:name).each do |category| %>
-          <option
-            value="<%= category.id %>"
-            <%= "selected" if category.id == @tea_product.selected_flavor_category_id.to_i %>
-          >
-            <%= category.name %>
-          </option>
-        <% end %>
-      </select>
+      <input type="hidden" name="tea_product[brand_id]" value="<%= tea_product.brand_id %>" data-brand-suggest-target="hidden">
+      <ul data-brand-suggest-target="list" class="bg-white border-2 border-[#D6CEC5] border-t-0 mt-0 max-h-40 overflow-y-auto rounded-b shadow-lg z-10 font-semibold"></ul>
     </div>
 
-    <div class="mt-4">
-      <label class="font-bold">フレーバー</label>
+    <div class="grid md:grid-cols-2 gap-8 mb-10">
+      <div>
+        <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+          Classification / 茶葉タイプ
+        </label>
+        <%= f.select :tea_type,
+              TeaProduct.tea_types.keys.map { |k| [TeaProduct.new(tea_type: k).enum_i18n(:tea_type), k] },
+              { include_blank: "選択してください" },
+              class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded focus:ring-2 focus:ring-[#365442] outline-none font-semibold text-[#8C7B6C]" %>
+      </div>
 
-      <div
-        data-flavor-select-target="list"
-        class="mt-2 space-y-1"
-      ></div>
+      <div>
+        <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+          Caffeine / カフェイン
+        </label>
+        <%= f.select :caffeine_level,
+              TeaProduct.caffeine_levels.keys.map { |k| [TeaProduct.new(caffeine_level: k).enum_i18n(:caffeine_level), k] },
+              { include_blank: "選択してください" },
+              class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded focus:ring-2 focus:ring-[#365442] outline-none font-semibold text-[#8C7B6C]" %>
+      </div>
     </div>
-  </div>
 
-  <% purchase_location = @tea_product.purchase_locations.first %>
-
-  <div class="mb-8">
-    <h3 class="font-bold text-lg mb-2">購入場所</h3>
-
-    <!-- location_type -->
-    <div class="mb-4">
-      <label class="font-bold block mb-1">
-        購入場所の種類
+    <div class="mb-10 bg-[#F9F7F2] p-6 rounded border-2 border-[#D6CEC5]"
+         data-controller="flavor-select"
+         data-flavor-select-url-value="/flavor_categories"
+         data-flavor-select-selected-ids-value="<%= @tea_product.flavor_ids.join(',') %>"
+         data-flavor-select-category-id-value="<%= @tea_product.selected_flavor_category_id %>">
+      
+      <%= f.hidden_field :selected_flavor_category_id, value: @tea_product.selected_flavor_category_id %>
+      
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-4">
+        Flavor Selection / フレーバー設定
       </label>
 
-      <%= select_tag "tea_product[purchase_location][location_type]",
-        options_for_select(
-          PurchaseLocation.location_types.keys.map { |k|
-            [
-              PurchaseLocation.new(location_type: k)
-                .enum_i18n(:location_type),
-              k
-            ]
-          },
-          purchase_location&.location_type
-        ),
-        prompt: "選択してください",
-        class: "border p-2 w-full"
-      %>
+      <div class="space-y-6">
+        <div>
+          <p class="text-xs text-[#365442] mb-2 font-bold uppercase tracking-widest">1. Category</p>
+          <select data-action="change->flavor-select#load" data-flavor-select-target="category"
+                  class="w-full p-3 bg-white border-2 border-[#D6CEC5] rounded font-semibold text-[#8C7B6C]">
+            <option value="">カテゴリを選択してください</option>
+            <% FlavorCategory.order(:name).each do |category| %>
+              <option value="<%= category.id %>" <%= "selected" if category.id == @tea_product.selected_flavor_category_id.to_i %>>
+                <%= category.name %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+
+        <div>
+          <p class="text-xs text-[#365442] mb-2 font-bold uppercase tracking-widest">2. Detailed Notes</p>
+          <div data-flavor-select-target="list" class="flex flex-wrap gap-2 min-h-[40px] font-semibold text-[#8C7B6C]">
+            </div>
+        </div>
+      </div>
     </div>
 
-    <!-- name -->
-    <div>
-      <label class="font-bold block mb-1">
-        店名（必須）
+    <div class="mb-12 border-t-2 border-[#F1EFE9] pt-10">
+      <h3 class="text-sm font-bold text-[#365442] tracking-[0.3em] uppercase mb-6 flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#A75F29]"></span>
+        Provenance / 購入場所
+      </h3>
+
+      <% purchase_location = @tea_product.purchase_locations.first %>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">Location Type</label>
+          <%= select_tag "tea_product[purchase_location][location_type]",
+                options_for_select(PurchaseLocation.location_types.keys.map { |k| [PurchaseLocation.new(location_type: k).enum_i18n(:location_type), k] }, purchase_location&.location_type),
+                prompt: "種類を選択",
+                class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded font-semibold text-[#8C7B6C]" %>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">Store Name</label>
+          <%= text_field_tag "tea_product[purchase_location][name]",
+                purchase_location&.name,
+                placeholder: "例：LUPICIA 自由が丘本店",
+                class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded font-semibold" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-12">
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+        Curator's Notes / 説明・レビュー
       </label>
-
-      <%= text_field_tag "tea_product[purchase_location][name]",
-        purchase_location&.name,
-        placeholder: "例：成城石井 新宿店、Amazon など",
-        class: "border p-2 w-full"
-      %>
+      <%= f.text_area :description,
+            rows: 6,
+            placeholder: "この紅茶の個性や、淹れた時の香りの変化などを記してください...",
+            class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                   focus:ring-2 focus:ring-[#365442] outline-none font-semibold leading-loose" %>
     </div>
-  </div>
 
-  <div>
-    <%= f.label :description, "説明・レビュー" %>
+    <div class="text-center pt-6">
+      <%= f.submit "変更を保存する",
+            class: "bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] px-12 py-4
+                   rounded shadow-lg font-bold tracking-[0.2em] transition duration-300 cursor-pointer text-lg" %>
+      
+      <p class="mt-4 text-xs text-[#8C7B6C] font-bold italic tracking-widest">
+        * 申請前に必ず内容を保存してください
+      </p>
+    </div>
 
-    <%= f.text_area :description,
-          rows: 6,
-          placeholder: "香り・味・後味・おすすめポイントなど自由に書いてください",
-          class: "border p-2 w-full" %>
-  </div>
+  <% end %>
 
-  <div>
-    <%= f.submit "保存" %>
-  </div>
-<% end %>
+</div>

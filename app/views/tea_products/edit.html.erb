@@ -1,13 +1,38 @@
-<h1>編集</h1>
-<%= render "form", tea_product: @tea_product %>
+<div class="min-h-screen bg-[#F1EFE9]">
+  <section class="px-6 py-12">
+    <div class="max-w-3xl mx-auto">
 
-<p class="text-sm text-gray-500">
-  ※ 申請前に必ず「保存」を押してください。
-  保存されていない変更は反映されません。
-</p>
-<% if @tea_product.draft? || @tea_product.rejected? %>
-  <%= button_to "申請する",
-        submit_tea_product_path(@tea_product),
-        method: :patch,
-        data: { turbo_confirm: "申請しますか？" } %>
-<% end %>
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-serif font-semibold text-[#365442] tracking-widest">EDIT RECORD</h1>
+        <p class="text-xs text-[#8C7B6C] font-bold mt-1 uppercase">投稿内容の編集</p>
+        <div class="mt-6 w-12 h-[1px] bg-[#D6CEC5] mx-auto"></div>
+      </div>
+
+      <%= render "form", tea_product: @tea_product %>
+
+      <% if @tea_product.draft? || @tea_product.rejected? %>
+        <div class="mt-8 p-6 bg-white border-2 border-[#A75F29] rounded-lg shadow-md text-center">
+          
+          <div class="mb-6">
+            <p class="text-sm font-semibold text-[#433D3C]">
+              内容を変更した場合は、必ず先に上の「内容を保存する」ボタンで保存を完了させてください。
+            </p>
+          </div>
+
+          <%= button_to "掲載を申請する",
+                submit_tea_product_path(@tea_product),
+                method: :patch,
+                data: { turbo_confirm: "申請しますか？（未保存の変更は反映されません）" },
+                class: "bg-[#A75F29] hover:bg-[#8B4E21] text-white px-10 py-3 
+                       rounded shadow-md font-bold tracking-widest transition duration-300 w-full md:w-auto" %>
+        </div>
+      <% end %>
+
+      <div class="text-center mt-10">
+        <%= link_to "← マイページへ戻る", mypage_path(@tea_product), 
+              class: "text-xs font-bold text-[#8C7B6C] hover:text-[#365442] transition border-b border-[#8C7B6C]/50 pb-1" %>
+      </div>
+
+    </div>
+  </section>
+</div>

@@ -1,2 +1,27 @@
-<h1>新規投稿</h1>
-<%= render "form", tea_product: @tea_product %>
+<div class="min-h-screen bg-[#F1EFE9]">
+
+  <section class="px-6 py-12">
+    <div class="max-w-3xl mx-auto">
+
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-serif font-semibold text-[#365442] tracking-widest">
+          ARCHIVE NEW RECORD
+        </h1>
+        <div class="text-xs text-[#8C7B6C] font-bold mt-1 uppercase">
+          新規投稿
+        </div>
+        <div class="mt-6 w-12 h-[1px] bg-[#D6CEC5] mx-auto"></div>
+      </div>
+
+      <%= render "form", tea_product: @tea_product %>
+
+      <div class="text-center mt-10">
+        <%= link_to tea_products_path, class: "text-xs font-bold text-[#8C7B6C] hover:text-[#365442] transition uppercase border-b border-[#8C7B6C]/50 pb-1" do %>
+          ← マイページへ戻る
+        <% end %>
+      </div>
+
+    </div>
+  </section>
+
+</div>
