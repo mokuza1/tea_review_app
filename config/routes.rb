@@ -46,5 +46,9 @@ Rails.application.routes.draw do
         patch :reject
       end
     end
+
+    resources :flavor_categories do
+      resources :flavors, shallow: true
+    end
   end
 end
