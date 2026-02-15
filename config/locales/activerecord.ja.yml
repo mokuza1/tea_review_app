@@ -64,16 +64,16 @@ ja:
           published: 公開中
 
         tea_type:
-          leaf: 茶葉
-          tea_bag: ティーバッグ
-          powder: 粉末
-          liquid: リキッド
-          bottle: ボトル
+          black: ブラックティー
+          green: グリーンティー
+          oolong: ウーロンティー
+          white: ホワイトティー
+          herbal: ハーブティー
 
         caffeine_level:
           caffeinated: カフェインあり
           non_caffeinated: カフェインなし
-          decaffeinated: デカフェイン
+          decaffeinated: デカフェ
 
       brand:
         status:
