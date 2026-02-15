@@ -1,0 +1,50 @@
+<h2 class="text-2xl font-bold mb-4">
+  フレーバー一覧（<%= @flavor_category.name %>）
+</h2>
+
+<div class="mb-4">
+  <%= link_to "+ フレーバー追加",
+        new_admin_flavor_category_flavor_path(@flavor_category),
+        class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+</div>
+
+<table class="w-full border">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="border p-2 text-left">名前</th>
+      <th class="border p-2">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @flavors.each do |flavor| %>
+      <tr>
+        <td class="border p-2">
+          <%= flavor.name %>
+        </td>
+        <td class="border p-2 text-center">
+          <%= link_to "編集",
+                edit_admin_flavor_path(flavor),
+                class: "text-green-600 underline" %>
+
+          <% if flavor.deletable? %>
+            |
+            <%= link_to "削除",
+                  admin_flavor_path(flavor),
+                  data: { turbo_method: :delete,
+                          confirm: "本当に削除しますか？" },
+                  class: "text-red-600 underline" %>
+          <% else %>
+            |
+            <span class="text-gray-400">使用中</span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="mt-6">
+  <%= link_to "← 大カテゴリ一覧へ戻る",
+        admin_flavor_categories_path,
+        class: "text-blue-600 underline" %>
+</div>

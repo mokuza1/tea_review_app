@@ -9,4 +9,8 @@ class Flavor < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     %w[id name flavor_category_id]
   end
+
+  def deletable?
+    !tea_products.exists?
+  end
 end
