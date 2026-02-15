@@ -1,0 +1,11 @@
+<h2 class="text-xl font-bold mb-4">
+  フレーバー追加（<%= @flavor_category.name %>）
+</h2>
+
+<%= render "form" %>
+
+<div class="mt-4">
+  <%= link_to "一覧へ戻る",
+        admin_flavor_category_flavors_path(@flavor_category),
+        class: "text-blue-600 underline" %>
+</div>
