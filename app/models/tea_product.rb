@@ -25,11 +25,11 @@ class TeaProduct < ApplicationRecord
   }
 
   enum :tea_type, {
-    leaf: 0,
-    tea_bag: 10,
-    powder: 20,
-    liquid: 30,
-    bottle: 40
+    black: 0,
+    green: 10,
+    oolong: 20,
+    white: 30,
+    herbal: 40,
   }
 
   enum :caffeine_level, {
