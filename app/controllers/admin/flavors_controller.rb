@@ -1,5 +1,5 @@
 class Admin::FlavorsController < Admin::BaseController
-  before_action :set_flavor, only: %i[edit update]
+  before_action :set_flavor, only: %i[edit update destroy]
 
   def index
     @flavor_category = FlavorCategory.find(params[:flavor_category_id])
@@ -30,6 +30,17 @@ class Admin::FlavorsController < Admin::BaseController
       redirect_to admin_flavor_category_flavors_path(@flavor.flavor_category)
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @flavor.deletable?
+      @flavor.destroy
+      redirect_to admin_flavor_category_flavors_path(@flavor.flavor_category),
+                    notice: "フレーバーを削除しました"
+    else
+      redirect_to admin_flavor_category_flavors_path(@flavor.flavor_category),
+                    alert: "使用中のフレーバーは削除できません"
     end
   end
 

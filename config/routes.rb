@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     end
 
     resources :flavor_categories do
-      resources :flavors, shallow: true
+      resources :flavors, shallow: true, only: %i[index new create edit update destroy]
     end
   end
 end

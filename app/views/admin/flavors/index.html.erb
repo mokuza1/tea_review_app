@@ -25,6 +25,18 @@
           <%= link_to "編集",
                 edit_admin_flavor_path(flavor),
                 class: "text-green-600 underline" %>
+
+          <% if flavor.deletable? %>
+            |
+            <%= link_to "削除",
+                  admin_flavor_path(flavor),
+                  data: { turbo_method: :delete,
+                          confirm: "本当に削除しますか？" },
+                  class: "text-red-600 underline" %>
+          <% else %>
+            |
+            <span class="text-gray-400">使用中</span>
+          <% end %>
         </td>
       </tr>
     <% end %>
