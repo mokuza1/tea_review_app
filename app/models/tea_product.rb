@@ -29,7 +29,7 @@ class TeaProduct < ApplicationRecord
     green: 10,
     oolong: 20,
     white: 30,
-    herbal: 40,
+    herbal: 40
   }
 
   enum :caffeine_level, {
