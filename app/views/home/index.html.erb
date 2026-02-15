@@ -35,7 +35,8 @@
 
         <%= f.search_field :name_or_brand_name_ja_or_brand_name_en_cont,
               placeholder: "商品名・ブランド名で検索...",
-              class: "w-full p-4 rounded-lg bg-white border border-[#D6Cec5] text-[#433D3C] placeholder-gray-400 focus:ring-1 focus:ring-[#365442] focus:border-[#365442] focus:outline-none transition shadow-inner" %>
+              autocomplete: "off",
+              class: "w-full p-4 rounded-lg bg-white border border-[#D6Cec5] font-semibold text-[#26302A] placeholder-gray-400 focus:ring-1 focus:ring-[#365442] focus:border-[#365442] focus:outline-none transition shadow-inner" %>
 
         <%= f.submit "検索",
               class: "bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-serif tracking-widest px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-300 cursor-pointer border border-[#2A4034]" %>
