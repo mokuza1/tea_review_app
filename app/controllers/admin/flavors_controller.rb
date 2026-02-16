@@ -3,7 +3,7 @@ class Admin::FlavorsController < Admin::BaseController
 
   def index
     @flavor_category = FlavorCategory.find(params[:flavor_category_id])
-    @flavors = @flavor_category.flavors.order(:name)
+    @flavors = @flavor_category.flavors.order(:created_at)
   end
 
   def new

@@ -1,6 +1,6 @@
 class Admin::FlavorCategoriesController < Admin::BaseController
   def index
-    @flavor_categories = FlavorCategory.order(:name)
+    @flavor_categories = FlavorCategory.order(:created_at)
   end
 
   def new
