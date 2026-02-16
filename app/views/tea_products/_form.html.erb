@@ -108,7 +108,7 @@
           <select data-action="change->flavor-select#load" data-flavor-select-target="category"
                   class="w-full p-3 bg-white border-2 border-[#D6CEC5] rounded font-semibold text-[#26302A]">
             <option value="">カテゴリを選択してください</option>
-            <% FlavorCategory.order(:name).each do |category| %>
+            <% FlavorCategory.order(:created_at).each do |category| %>
               <option value="<%= category.id %>" <%= "selected" if category.id == @tea_product.selected_flavor_category_id.to_i %>>
                 <%= category.name %>
               </option>

@@ -2,7 +2,7 @@ class FlavorsController < ApplicationController
   def index
     category = FlavorCategory.find(params[:flavor_category_id])
 
-    flavors = category.flavors.order(:name)
+    flavors = category.flavors.order(:created_at)
 
     render json: flavors.map { |flavor|
       { id: flavor.id, name: flavor.name }
