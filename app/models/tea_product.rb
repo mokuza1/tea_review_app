@@ -155,13 +155,13 @@ class TeaProduct < ApplicationRecord
 
   # フレーバーは選択した大カテゴリに属している必要あり
   # def flavors_belong_to_selected_category
-    # return if flavors.empty?
+  # return if flavors.empty?
 
-    # category_ids = flavors.map(&:flavor_category_id).uniq
+  # category_ids = flavors.map(&:flavor_category_id).uniq
 
-    # if category_ids.size > 1
-      # errors.add(:base, "フレーバーは同一カテゴリ内で選択してください")
-    # end
+  # if category_ids.size > 1
+  # errors.add(:base, "フレーバーは同一カテゴリ内で選択してください")
+  # end
   # end
 
   def validate_purchase_locations
