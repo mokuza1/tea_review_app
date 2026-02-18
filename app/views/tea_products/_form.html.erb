@@ -93,33 +93,36 @@
     <div class="mb-10 bg-[#F9F7F2] p-6 rounded border-2 border-[#D6CEC5]"
          data-controller="flavor-select"
          data-flavor-select-url-value="/flavor_categories"
-         data-flavor-select-selected-ids-value="<%= @tea_product.flavor_ids.join(',') %>"
-         data-flavor-select-category-id-value="<%= @tea_product.selected_flavor_category_id %>">
-      
-      <%= f.hidden_field :selected_flavor_category_id, value: @tea_product.selected_flavor_category_id %>
-      
+         data-flavor-select-selected-ids-value="<%= @tea_product.flavor_ids.join(',') %>">
+  
       <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-4">
         Flavor Selection / フレーバー設定
       </label>
 
       <div class="space-y-6">
         <div>
-          <p class="text-xs text-[#365442] mb-2 font-bold uppercase tracking-widest">1. Category</p>
-          <select data-action="change->flavor-select#load" data-flavor-select-target="category"
-                  class="w-full p-3 bg-white border-2 border-[#D6CEC5] rounded font-semibold text-[#26302A]">
-            <option value="">カテゴリを選択してください</option>
+          <p class="text-xs text-[#365442] mb-2 font-bold uppercase tracking-widest">1. Categories (Multiple) / 大カテゴリ選択</p>
+          <div class="flex flex-wrap gap-4 p-3 bg-white border-2 border-[#D6CEC5] rounded">
             <% FlavorCategory.order(:created_at).each do |category| %>
-              <option value="<%= category.id %>" <%= "selected" if category.id == @tea_product.selected_flavor_category_id.to_i %>>
-                <%= category.name %>
-              </option>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" 
+                       value="<%= category.id %>" 
+                       name="tea_product[selected_flavor_category_ids][]"
+                       data-action="change->flavor-select#toggleCategory"
+                       class="rounded text-[#365442] focus:ring-[#365442]"
+                       <%= "checked" if @selected_flavor_category_ids&.include?(category.id.to_s) || @tea_product.flavors.any? { |f| f.flavor_category_id == category.id } %>>
+                <span class="text-sm font-semibold text-[#26302A]"><%= category.name %></span>
+              </label>
             <% end %>
-          </select>
+          </div>
         </div>
 
         <div>
-          <p class="text-xs text-[#365442] mb-2 font-bold uppercase tracking-widest">2. Detailed Notes</p>
-          <div data-flavor-select-target="list" class="flex flex-wrap gap-4 min-h-[40px] font-semibold text-[#26302A]">
-            </div>
+          <p class="text-xs text-[#365442] mb-2 font-bold uppercase tracking-widest">2. Detailed Notes / フレーバー詳細</p>
+          <input type="hidden" name="tea_product[flavor_ids][]" value="">
+          <%# 各カテゴリごとのフレーバーリストがここに追加される %>
+          <div data-flavor-select-target="list" class="space-y-4 font-semibold text-[#26302A]">
+          </div>
         </div>
       </div>
     </div>
