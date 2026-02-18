@@ -4,7 +4,7 @@ class TeaProduct < ApplicationRecord
   include PreventableDestroyIfPublished
 
   attr_accessor :brand_name
-  attr_accessor :selected_flavor_category_id
+  attr_accessor :selected_flavor_category_ids
 
   belongs_to :user
   belongs_to :approved_by, class_name: "User", optional: true
@@ -47,7 +47,7 @@ class TeaProduct < ApplicationRecord
 
   validate :brand_must_be_published_or_pending_with_self, unless: :draft?
   validate :at_least_one_flavor, unless: :draft?
-  validate :flavors_belong_to_selected_category, unless: :draft?
+  # validate :flavors_belong_to_selected_category, unless: :draft?
   # validate :only_one_purchase_location
   validate :validate_purchase_locations, unless: :draft?
   validate :image_type
@@ -154,15 +154,15 @@ class TeaProduct < ApplicationRecord
   end
 
   # フレーバーは選択した大カテゴリに属している必要あり
-  def flavors_belong_to_selected_category
-    return if flavors.empty?
+  # def flavors_belong_to_selected_category
+  # return if flavors.empty?
 
-    category_ids = flavors.map(&:flavor_category_id).uniq
+  # category_ids = flavors.map(&:flavor_category_id).uniq
 
-    if category_ids.size > 1
-      errors.add(:base, "フレーバーは同一カテゴリ内で選択してください")
-    end
-  end
+  # if category_ids.size > 1
+  # errors.add(:base, "フレーバーは同一カテゴリ内で選択してください")
+  # end
+  # end
 
   def validate_purchase_locations
     active_locations = tea_product_purchase_locations.reject(&:marked_for_destruction?)

@@ -175,10 +175,11 @@ class TeaProductsController < ApplicationController
   def prepare_edit_form
     return unless @tea_product
 
-    @tea_product.selected_flavor_category_id =
-      params.dig(:tea_product, :selected_flavor_category_id) ||
-      @tea_product.selected_flavor_category_id ||
-      @tea_product.flavors.first&.flavor_category_id
+    @tea_product.selected_flavor_category_ids =
+      params.dig(:tea_product, :selected_flavor_category_ids) ||
+      @tea_product.flavors
+                  .pluck(:flavor_category_id)
+                  .uniq
   end
 
   def save_purchase_location!(tea_product:, params:)
@@ -217,9 +218,9 @@ class TeaProductsController < ApplicationController
       :tea_type,
       :caffeine_level,
       :description,
-      :selected_flavor_category_id,
       :image,
-      flavor_ids: [],
+      { selected_flavor_category_ids: [] },
+      { flavor_ids: [] },
       purchase_location: [
       :location_type,
       :name
