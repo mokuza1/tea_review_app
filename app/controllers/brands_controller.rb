@@ -26,10 +26,14 @@ class BrandsController < ApplicationController
 
   def search
     q = params[:q].to_s.strip
+                  .tr('ぁ-ん', 'ァ-ン')  # ひらがな→カタカナ
+                  .unicode_normalize(:nfkc)
+
+    return render json: [] if q.blank?
 
     brands = Brand.published
                   .where(
-                    "name_ja LIKE :q OR name_en LIKE :q",
+                    "name_ja ILIKE :q OR name_en ILIKE :q",
                     q: "%#{q}%"
                   )
                   .order(Arel.sql("COALESCE(name_ja, name_en) ASC"))
@@ -38,7 +42,8 @@ class BrandsController < ApplicationController
     render json: brands.map { |brand|
       {
         id: brand.id,
-        name: brand.display_name
+        name: brand.name_en.present? ? "#{brand.name_ja} (#{brand.name_en})" : brand.name_ja,
+        name_ja: brand.name_ja
       }
     }
   end
