@@ -26,7 +26,7 @@ class BrandsController < ApplicationController
 
   def search
     q = params[:q].to_s.strip
-                  .tr('ぁ-ん', 'ァ-ン')  # ひらがな→カタカナ
+                  .tr("ぁ-ん", "ァ-ン")  # ひらがな→カタカナ
                   .unicode_normalize(:nfkc)
 
     return render json: [] if q.blank?

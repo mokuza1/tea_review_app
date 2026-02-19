@@ -32,12 +32,12 @@ class TeaProductsController < ApplicationController
     normalized = tea_product_params.dup
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
-  
+
     # 購入場所などはそのまま
     purchase_location_params = normalized.delete(:purchase_location)
 
     @tea_product = current_user.tea_products.build(normalized)
-  
+
     # エラー時にフォームが空にならないよう、値を保持させる
     @tea_product.brand_id = brand_id
     @tea_product.brand_name = brand_name

@@ -83,16 +83,16 @@ class Brand < ApplicationRecord
   private
 
   # def name_ja_or_name_en_present
-    # if name_ja.blank? && name_en.blank?
-      # errors.add(:base, "ブランド名（日本語または英語）のいずれかを入力してください")
-    # end
+  # if name_ja.blank? && name_en.blank?
+  # errors.add(:base, "ブランド名（日本語または英語）のいずれかを入力してください")
+  # end
   # end
 
   def normalize_name_ja
     return if name_ja.blank?
 
     self.name_ja = name_ja.strip
-                         .tr('ぁ-ん', 'ァ-ン')
+                         .tr("ぁ-ん", "ァ-ン")
                          .unicode_normalize(:nfkc)
                          .upcase
   end
