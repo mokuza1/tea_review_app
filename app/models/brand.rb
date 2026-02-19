@@ -17,7 +17,7 @@ class Brand < ApplicationRecord
   validates :country, length: { maximum: 100 }, allow_blank: true
   validates :description, length: { maximum: 1000 }, allow_blank: true
 
-  validate :name_ja_or_name_en_present
+  # validate :name_ja_or_name_en_present
 
   enum :status, {
     draft: 0,
@@ -41,9 +41,11 @@ class Brand < ApplicationRecord
   # ===========
 
   def update_with_resubmission!(params)
+    was_rejected = rejected?
+
     transaction do
       update!(params)
-      update!(status: :draft) if rejected?
+      update!(status: :draft) if was_rejected
     end
   end
 
@@ -80,11 +82,11 @@ class Brand < ApplicationRecord
 
   private
 
-  def name_ja_or_name_en_present
-    if name_ja.blank? && name_en.blank?
-      errors.add(:base, "ブランド名（日本語または英語）のいずれかを入力してください")
-    end
-  end
+  # def name_ja_or_name_en_present
+    # if name_ja.blank? && name_en.blank?
+      # errors.add(:base, "ブランド名（日本語または英語）のいずれかを入力してください")
+    # end
+  # end
 
   def normalize_name_ja
     return if name_ja.blank?
