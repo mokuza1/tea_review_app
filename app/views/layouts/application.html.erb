@@ -31,20 +31,26 @@
     <% end %>
 
     <% if notice %>
-      <div class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm
-                  bg-[#E9F0EC] border-2 border-[#365442] text-[#365442]
-                  px-6 py-4 rounded-lg shadow-[0_10px_25px_rgba(54,84,66,0.2)] 
-                  z-[100] flex items-center justify-center gap-3">
+      <div
+        data-controller="flash"
+        data-flash-timeout-value="3000"
+        class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm
+               bg-[#E9F0EC] border-2 border-[#365442] text-[#365442]
+               px-6 py-4 rounded-lg shadow-[0_10px_25px_rgba(54,84,66,0.2)] 
+               z-[100] flex items-center justify-center gap-3">
         <span class="text-xl">🌿</span>
         <span class="font-bold text-sm tracking-widest"><%= notice %></span>
       </div>
     <% end %>
 
     <% if alert %>
-      <div class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm
-                  bg-[#FFF5F5] border-2 border-[#C53030] text-[#C53030]
-                  px-6 py-4 rounded-lg shadow-[0_10px_25px_rgba(197,48,48,0.2)] 
-                  z-[100] flex items-center justify-center gap-3">
+      <div
+        data-controller="flash"
+        data-flash-timeout-value="3000"
+        class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm
+               bg-[#FFF5F5] border-2 border-[#C53030] text-[#C53030]
+               px-6 py-4 rounded-lg shadow-[0_10px_25px_rgba(197,48,48,0.2)] 
+               z-[100] flex items-center justify-center gap-3">
         <span class="text-xl font-serif font-black italic">!</span>
         <span class="font-bold text-sm tracking-widest"><%= alert %></span>
       </div>

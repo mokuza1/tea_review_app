@@ -10,6 +10,7 @@ import FlavorSelectController from "./flavor_select_controller"
 import BrandController from "./brand_controller"
 import FlavorController from "./flavor_controller"
 import ModalController from "./modal_controller"
+import FlashController from "./flash_controller"
 
 application.register("hello", HelloController)
 application.register("brand-suggest", BrandSuggestController)
@@ -17,3 +18,4 @@ application.register("flavor-select", FlavorSelectController)
 application.register("brand", BrandController)
 application.register("flavor", FlavorController)
 application.register("modal", ModalController)
+application.register("flash", FlashController)
