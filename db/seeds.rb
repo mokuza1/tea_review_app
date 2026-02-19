@@ -49,9 +49,9 @@ if Rails.env.development?
   admin.update!(role: :admin)
   puts "Users created: #{users.size}"
 
-# =====================================
-# Brands（8件）
-# =====================================
+  # =====================================
+  # Brands（8件）
+  # =====================================
   puts "Creating brands..."
 
   brand_names = [
@@ -84,9 +84,9 @@ if Rails.env.development?
 
   puts "Brands created: #{brands.size}"
 
-# =====================================
-# FlavorCategories / Flavors
-# =====================================
+  # =====================================
+  # FlavorCategories / Flavors
+  # =====================================
   puts "Creating flavor categories & flavors..."
 
   flavor_data = {
@@ -113,9 +113,9 @@ if Rails.env.development?
   puts "FlavorCategories created: #{FlavorCategory.count}"
   puts "Flavors created: #{Flavor.count}"
 
-# =====================================
-# PurchaseLocations（enum 前提）
-# =====================================
+  # =====================================
+  # PurchaseLocations（enum 前提）
+  # =====================================
   puts "Creating purchase locations..."
 
   purchase_locations_data = [
@@ -155,15 +155,15 @@ if Rails.env.development?
 
   puts "PurchaseLocations created: #{PurchaseLocation.count}"
 
-# =====================================
-# TeaProducts（20件）
-# =====================================
+  # =====================================
+  # TeaProducts（20件）
+  # =====================================
   puts "Creating tea products..."
 
   all_flavors = Flavor.all
   all_locations = PurchaseLocation.all
 
-# pending（承認待ち）5件
+  # pending（承認待ち）5件
   5.times do |n|
     product = TeaProduct.new(
       name: "承認待ちのお茶 #{n + 1}",
@@ -214,9 +214,9 @@ if Rails.env.development?
 
   puts "TeaProducts created: #{TeaProduct.count}"
 
-# =====================================
-# TeaProductFlavors
-# =====================================
+  # =====================================
+  # TeaProductFlavors
+  # =====================================
   puts "Linking tea products with flavors..."
 
   published_products = TeaProduct.where(status: :published)
@@ -234,9 +234,9 @@ if Rails.env.development?
 
   puts "TeaProductFlavors created: #{TeaProductFlavor.count}"
 
-# =====================================
-# TeaProductPurchaseLocations
-# =====================================
+  # =====================================
+  # TeaProductPurchaseLocations
+  # =====================================
   puts "Linking tea products with purchase locations..."
 
   all_locations = PurchaseLocation.all
