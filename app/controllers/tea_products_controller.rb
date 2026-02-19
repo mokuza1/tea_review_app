@@ -17,6 +17,7 @@ class TeaProductsController < ApplicationController
 
   def show
     @tea_product = TeaProduct
+      .viewable_by(current_user)
       .includes(:brand, :purchase_locations, flavors: :flavor_category)
       .find(params[:id])
   end
@@ -86,8 +87,6 @@ class TeaProductsController < ApplicationController
   end
 
   def update
-    @tea_product = current_user.tea_products.find(params[:id])
-
     # パラメータの整理
     normalized = tea_product_params.dup
     brand_id   = normalized.delete(:brand_id).presence
@@ -104,6 +103,8 @@ class TeaProductsController < ApplicationController
       prepare_edit_form
       render :edit, status: :unprocessable_entity and return
     end
+
+    was_rejected = @tea_product.rejected?
 
     ActiveRecord::Base.transaction do
       # --- ブランド紐付けロジック ---
@@ -133,7 +134,7 @@ class TeaProductsController < ApplicationController
       end
     end
 
-    if @tea_product.rejected?
+    if was_rejected
       redirect_to mypage_path,
                   notice: "再申請用に下書きへ戻しました"
     else
@@ -163,10 +164,9 @@ class TeaProductsController < ApplicationController
   private
 
   def set_tea_product
-    @tea_product = TeaProduct
-      .viewable_by(current_user)
-      .includes(:brand)
-      .find(params[:id])
+    @tea_product = current_user.tea_products
+                               .includes(:brand)
+                               .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   end
