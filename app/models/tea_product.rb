@@ -85,8 +85,8 @@ class TeaProduct < ApplicationRecord
 
   # rejected 状態の商品を編集したら draft に戻す
   def update_with_resubmission!(params)
-    self.selected_flavor_category_id =
-      params[:selected_flavor_category_id]
+    self.selected_flavor_category_ids =
+      params[:selected_flavor_category_ids]
 
     transaction do
       update!(params)
