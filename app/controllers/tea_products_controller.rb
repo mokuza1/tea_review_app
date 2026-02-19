@@ -29,23 +29,21 @@ class TeaProductsController < ApplicationController
 
   def create
     normalized = tea_product_params.dup
-
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
+  
+    # 購入場所などはそのまま
     purchase_location_params = normalized.delete(:purchase_location)
 
     @tea_product = current_user.tea_products.build(normalized)
+  
+    # 【重要】エラー時にフォームが空にならないよう、値を保持させる
+    @tea_product.brand_id = brand_id
+    @tea_product.brand_name = brand_name
 
-    # ==================================
-    # brand_id / brand_name 排他チェック
-    # ==================================
+    # 両方空の時だけチェックする（両方ある場合は brand_id を優先するロジックにする）
     if brand_id.blank? && brand_name.blank?
       flash.now[:alert] = "ブランドを選択するか、新しく入力してください"
-      render :new, status: :unprocessable_entity and return
-    end
-
-    if brand_id.present? && brand_name.present?
-      flash.now[:alert] = "既存ブランドを選ぶか、新規ブランド入力のどちらかにしてください"
       render :new, status: :unprocessable_entity and return
     end
 
@@ -53,18 +51,15 @@ class TeaProductsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       if brand_id.present?
+        # サジェストから選ばれた既存ブランドを優先
         @tea_product.brand = Brand.find(brand_id)
-        # 既存ブランドを使用（何もしない）
       else
-        # ==================================
-        # 新規ブランドを同時作成（draft）
-        # ==================================
+        # 手入力（新規ブランド）
         brand = Brand.create!(
           name_ja: brand_name,
           status: :draft,
           user: current_user
         )
-
         @tea_product.brand = brand
       end
 
@@ -94,21 +89,34 @@ class TeaProductsController < ApplicationController
   def update
     @tea_product = current_user.tea_products.find(params[:id])
 
+    # パラメータの整理
     normalized = tea_product_params.dup
-
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
     purchase_location_params = normalized.delete(:purchase_location)
 
-    ActiveRecord::Base.transaction do
-      current_brand = @tea_product.brand
-      if brand_id.present?
-        @tea_product.brand = Brand.find(brand_id)
+    # 画面再表示用に仮想属性・関連IDをセット
+    @tea_product.brand_id = brand_id
+    @tea_product.brand_name = brand_name
 
+    # ブランド未入力チェック（新規でも既存でもない場合）
+    if brand_id.blank? && brand_name.blank?
+      flash.now[:alert] = "ブランドを選択するか、新しく入力してください"
+      prepare_edit_form
+      render :edit, status: :unprocessable_entity and return
+    end
+
+    ActiveRecord::Base.transaction do
+      # --- ブランドの紐付け処理 ---
+      if brand_id.present?
+        # サジェストから選ばれた場合（既存ブランドを優先）
+        @tea_product.brand = Brand.find(brand_id)
       elsif brand_name.present?
-        if current_brand&.display_name == brand_name
-          # 変更なし → 何もしない(修正可能性あり)
-        else
+        # 手入力された場合
+        current_brand = @tea_product.brand
+
+        # 現在のブランドと名前が違う場合のみ新規作成（既存の書き換えを防ぐ）
+        if current_brand&.display_name != brand_name
           brand = Brand.create!(
             name_ja: brand_name,
             status: :draft,
@@ -143,6 +151,7 @@ class TeaProductsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid
     prepare_edit_form
+    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
     render :edit, status: :unprocessable_entity
   end
 
