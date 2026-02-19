@@ -62,50 +62,6 @@ published_brands = brands.select(&:published?)
 puts "Brands created: #{brands.size}"
 
 # =====================================
-# TeaProducts（20件）
-# =====================================
-puts "Creating tea products..."
-
-# pending（承認待ち）5件
-5.times do |n|
-  TeaProduct.create!(
-    name: "承認待ちのお茶 #{n + 1}",
-    user: users.sample,
-    brand: published_brands.sample,
-    tea_type: TeaProduct.tea_types.keys.sample,
-    caffeine_level: TeaProduct.caffeine_levels.keys.sample,
-    description: Faker::Lorem.sentence,
-    status: :pending
-  )
-end
-
-# draft（下書き）5件
-5.times do
-  TeaProduct.create!(
-    user: users.sample,
-    status: :draft
-    # brand / name / enum / description はあえて入れない
-  )
-end
-
-# published（公開済み）10件
-10.times do |n|
-  TeaProduct.create!(
-    name: "公開済みのお茶 #{n + 1}",
-    user: users.sample,
-    brand: published_brands.sample,
-    tea_type: TeaProduct.tea_types.keys.sample,
-    caffeine_level: TeaProduct.caffeine_levels.keys.sample,
-    description: Faker::Lorem.paragraph(sentence_count: 2),
-    status: :published,
-    approved_by: admin,
-    approved_at: Faker::Time.backward(days: 30)
-  )
-end
-
-puts "TeaProducts created: 20"
-
-# =====================================
 # FlavorCategories / Flavors
 # =====================================
 puts "Creating flavor categories & flavors..."
@@ -175,6 +131,65 @@ purchase_locations_data.each do |attrs|
 end
 
 puts "PurchaseLocations created: #{PurchaseLocation.count}"
+
+# =====================================
+# TeaProducts（20件）
+# =====================================
+puts "Creating tea products..."
+
+all_flavors = Flavor.all
+all_locations = PurchaseLocation.all
+
+# pending（承認待ち）5件
+5.times do |n|
+  product = TeaProduct.new(
+    name: "承認待ちのお茶 #{n + 1}",
+    user: users.sample,
+    brand: published_brands.sample,
+    tea_type: TeaProduct.tea_types.keys.sample,
+    caffeine_level: TeaProduct.caffeine_levels.keys.sample,
+    description: Faker::Lorem.sentence,
+    status: :pending
+  )
+
+  # フレーバー1〜3個
+  product.flavors << all_flavors.sample(rand(1..3))
+
+  # 購入場所は1件のみ（バリデーションに合わせる）
+  product.purchase_locations << all_locations.sample
+
+  product.save!
+end
+
+# draft（下書き）5件
+5.times do
+  TeaProduct.create!(
+    user: users.sample,
+    status: :draft
+  )
+end
+
+# published（公開済み）10件
+10.times do |n|
+  product = TeaProduct.new(
+    name: "公開済みのお茶 #{n + 1}",
+    user: users.sample,
+    brand: published_brands.sample,
+    tea_type: TeaProduct.tea_types.keys.sample,
+    caffeine_level: TeaProduct.caffeine_levels.keys.sample,
+    description: Faker::Lorem.paragraph(sentence_count: 2),
+    status: :published,
+    approved_by: admin,
+    approved_at: Faker::Time.backward(days: 30)
+  )
+
+  product.flavors << all_flavors.sample(rand(1..3))
+  product.purchase_locations << all_locations.sample
+
+  product.save!
+end
+
+puts "TeaProducts created: #{TeaProduct.count}"
 
 # =====================================
 # TeaProductFlavors
