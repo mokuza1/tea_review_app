@@ -88,9 +88,11 @@ class TeaProduct < ApplicationRecord
     self.selected_flavor_category_ids =
       params[:selected_flavor_category_ids]
 
+    was_rejected = rejected? # 更新前の状態をメモしておく
+
     transaction do
       update!(params)
-      update!(status: :draft) if rejected?
+      update!(status: :draft) if was_rejected
     end
   end
 
@@ -98,8 +100,7 @@ class TeaProduct < ApplicationRecord
     return false unless draft?
     return false unless valid?
 
-    self.status = :pending
-    save
+    update!(status: :pending)
   end
 
   # ===========
@@ -142,8 +143,11 @@ class TeaProduct < ApplicationRecord
     return if brand.blank?
 
     return if brand.published?
-    return if brand.pending? # SubmitTeaProductService 経由を想定
 
+    # 申請中(pending)または下書き(draft)の場合は、作成者が自分である必要がある
+    if (brand.pending? || brand.draft?) && brand.user_id == self.user_id
+      return
+    end
     errors.add(:brand, "は承認済み、または申請中のものを選択してください")
   end
 
