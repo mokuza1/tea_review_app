@@ -1,6 +1,8 @@
 class Brand < ApplicationRecord
   class InvalidStatusTransition < StandardError; end
 
+  before_validation :normalize_name_ja
+
   include PreventableDestroyIfPublished
 
   belongs_to :user
@@ -10,7 +12,7 @@ class Brand < ApplicationRecord
 
   has_many :tea_products
 
-  validates :name_ja, length: { maximum: 255 }, allow_blank: true
+  validates :name_ja, length: { maximum: 255 }, allow_blank: true, presence: true
   validates :name_en, length: { maximum: 255 }, allow_blank: true
   validates :country, length: { maximum: 100 }, allow_blank: true
   validates :description, length: { maximum: 1000 }, allow_blank: true
@@ -82,5 +84,14 @@ class Brand < ApplicationRecord
     if name_ja.blank? && name_en.blank?
       errors.add(:base, "ブランド名（日本語または英語）のいずれかを入力してください")
     end
+  end
+
+  def normalize_name_ja
+    return if name_ja.blank?
+
+    self.name_ja = name_ja.strip
+                         .tr('ぁ-ん', 'ァ-ン')
+                         .unicode_normalize(:nfkc)
+                         .upcase
   end
 end

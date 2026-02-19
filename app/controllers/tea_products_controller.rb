@@ -37,7 +37,7 @@ class TeaProductsController < ApplicationController
 
     @tea_product = current_user.tea_products.build(normalized)
   
-    # 【重要】エラー時にフォームが空にならないよう、値を保持させる
+    # エラー時にフォームが空にならないよう、値を保持させる
     @tea_product.brand_id = brand_id
     @tea_product.brand_name = brand_name
 
@@ -50,17 +50,16 @@ class TeaProductsController < ApplicationController
     @tea_product.status = :draft
 
     ActiveRecord::Base.transaction do
+      # --- ブランド紐付けロジック ---
       if brand_id.present?
-        # サジェストから選ばれた既存ブランドを優先
         @tea_product.brand = Brand.find(brand_id)
       else
-        # 手入力（新規ブランド）
-        brand = Brand.create!(
-          name_ja: brand_name,
-          status: :draft,
-          user: current_user
-        )
-        @tea_product.brand = brand
+        # 手入力の場合：既存を探す。なければ新規作成(status: :draft)
+        # ※DB側に name_ja のユニークインデックスが必須
+        @tea_product.brand = Brand.create_or_find_by!(name_ja: brand_name) do |b|
+          b.status = :draft
+          b.user = current_user
+        end
       end
 
       if purchase_location_params.present?
@@ -75,8 +74,8 @@ class TeaProductsController < ApplicationController
 
     redirect_to edit_tea_product_path(@tea_product),
                 notice: "下書きを作成しました"
-  rescue ActiveRecord::RecordInvalid
-    flash.now[:alert] = "保存に失敗しました"
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
     render :new, status: :unprocessable_entity
   end
 
@@ -107,22 +106,14 @@ class TeaProductsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      # --- ブランドの紐付け処理 ---
+      # --- ブランド紐付けロジック ---
       if brand_id.present?
-        # サジェストから選ばれた場合（既存ブランドを優先）
         @tea_product.brand = Brand.find(brand_id)
-      elsif brand_name.present?
-        # 手入力された場合
-        current_brand = @tea_product.brand
-
-        # 現在のブランドと名前が違う場合のみ新規作成（既存の書き換えを防ぐ）
-        if current_brand&.display_name != brand_name
-          brand = Brand.create!(
-            name_ja: brand_name,
-            status: :draft,
-            user: current_user
-          )
-          @tea_product.brand = brand
+      else
+        # 手入力の場合：既存を探すか、新規(draft)で作成
+        @tea_product.brand = Brand.create_or_find_by!(name_ja: brand_name) do |b|
+          b.status = :draft
+          b.user = current_user
         end
       end
 
@@ -149,7 +140,7 @@ class TeaProductsController < ApplicationController
       redirect_to edit_tea_product_path(@tea_product),
                   notice: "商品を更新しました"
     end
-  rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordInvalid => e
     prepare_edit_form
     flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
     render :edit, status: :unprocessable_entity
