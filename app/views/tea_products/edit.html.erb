@@ -11,16 +11,16 @@
       <% if @tea_product.rejected? && @tea_product.rejection_reason.present? %>
         <div class="mb-10 bg-red-50 border border-red-200 rounded-xl p-6">
 
-          <p class="text-xs font-bold text-red-600 tracking-widest uppercase mb-2">
+          <p class="text-xs font-bold text-red-600 tracking-[0.2em] uppercase mb-2">
             REJECTION REASON / 却下の理由
           </p>
 
-          <p class="text-base text-red-800 leading-relaxed mb-4">
+          <p class="text-base text-red-950 font-semibold leading-relaxed mb-4">
             <%= @tea_product.rejection_reason %>
           </p>
 
           <p class="text-sm text-red-700">
-            上記の理由をご確認のうえ、内容を修正して再度申請してください。
+            上記の理由をご確認のうえ、内容を修正して再度保存・申請してください。
           </p>
 
         </div>
