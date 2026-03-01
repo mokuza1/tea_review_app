@@ -27,9 +27,17 @@ class Admin::TeaProductsController < Admin::BaseController
 
   def reject
     tea_product = TeaProduct.find(params[:id])
-    tea_product.reject!(current_user)
+    reason = params[:rejection_reason].to_s.strip
+
+    if reason.blank?
+      redirect_to admin_tea_product_path(tea_product),
+                  alert: "却下理由を入力してください" and return
+    end
+
+    tea_product.reject!(current_user, reason: reason)
 
     redirect_to admin_tea_products_path, notice: "却下しました"
+
   rescue InvalidStatusTransition
     redirect_to admin_tea_products_path, alert: "却下できない状態です"
   end
