@@ -135,7 +135,7 @@ class TeaProductsController < ApplicationController
     end
 
     if was_rejected
-      redirect_to mypage_path,
+      redirect_to edit_tea_product_path(@tea_product),
                   notice: "再申請用に下書きへ戻しました"
     else
       redirect_to edit_tea_product_path(@tea_product),

@@ -44,6 +44,7 @@ class TeaProduct < ApplicationRecord
   validates :caffeine_level, presence: { message: "を選択してください" }, inclusion: { in: caffeine_levels.keys }, unless: :draft?
   # validates :selected_flavor_category_id,  presence: true,  unless: :draft?
   validates :description, length: { maximum: 1000 }, allow_blank: true
+  validates :rejection_reason, presence: true, if: :rejected?
 
   validate :brand_must_be_published_or_pending_with_self, unless: :draft?
   validate :at_least_one_flavor, unless: :draft?
@@ -92,7 +93,13 @@ class TeaProduct < ApplicationRecord
 
     transaction do
       update!(params)
-      update!(status: :draft) if was_rejected
+
+      if was_rejected
+        update!(
+          status: :draft,
+          rejection_reason: nil
+        )
+      end
     end
   end
 
@@ -117,13 +124,14 @@ class TeaProduct < ApplicationRecord
     )
   end
 
-  def reject!(admin)
+  def reject!(admin, reason:)
     raise InvalidStatusTransition unless pending?
 
     update!(
       status: :rejected,
       approved_by: admin,
-      approved_at: Time.current
+      approved_at: Time.current,
+      rejection_reason: reason
     )
   end
 
