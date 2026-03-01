@@ -135,27 +135,31 @@
 
     <% if @tea_product.pending? %>
       <!-- 右側 -->
-      <div class="flex flex-col items-end gap-3">
+      <div class="flex flex-col items-end gap-6">
 
         <%= button_to "承認",
             approve_admin_tea_product_path(@tea_product),
             method: :patch,
-            class: "px-4 py-2 bg-green-600 text-white rounded" %>
+            class: "px-6 py-2 bg-green-600 text-white rounded font-semibold shadow" %>
 
-        <%= form_with url: reject_admin_tea_product_path(@tea_product),
-              method: :patch,
-              local: true,
-              class: "flex flex-col items-end gap-2" do |f| %>
+        <!-- 却下フォーム -->
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 w-72">
 
-          <%= text_area_tag :rejection_reason,
-                nil,
-                rows: 3,
-                placeholder: "却下理由を入力してください",
-                class: "w-64 border rounded p-2" %>
+          <%= form_with url: reject_admin_tea_product_path(@tea_product),
+                method: :patch,
+                local: true,
+                class: "flex flex-col gap-3" do |f| %>
 
-          <%= f.submit "却下",
-              class: "px-4 py-2 bg-red-600 text-white rounded" %>
-        <% end %>
+            <%= text_area_tag :rejection_reason,
+                  nil,
+                  rows: 3,
+                  placeholder: "却下理由を入力してください",
+                  class: "w-full border rounded p-2" %>
+
+            <%= f.submit "却下する",
+                  class: "px-4 py-2 bg-red-600 text-white rounded font-semibold" %>
+
+          <% end %>
 
       </div>
     <% end %>

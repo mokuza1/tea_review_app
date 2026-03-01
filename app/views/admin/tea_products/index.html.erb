@@ -21,10 +21,6 @@
 
         <td class="p-2 space-x-2">
           <% if tea_product.pending? %>
-            <%= button_to "承認",
-                  approve_admin_tea_product_path(tea_product),
-                  method: :patch,
-                  class: "px-3 py-1 bg-green-600 text-white rounded text-xs" %>
 
             <%= button_to "却下",
                   reject_admin_tea_product_path(tea_product),
