@@ -89,4 +89,5 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   config.hosts << "kocha-zukan.com"
   config.hosts << "www.kocha-zukan.com"
+  config.hosts << "kocha-zukan.onrender.com"
 end
