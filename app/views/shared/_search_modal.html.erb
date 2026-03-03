@@ -96,6 +96,66 @@
         </div>
 
       </div>
-    </div>
+
+      <div data-modal-target="teaTypePanel" class="hidden">
+
+        <div class="mb-8 border-b-2 border-[#F1EFE9] pb-4">
+          <h2 class="text-xl font-serif font-bold text-[#365442] tracking-widest uppercase">
+            TEA TYPE
+          </h2>
+          <p class="text-[10px] text-[#8C7B6C] font-bold mt-1 uppercase tracking-widest">
+            茶葉タイプから探す
+          </p>
+        </div>
+
+        <div class="grid gap-2">
+          <% TeaProduct.tea_types.each_key do |key| %>
+            <%= link_to tea_products_path(
+                  q: (params[:q]&.to_unsafe_h || {}).merge(
+                    tea_type_eq: TeaProduct.tea_types[key]
+                  )
+                ),
+                class: "group block p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded hover:border-[#365442] hover:bg-white transition-all shadow-sm" do %>
+
+              <span class="text-base font-bold text-[#365442] flex justify-between">
+                <%= TeaProduct.new(tea_type: key).enum_i18n(:tea_type) %>
+                <span class="text-xs">→</span>
+              </span>
+
+            <% end %>
+          <% end %>
+        </div>
+
+      </div>
+
+      <div data-modal-target="caffeinePanel" class="hidden">
+
+        <div class="mb-8 border-b-2 border-[#F1EFE9] pb-4">
+          <h2 class="text-xl font-serif font-bold text-[#365442] tracking-widest uppercase">
+            CAFFEINE LEVEL
+          </h2>
+          <p class="text-[10px] text-[#8C7B6C] font-bold mt-1 uppercase tracking-widest">
+              カフェイン量から探す
+          </p>
+        </div>
+
+        <div class="grid gap-2">
+          <% TeaProduct.caffeine_levels.each_key do |key| %>
+            <%= link_to tea_products_path(
+                  q: (params[:q]&.to_unsafe_h || {}).merge(
+                    caffeine_level_eq: TeaProduct.caffeine_levels[key]
+                  )
+                ),
+                class: "group block p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded hover:border-[#365442] hover:bg-white transition-all shadow-sm" do %>
+
+              <span class="text-base font-bold text-[#365442] flex justify-between">
+                <%= TeaProduct.new(caffeine_level: key).enum_i18n(:caffeine_level) %>
+                <span class="text-xs">→</span>
+              </span>
+
+            <% end %>
+          <% end %>
+        </div>
+      </div>
   </div>
 </div>
