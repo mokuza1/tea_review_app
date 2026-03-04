@@ -64,12 +64,11 @@ ja:
           published: 公開中
 
         tea_type:
-          black: ブラックティー
-          green: グリーンティー
-          oolong: ウーロンティー
-          white: ホワイトティー
+          black: ブラックティー（紅茶）
+          green: グリーンティー（緑茶）
+          oolong: ウーロンティー（烏龍茶）
+          white: ホワイトティー（白茶）
           herbal: ハーブティー
-
         caffeine_level:
           caffeinated: カフェインあり
           non_caffeinated: カフェインなし
