@@ -72,7 +72,7 @@ class TeaProduct < ApplicationRecord
 
   # 検索可能カラム
   def self.ransackable_attributes(auth_object = nil)
-    %w[name brand_id]
+    %w[name brand_id tea_type caffeine_level]
   end
 
   # 関連先で検索許可

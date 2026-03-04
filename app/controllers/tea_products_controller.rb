@@ -5,9 +5,7 @@ class TeaProductsController < ApplicationController
 
   def index
     base_scope = TeaProduct.where(status: :published)
-
     @q = base_scope.includes(:brand, :image_attachment).ransack(search_params)
-
     @tea_products = @q.result(distinct: true)
                       .order(created_at: :desc)
                       .page(params[:page])
@@ -236,7 +234,9 @@ class TeaProductsController < ApplicationController
       "name_or_brand_name_ja_or_brand_name_en_cont",
       "brand_id_eq",
       "flavors_id_eq",
-      "flavors_flavor_category_id_eq"
+      "flavors_flavor_category_id_eq",
+      "tea_type_eq",
+      "caffeine_level_eq"
     )
   end
 end
