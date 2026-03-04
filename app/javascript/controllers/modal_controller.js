@@ -9,6 +9,15 @@ export default class extends Controller {
     "caffeinePanel"
   ]
 
+  connect() {
+    this.closeOnEscape = this.closeOnEscape.bind(this)
+    document.addEventListener("keydown", this.closeOnEscape)
+  }
+
+  disconnect() {
+    document.removeEventListener("keydown", this.closeOnEscape)
+  }
+
   openFlavor() {
     this.show(this.flavorPanelTarget)
   }
@@ -28,15 +37,29 @@ export default class extends Controller {
   show(panel) {
     this.overlayTarget.classList.remove("hidden")
 
+    this.hideAllPanels()
+    panel.classList.remove("hidden")
+  }
+
+  hideAllPanels() {
     this.flavorPanelTarget.classList.add("hidden")
     this.brandPanelTarget.classList.add("hidden")
     this.teaTypePanelTarget.classList.add("hidden")
     this.caffeinePanelTarget.classList.add("hidden")
-
-    panel.classList.remove("hidden")
   }
 
   close() {
     this.overlayTarget.classList.add("hidden")
+    this.hideAllPanels()
+  }
+
+  closeOnEscape(event) {
+    if (event.key === "Escape") {
+      this.close()
+    }
+  }
+
+  stop(event) {
+    event.stopPropagation()
   }
 }
