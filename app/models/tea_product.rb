@@ -109,9 +109,12 @@ class TeaProduct < ApplicationRecord
 
   def submit
     return false unless draft?
+
+    self.status = :pending
+
     return false unless valid?
 
-    update!(status: :pending)
+    save!
   end
 
   # ===========
