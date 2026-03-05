@@ -10,7 +10,12 @@ export default class extends Controller {
 
   add() {
 
-    if (this.fieldTargets.length >= 3) {
+    const activeFields = this.fieldTargets.filter((field) => {
+      const destroyInput = field.querySelector("input[name*='_destroy']")
+      return !(destroyInput && destroyInput.value == "1")
+    })
+
+    if (activeFields.length >= 3) {
       alert("購入場所は3件まで登録できます")
       return
     }
