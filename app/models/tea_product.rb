@@ -15,6 +15,8 @@ class TeaProduct < ApplicationRecord
   has_many :tea_product_purchase_locations, dependent: :destroy
   has_many :purchase_locations, through: :tea_product_purchase_locations
 
+  accepts_nested_attributes_for :tea_product_purchase_locations, allow_destroy: true
+
   has_one_attached :image
 
   enum :status, {
@@ -181,8 +183,8 @@ class TeaProduct < ApplicationRecord
 
     if active_locations.empty?
       errors.add(:base, "購入場所を1件登録してください")
-    elsif active_locations.size > 1
-      errors.add(:base, "購入場所は1件のみ登録できます")
+    elsif active_locations.size > 3
+      errors.add(:base, "購入場所は3件まで登録できます")
     end
   end
 
