@@ -127,30 +127,34 @@
       </div>
     </div>
 
-    <div class="mb-12 border-t-2 border-[#F1EFE9] pt-10">
+    <div class="mb-12 border-t-2 border-[#F1EFE9] pt-10"
+         data-controller="purchase-locations">
+
       <h3 class="text-sm font-bold text-[#365442] tracking-[0.3em] uppercase mb-6 flex items-center gap-2">
         <span class="w-2.5 h-2.5 rounded-full bg-[#A75F29]"></span>
         Provenance / 購入場所
       </h3>
 
-      <% purchase_location = @tea_product.purchase_locations.first %>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div>
-          <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">Location Type</label>
-          <%= select_tag "tea_product[purchase_location][location_type]",
-                options_for_select(PurchaseLocation.location_types.keys.map { |k| [PurchaseLocation.new(location_type: k).enum_i18n(:location_type), k] }, purchase_location&.location_type),
-                prompt: "種類を選択",
-                class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded font-semibold text-[#26302A]" %>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">Store Name</label>
-          <%= text_field_tag "tea_product[purchase_location][name]",
-                purchase_location&.name,
-                placeholder: "例：LUPICIA 自由が丘本店",
-                autocomplete: "off",
-                class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded font-semibold text-[#26302A]" %>
-        </div>
+      <div data-purchase-locations-target="container">
+        <%= f.fields_for :tea_product_purchase_locations do |location_form| %>
+          <%= render "purchase_location_fields", f: location_form %>
+        <% end %>
       </div>
+
+      <template data-purchase-locations-target="template">
+        <%= f.fields_for :tea_product_purchase_locations,
+              TeaProductPurchaseLocation.new.tap { |tpl| tpl.build_purchase_location },
+              child_index: "NEW_RECORD" do |location_form| %>
+          <%= render "purchase_location_fields", f: location_form %>
+        <% end %>
+      </template>
+
+      <button type="button"
+              data-action="purchase-locations#add"
+              class="mt-6 px-4 py-2 border border-[#365442] text-[#365442] rounded hover:bg-[#365442] hover:text-white transition">
+        ＋ 購入場所を追加
+      </button>
+
     </div>
 
     <div class="mb-12">

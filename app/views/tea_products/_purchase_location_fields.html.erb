@@ -1,0 +1,42 @@
+<div class="purchase-location-fields grid md:grid-cols-2 gap-8 mb-6"
+     data-purchase-locations-target="field">
+
+  <%= f.hidden_field :_destroy %>
+
+  <%= f.fields_for :purchase_location do |pl| %>
+
+    <div>
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+        Location Type
+      </label>
+
+      <%= pl.select :location_type,
+            PurchaseLocation.location_types.keys.map { |k|
+              [PurchaseLocation.new(location_type: k).enum_i18n(:location_type), k]
+            },
+            { prompt: "種類を選択" },
+            class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded font-semibold text-[#26302A]" %>
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold text-[#365442] tracking-[0.2em] uppercase mb-2">
+        Store Name
+      </label>
+
+      <%= pl.text_field :name,
+            placeholder: "例：LUPICIA 自由が丘本店",
+            autocomplete: "off",
+            class: "w-full p-4 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded font-semibold text-[#26302A]" %>
+    </div>
+
+  <% end %>
+
+  <div class="col-span-2">
+    <button type="button"
+            data-action="purchase-locations#remove"
+            class="text-sm text-red-500 hover:underline">
+      削除
+    </button>
+  </div>
+
+</div>
