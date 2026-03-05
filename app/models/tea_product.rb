@@ -15,7 +15,9 @@ class TeaProduct < ApplicationRecord
   has_many :tea_product_purchase_locations, dependent: :destroy
   has_many :purchase_locations, through: :tea_product_purchase_locations
 
-  accepts_nested_attributes_for :tea_product_purchase_locations, allow_destroy: true
+  accepts_nested_attributes_for :tea_product_purchase_locations,
+                                allow_destroy: true,
+                                reject_if: :all_blank
 
   has_one_attached :image
 

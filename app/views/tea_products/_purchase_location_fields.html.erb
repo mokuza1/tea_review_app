@@ -3,6 +3,8 @@
 
   <%= f.hidden_field :_destroy %>
 
+  <% f.object.build_purchase_location unless f.object.purchase_location %>
+
   <%= f.fields_for :purchase_location do |pl| %>
 
     <div>
