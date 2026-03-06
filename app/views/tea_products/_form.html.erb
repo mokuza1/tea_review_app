@@ -10,8 +10,8 @@
       <div class="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 mb-8 font-serif text-sm">
         <p class="font-bold mb-1">入力内容に不備があります：</p>
         <ul class="list-disc list-inside opacity-90 font-semibold">
-          <% tea_product.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
+          <% tea_product.errors.each do |error| %>
+            <li><%= error.message %></li>
           <% end %>
         </ul>
       </div>

@@ -74,7 +74,7 @@ class TeaProductsController < ApplicationController
     redirect_to edit_tea_product_path(@tea_product),
                 notice: "下書きを作成しました"
   rescue ActiveRecord::RecordInvalid => e
-    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
+    flash.now[:alert] = "保存に失敗しました"
     render :new, status: :unprocessable_entity
   end
 
@@ -87,7 +87,7 @@ class TeaProductsController < ApplicationController
       tea_product_purchase_locations: :purchase_location
     ).find(params[:id])
 
-    if @tea_product.tea_product_purchase_locations.empty?
+    if @tea_product.tea_product_purchase_locations.blank?
         tpl = @tea_product.tea_product_purchase_locations.build
         tpl.build_purchase_location
       end
@@ -150,7 +150,7 @@ class TeaProductsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid => e
     prepare_edit_form
-    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
+    flash.now[:alert] = "保存に失敗しました"
     render :edit, status: :unprocessable_entity
   end
 

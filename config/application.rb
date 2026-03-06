@@ -18,6 +18,7 @@ module Myapp
 
     config.i18n.default_locale = :ja
     config.i18n.available_locales = [ :ja, :en ]
+    config.active_model.i18n_customize_full_message = true
 
     config.time_zone = "Tokyo"
     # Configuration for the application, engines, and railties goes here.

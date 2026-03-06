@@ -17,7 +17,7 @@ class TeaProduct < ApplicationRecord
 
   accepts_nested_attributes_for :tea_product_purchase_locations,
                                 allow_destroy: true,
-                                reject_if: :all_blank
+                                reject_if: :reject_empty_purchase_locations
 
   has_one_attached :image
 
@@ -42,10 +42,10 @@ class TeaProduct < ApplicationRecord
     decaffeinated: 20
   }
 
-  validates :name, presence: { message: "を入力してください" }, length: { maximum: 100 }, unless: :draft?
-  validates :brand, presence: { message: "を選択してください" }, unless: :draft?
-  validates :tea_type, presence: { message: "を選択してください" }, inclusion: { in: tea_types.keys }, unless: :draft?
-  validates :caffeine_level, presence: { message: "を選択してください" }, inclusion: { in: caffeine_levels.keys }, unless: :draft?
+  validates :name, presence: { message: "商品名を入力してください" }, length: { maximum: 100 }, unless: :draft?
+  validates :brand, presence: { message: "ブランドを選択してください" }, unless: :draft?
+  validates :tea_type, presence: { message:"お茶の種類を選択してください"}, inclusion: { in: tea_types.keys, allow_blank: true }, unless: :draft?
+  validates :caffeine_level, presence: { message: "カフェインの有無を選択してください" }, inclusion: { in: caffeine_levels.keys, allow_blank: true }, unless: :draft?
   # validates :selected_flavor_category_id,  presence: true,  unless: :draft?
   validates :description, length: { maximum: 1000 }, allow_blank: true
   validates :rejection_reason, presence: true, if: :rejected?
@@ -191,6 +191,21 @@ class TeaProduct < ApplicationRecord
     elsif active_locations.size > 3
       errors.add(:base, "購入場所は3件まで登録できます")
     end
+  end
+
+  # カスタムrejectメソッドを追加
+  def reject_empty_purchase_locations(attributes)
+    # 既存レコード（idが存在する）の更新や削除（_destroy）は邪魔しない
+    return false if attributes['id'].present?
+
+    # ネストされた purchase_location のパラメータを取得
+    loc_attrs = attributes['purchase_location_attributes'] || {}
+    
+    # 既存のIDを直接指定するUI（セレクトボックス等）の場合は、そのIDの有無も見る
+    return false if attributes['purchase_location_id'].present?
+
+    # name と location_type が両方とも空なら、中間テーブルのレコードごと保存を破棄する
+    loc_attrs['name'].blank? && loc_attrs['location_type'].blank?
   end
 
   def image_type
