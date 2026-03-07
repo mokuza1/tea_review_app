@@ -1,0 +1,19 @@
+<%= turbo_frame_tag "favorite_button_#{tea_product.id}" do %>
+  <% if tea_product.favorited_by?(current_user) %>
+
+    <%= button_to "★ お気に入り解除",
+        tea_product_favorite_path(tea_product),
+        method: :delete,
+        data: { turbo: true },
+        class: "btn btn-outline-danger" %>
+
+  <% else %>
+
+    <%= button_to "☆ お気に入り",
+        tea_product_favorite_path(tea_product),
+        method: :post,
+        data: { turbo: true },
+        class: "btn btn-danger" %>
+
+  <% end %>
+<% end %>
