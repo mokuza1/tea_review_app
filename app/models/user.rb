@@ -23,8 +23,4 @@ class User < ApplicationRecord
            class_name: "TeaProduct",
            foreign_key: :approved_by_id
 
-  # お気に入り登録済みかどうかを判定するメソッド
-  def favorited?(tea_product)
-    favorites.exists?(tea_product_id: tea_product.id)
-  end
 end

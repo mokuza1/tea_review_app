@@ -85,6 +85,11 @@ class TeaProduct < ApplicationRecord
     %w[brand flavors]
   end
 
+  def favorited_by?(user)
+    return false unless user
+    favorites.exists?(user: user)
+  end
+
   # ===========
   # 一般ユーザー側
   # ===========
