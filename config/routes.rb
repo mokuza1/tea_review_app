@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   resource :mypage, only: %i[show]
 
   resources :tea_products, only: %i[index show new create edit update] do
+    resource :favorite, only: %i[create destroy]
+
     member do
       patch :submit
     end
