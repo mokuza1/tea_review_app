@@ -5,6 +5,7 @@ ja:
       tea_product: 紅茶商品
       brand: ブランド
       purchase_location: 購入場所
+      tea_product_purchase_location: 購入場所
 
     # =========================
     # 属性名（ラベル）
@@ -30,6 +31,7 @@ ja:
         caffeine_level: カフェイン
         brand: ブランド
         selected_flavor_category_id: フレーバーカテゴリ
+        tea_product_purchase_locations: 購入場所
 
       # --------------------
       # Brand
@@ -50,6 +52,10 @@ ja:
       purchase_location:
         name: 場所名
         location_type: 種別
+
+      tea_product_purchase_location:
+        purchase_location: 購入場所
+        purchase_location_id: 購入場所
 
     # =========================
     # enum 翻訳
@@ -100,3 +106,18 @@ ja:
           attributes:
             name:
               blank: "商品名を入力してください"
+        tea_product_purchase_location:
+          attributes:
+            purchase_location_id:
+              blank: "購入場所を入力してください"
+        purchase_location:
+          attributes:
+            name:
+              blank: "店舗名を入力してください"
+              too_short: "店舗名は%{count}文字以上で入力してください"
+            location_type:
+              blank: "購入場所の種類を選択してください"
+  errors:
+    messages:
+      blank: を入力してください
+      too_short: "%{count}文字以上で入力してください"

@@ -16,23 +16,20 @@ class TeaProductsController < ApplicationController
   def show
     @tea_product = TeaProduct
       .viewable_by(current_user)
-      .includes(:brand, :purchase_locations, flavors: :flavor_category)
+      .includes(:brand, tea_product_purchase_locations: :purchase_location, flavors: :flavor_category)
       .find(params[:id])
   end
 
   def new
-    @tea_product = current_user.tea_products.build(
-      status: :draft
-    )
+    @tea_product = current_user.tea_products.build(status: :draft)
+    tpl = @tea_product.tea_product_purchase_locations.build
+    tpl.build_purchase_location
   end
 
   def create
     normalized = tea_product_params.dup
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
-
-    # 購入場所などはそのまま
-    purchase_location_params = normalized.delete(:purchase_location)
 
     @tea_product = current_user.tea_products.build(normalized)
 
@@ -61,26 +58,28 @@ class TeaProductsController < ApplicationController
         end
       end
 
-      if purchase_location_params.present?
-          save_purchase_location!(
-            tea_product: @tea_product,
-            params: purchase_location_params
-          )
-      end
-
       @tea_product.save!
     end
 
     redirect_to edit_tea_product_path(@tea_product),
                 notice: "下書きを作成しました"
   rescue ActiveRecord::RecordInvalid => e
-    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
+    flash.now[:alert] = "保存に失敗しました"
     render :new, status: :unprocessable_entity
   end
 
   def edit
     unless @tea_product.draft? || @tea_product.rejected?
       redirect_to tea_products_path, alert: "編集できない状態です"
+    end
+
+    @tea_product = TeaProduct.includes(
+      tea_product_purchase_locations: :purchase_location
+    ).find(params[:id])
+
+    if @tea_product.tea_product_purchase_locations.blank?
+        tpl = @tea_product.tea_product_purchase_locations.build
+        tpl.build_purchase_location
     end
   end
 
@@ -89,7 +88,6 @@ class TeaProductsController < ApplicationController
     normalized = tea_product_params.dup
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
-    purchase_location_params = normalized.delete(:purchase_location)
 
     # 画面再表示用に仮想属性・関連IDをセット
     @tea_product.brand_id = brand_id
@@ -122,14 +120,6 @@ class TeaProductsController < ApplicationController
       else
         @tea_product.update!(normalized)
       end
-
-      # ---- 購入場所更新 ----
-      if purchase_location_params.present?
-        save_purchase_location!(
-          tea_product: @tea_product,
-          params: purchase_location_params
-        )
-      end
     end
 
     if was_rejected
@@ -141,7 +131,7 @@ class TeaProductsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid => e
     prepare_edit_form
-    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
+    flash.now[:alert] = "保存に失敗しました"
     render :edit, status: :unprocessable_entity
   end
 
@@ -180,34 +170,6 @@ class TeaProductsController < ApplicationController
                   .uniq
   end
 
-  def save_purchase_location!(tea_product:, params:)
-    location_type = params[:location_type]
-    name          = params[:name].to_s.strip
-
-    # 両方必須（DB設計と完全一致）
-    return if location_type.blank? || name.blank?
-
-    # 既存の購入場所（1件前提）
-    existing = tea_product.purchase_locations.first
-
-    if existing
-      existing.update!(
-        location_type: location_type,
-        name: name
-      )
-    else
-      location = PurchaseLocation.find_or_create_by!(
-        location_type: location_type,
-        name: name
-      )
-
-      TeaProductPurchaseLocation.create!(
-        tea_product: tea_product,
-        purchase_location: location
-      )
-    end
-  end
-
   def tea_product_params
     params.require(:tea_product).permit(
       :name,
@@ -219,9 +181,14 @@ class TeaProductsController < ApplicationController
       :image,
       { selected_flavor_category_ids: [] },
       { flavor_ids: [] },
-      purchase_location: [
-      :location_type,
-      :name
+      tea_product_purchase_locations_attributes: [
+        :id,
+        :_destroy,
+        purchase_location_attributes: [
+          :id,
+          :location_type,
+          :name
+        ]
       ]
     )
   end
