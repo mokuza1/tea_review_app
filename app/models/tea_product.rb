@@ -14,6 +14,7 @@ class TeaProduct < ApplicationRecord
   has_many :flavors, through: :tea_product_flavors
   has_many :tea_product_purchase_locations, dependent: :destroy
   has_many :purchase_locations, through: :tea_product_purchase_locations
+  has_many :favorites, dependent: :destroy
 
   accepts_nested_attributes_for :tea_product_purchase_locations,
                                 allow_destroy: true,

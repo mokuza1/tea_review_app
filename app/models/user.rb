@@ -6,6 +6,10 @@ class User < ApplicationRecord
 
   enum :role, { general: 0, admin: 1 }
 
+  has_many :favorites, dependent: :destroy
+  # ユーザーがお気に入りした紅茶の一覧を簡単に取得できるようにする
+  has_many :favorite_tea_products, through: :favorites, source: :tea_product
+
   # 投稿者として
   has_many :brands
   has_many :tea_products
@@ -18,4 +22,9 @@ class User < ApplicationRecord
   has_many :approved_tea_products,
            class_name: "TeaProduct",
            foreign_key: :approved_by_id
+
+  # お気に入り登録済みかどうかを判定するメソッド
+  def favorited?(tea_product)
+    favorites.exists?(tea_product_id: tea_product.id)
+  end
 end
