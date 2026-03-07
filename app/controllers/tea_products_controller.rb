@@ -31,9 +31,6 @@ class TeaProductsController < ApplicationController
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
 
-    # 購入場所などはそのまま
-   # purchase_location_params = normalized.delete(:purchase_location)
-
     @tea_product = current_user.tea_products.build(normalized)
 
     # エラー時にフォームが空にならないよう、値を保持させる
@@ -61,13 +58,6 @@ class TeaProductsController < ApplicationController
         end
       end
 
-      #if purchase_location_params.present?
-          #save_purchase_location!(
-            #tea_product: @tea_product,
-            #params: purchase_location_params
-          #)
-      #end
-
       @tea_product.save!
     end
 
@@ -90,7 +80,7 @@ class TeaProductsController < ApplicationController
     if @tea_product.tea_product_purchase_locations.blank?
         tpl = @tea_product.tea_product_purchase_locations.build
         tpl.build_purchase_location
-      end
+    end
   end
 
   def update
@@ -98,7 +88,6 @@ class TeaProductsController < ApplicationController
     normalized = tea_product_params.dup
     brand_id   = normalized.delete(:brand_id).presence
     brand_name = normalized.delete(:brand_name).to_s.strip
-    #purchase_location_params = normalized.delete(:purchase_location)
 
     # 画面再表示用に仮想属性・関連IDをセット
     @tea_product.brand_id = brand_id
@@ -131,14 +120,6 @@ class TeaProductsController < ApplicationController
       else
         @tea_product.update!(normalized)
       end
-
-      # ---- 購入場所更新 ----
-      #if purchase_location_params.present?
-       # save_purchase_location!(
-          #tea_product: @tea_product,
-          #params: purchase_location_params
-        #)
-      #end
     end
 
     if was_rejected
@@ -188,34 +169,6 @@ class TeaProductsController < ApplicationController
                   .pluck(:flavor_category_id)
                   .uniq
   end
-
-  # def save_purchase_location!(tea_product:, params:)
-    # location_type = params[:location_type]
-    # name          = params[:name].to_s.strip
-
-    # 両方必須（DB設計と完全一致）
-   #  return if location_type.blank? || name.blank?
-
-    # 既存の購入場所（1件前提）
-   #  existing = tea_product.purchase_locations.first
-
-    # if existing
-     #  existing.update!(
-     #    location_type: location_type,
-     #    name: name
-      #)
-    # else
-      # location = PurchaseLocation.find_or_create_by!(
-        # location_type: location_type,
-       #  name: name
-      # )
-
-      # TeaProductPurchaseLocation.create!(
-        # tea_product: tea_product,
-        # purchase_location: location
-      # )
-    # end
-  # end
 
   def tea_product_params
     params.require(:tea_product).permit(
