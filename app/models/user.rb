@@ -22,5 +22,4 @@ class User < ApplicationRecord
   has_many :approved_tea_products,
            class_name: "TeaProduct",
            foreign_key: :approved_by_id
-
 end
