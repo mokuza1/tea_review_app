@@ -1,0 +1,18 @@
+<h2>
+質問 <%= @step %> / <%= TeaDiagnosisService.total_questions %>
+</h2>
+
+<p><%= @question[:text] %></p>
+
+<%= form_with url: answer_tea_diagnosis_path, method: :post do %>
+
+  <% @question[:choices].each do |choice| %>
+    <div>
+      <%= radio_button_tag :category, choice[:category] %>
+      <%= label_tag choice[:category], choice[:text] %>
+    </div>
+  <% end %>
+
+  <%= submit_tag "次へ" %>
+
+<% end %>
