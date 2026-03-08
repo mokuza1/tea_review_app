@@ -14,6 +14,9 @@ class MypagesController < ApplicationController
         .includes(:image_attachment)
         .order(created_at: :desc)
         .limit(3)
+
+    @tea_products_count = current_user.tea_products.count
+    @favorites_count = current_user.favorite_tea_products.count
   end
 
   # 自分の投稿一覧ページ
