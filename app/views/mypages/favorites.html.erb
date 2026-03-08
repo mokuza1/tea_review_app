@@ -1,0 +1,89 @@
+<div class="min-h-screen bg-[#F1EFE9] py-8 md:py-12">
+  <div class="max-w-4xl mx-auto px-4 mb-16">
+
+    <div class="mb-10 border-b-2 border-[#B5A89A] pb-6">
+      <h1 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] tracking-widest">
+        FAVORITE TEAS
+      </h1>
+      <p class="text-xs font-bold text-[#8C7B6C] mt-1 uppercase tracking-[0.2em]">
+        お気に入り一覧
+      </p>
+    </div>
+
+    <div class="mb-6">
+      <%= link_to "← マイページに戻る", mypage_path,
+          class: "text-sm font-bold text-[#365442] hover:text-[#A75F29]" %>
+    </div>
+
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
+
+      <table class="w-full text-sm border-collapse">
+
+        <thead class="bg-[#F9F7F2] border-b-2 border-[#D6CEC5]">
+          <tr>
+            <th class="p-4 w-32 text-center font-bold text-[#365442]">
+              画像
+            </th>
+            <th class="p-4 text-left font-bold text-[#365442]">
+              紅茶名
+            </th>
+            <th class="p-4 w-40 text-center font-bold text-[#365442]">
+              お気に入り
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y-2 divide-[#F1EFE9]">
+
+          <% @favorite_tea_products.each do |tea| %>
+
+            <tr class="hover:bg-[#FDFBF9]">
+
+              <!-- 画像 -->
+              <td class="p-4 text-center">
+
+                <div class="w-20 h-20 mx-auto bg-[#F1EFE9] border overflow-hidden rounded">
+
+                  <% if tea.image.attached? %>
+
+                    <%= image_tag tea.image, class: "w-full h-full object-cover" %>
+
+                  <% end %>
+
+                </div>
+
+              </td>
+
+              <!-- 名前 -->
+
+              <td class="p-4">
+
+                <%= link_to tea_product_path(tea),
+                    class: "font-bold text-[#365442] hover:text-[#A75F29]" do %>
+
+                  <%= tea.name %>
+
+                <% end %>
+
+              </td>
+
+              <!-- お気に入りボタン -->
+
+              <td class="p-4 text-center">
+
+                <%= render "favorites/button", tea_product: tea %>
+
+              </td>
+
+            </tr>
+
+          <% end %>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+</div>
