@@ -1,12 +1,10 @@
 <div class="relative">
 
-  <% if user_signed_in? %>
     <div class="absolute top-3 right-3 z-10">
       <%= turbo_frame_tag "favorite_button_#{tea_product.id}" do %>
         <%= render "favorites/button", tea_product: tea_product %>
       <% end %>
     </div>
-  <% end %>
 
   <%= link_to tea_product_path(tea_product, q: params[:q]&.to_unsafe_h),
               class: "block group" do %>

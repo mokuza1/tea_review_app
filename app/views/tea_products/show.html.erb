@@ -68,11 +68,9 @@
               <%= @tea_product.name %>
             </h1>
 
-            <% if user_signed_in? %>
               <%= turbo_frame_tag "favorite_button_#{@tea_product.id}" do %>
                 <%= render "favorites/button", tea_product: @tea_product %>
               <% end %>
-            <% end %>
 
           </div>
 
