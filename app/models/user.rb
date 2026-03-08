@@ -6,6 +6,10 @@ class User < ApplicationRecord
 
   enum :role, { general: 0, admin: 1 }
 
+  has_many :favorites, dependent: :destroy
+  # ユーザーがお気に入りした紅茶の一覧を簡単に取得できるようにする
+  has_many :favorite_tea_products, through: :favorites, source: :tea_product
+
   # 投稿者として
   has_many :brands
   has_many :tea_products

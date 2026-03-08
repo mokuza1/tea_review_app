@@ -8,9 +8,14 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resource :mypage, only: %i[show]
+  resource :mypage, only: %i[show] do
+    get :my_tea_products
+    get :favorites
+  end
 
   resources :tea_products, only: %i[index show new create edit update] do
+    resource :favorite, only: %i[create destroy]
+
     member do
       patch :submit
     end
