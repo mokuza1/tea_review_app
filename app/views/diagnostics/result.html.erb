@@ -1,11 +1,40 @@
-<h1>診断結果</h1>
+<turbo-frame id="diagnostic_modal">
 
-<p>
-  あなたにおすすめの紅茶は
-</p>
+<div
+  data-controller="diagnostic-modal"
+  data-diagnostic-modal-target="overlay"
+  data-action="click->diagnostic-modal#closeBackground"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
 
-<h2>
-  <%= @result %>
-</h2>
+  <div class="bg-white p-8 rounded-lg max-w-md w-full relative text-center">
 
-<%= link_to "もう一度診断する", start_diagnostic_path %>
+    <button
+      data-action="click->diagnostic-modal#close"
+      class="absolute top-2 right-2 text-gray-500"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-xl font-bold mb-4">
+      診断結果
+    </h2>
+
+    <p class="mb-2">
+      あなたにおすすめの紅茶は
+    </p>
+
+    <h3 class="text-2xl font-bold mb-6 text-green-700">
+      <%= @result %>
+    </h3>
+
+    <%= link_to "もう一度診断する",
+        start_diagnostic_path,
+        data: { turbo_frame: "diagnostic_modal" },
+        class: "inline-block px-4 py-2 bg-green-700 text-white rounded" %>
+
+  </div>
+
+</div>
+
+</turbo-frame>

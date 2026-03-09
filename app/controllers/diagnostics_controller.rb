@@ -5,6 +5,7 @@ class DiagnosticsController < ApplicationController
 
   def initialize_session
     session[:diagnostic_answers] = []
+
     redirect_to question_diagnostic_path(step: 1)
   end
 

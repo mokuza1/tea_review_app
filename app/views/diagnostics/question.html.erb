@@ -1,30 +1,55 @@
-<h2>質問 <%= @step %> / <%= @total_questions %></h2>
+<turbo-frame id="diagnostic_modal">
 
-<% progress = (@step.to_f / @total_questions * 100).round %>
+<div
+  data-controller="diagnostic-modal"
+  data-diagnostic-modal-target="overlay"
+  data-action="click->diagnostic-modal#closeBackground"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
 
-<div style="width: 100%; background: #eee; height: 10px; border-radius: 5px;">
-  <div
-    style="
-      width: <%= progress %>%;
-      background: #365442;
-      height: 10px;
-      border-radius: 5px;
-      transition: width 0.3s;
-    ">
+  <div class="bg-white p-8 rounded-lg max-w-md w-full relative">
+
+    <button
+      data-action="click->diagnostic-modal#close"
+      class="absolute top-2 right-2 text-gray-500"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-lg font-bold mb-2">
+      質問 <%= @step %> / <%= @total_questions %>
+    </h2>
+
+    <% progress = (@step.to_f / @total_questions * 100).round %>
+
+    <div class="w-full bg-gray-200 h-2 rounded mb-4">
+      <div
+        class="bg-green-700 h-2 rounded"
+        style="width:<%= progress %>%">
+      </div>
+    </div>
+
+    <p class="mb-6">
+      <%= @question[:text] %>
+    </p>
+
+    <div class="space-y-2">
+
+      <% @question[:options].each do |option| %>
+
+        <%= button_to option,
+            answer_diagnostic_path,
+            method: :post,
+            params: { answer: option },
+            form: { data: { turbo_frame: "diagnostic_modal" } },
+            class: "w-full border p-2 rounded hover:bg-gray-100" %>
+
+      <% end %>
+
+    </div>
+
   </div>
+
 </div>
 
-<p>
-  <%= @question[:text] %>
-</p>
-
-<div>
-  <% @question[:options].each do |option| %>
-
-    <%= button_to option,
-        answer_diagnostic_path,
-        method: :post,
-        params: { answer: option } %>
-
-  <% end %>
-</div>
+</turbo-frame>

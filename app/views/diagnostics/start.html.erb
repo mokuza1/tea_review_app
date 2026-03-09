@@ -1,10 +1,38 @@
-<h1>紅茶診断</h1>
+<turbo-frame id="diagnostic_modal">
 
-<p>
-  いくつかの質問に答えるだけで  
-  あなたに合う紅茶を見つけます。
-</p>
+<div
+  data-controller="diagnostic-modal"
+  data-diagnostic-modal-target="overlay"
+  data-action="click->diagnostic-modal#closeBackground"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
 
-<%= button_to "診断をはじめる",
-    initialize_session_diagnostic_path,
-    method: :post %>
+  <div class="bg-white p-8 rounded-lg max-w-md w-full relative">
+
+    <button
+      data-action="click->diagnostic-modal#close"
+      class="absolute top-2 right-2 text-gray-500"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-xl font-bold mb-4">
+      紅茶診断
+    </h2>
+
+    <p class="mb-6">
+      質問に答えて  
+      あなたに合う紅茶を見つけましょう
+    </p>
+
+    <%= button_to "診断スタート",
+        initialize_session_diagnostic_path,
+        method: :post,
+        form: { data: { turbo_frame: "diagnostic_modal" } },
+        class: "w-full bg-green-700 text-white p-2 rounded" %>
+
+  </div>
+
+</div>
+
+</turbo-frame>
