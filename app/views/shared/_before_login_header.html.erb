@@ -14,6 +14,10 @@
         <% end %>
       </div>
 
+      <%= link_to "紅茶診断",
+          start_diagnostic_path,
+          data: { turbo_frame: "diagnostic_modal" } %>
+
       <!-- ハンバーガー -->
       <label for="menu-toggle" class="md:hidden cursor-pointer">
         <div class="space-y-1">
