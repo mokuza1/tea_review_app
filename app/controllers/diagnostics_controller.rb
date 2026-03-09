@@ -20,11 +20,10 @@ class DiagnosticsController < ApplicationController
   end
 
   def answer
-    answers = session[:diagnostic_answers] || []
-    answers << params[:answer]
-    session[:diagnostic_answers] = answers
+    session[:diagnostic_answers] ||= []
+    session[:diagnostic_answers] << params[:answer].to_i
 
-    next_step = answers.length + 1
+    next_step = session[:diagnostic_answers].length + 1
 
     if next_step > TeaDiagnosticService.total_questions
       redirect_to result_diagnostic_path
@@ -34,8 +33,19 @@ class DiagnosticsController < ApplicationController
   end
 
   def result
-    @answers = session[:diagnostic_answers] || []
-    @result = TeaDiagnosticService.diagnose(@answers)
+    answers = session[:diagnostic_answers]
+
+    if answers.blank?
+      redirect_to start_diagnostic_path
+      return
+    end
+
+    category = TeaDiagnosticService.diagnose(answers)
+
+    @category = category
+    @result = TeaDiagnosticService.result_data(category)
+
+    session.delete(:diagnostic_answers)
   end
 
 end

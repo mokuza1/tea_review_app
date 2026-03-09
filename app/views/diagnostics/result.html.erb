@@ -24,9 +24,17 @@
       あなたにおすすめの紅茶は
     </p>
 
-    <h3 class="text-2xl font-bold mb-6 text-green-700">
-      <%= @result %>
-    </h3>
+    <h2 class="text-2xl font-bold mb-2">
+      <%= @result[:title] %>
+    </h2>
+
+    <p class="text-gray-600 mb-4">
+      <%= @result[:subtitle] %>
+    </p>
+
+    <p class="mb-6">
+      <%= @result[:description] %>
+    </p>
 
     <%= link_to "もう一度診断する",
         start_diagnostic_path,

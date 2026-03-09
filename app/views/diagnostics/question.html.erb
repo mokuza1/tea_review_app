@@ -35,17 +35,16 @@
 
     <div class="space-y-2">
 
-      <% @question[:options].each do |option| %>
+      <% @question[:options].each_with_index do |option, i| %>
 
-        <%= button_to option,
+        <%= button_to option[:text],
             answer_diagnostic_path,
             method: :post,
-            params: { answer: option },
+            params: { answer: i },
             form: { data: { turbo_frame: "diagnostic_modal" } },
             class: "w-full border p-2 rounded hover:bg-gray-100" %>
 
       <% end %>
-
     </div>
 
   </div>
