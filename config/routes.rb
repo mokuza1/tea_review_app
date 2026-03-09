@@ -35,11 +35,14 @@ Rails.application.routes.draw do
     resources :flavors, only: :index
   end
 
-  resource :tea_diagnosis, only: [] do
-    get :start
-    get "question/:step", action: :question, as: :question
-    post :answer
-    get :result
+  resource :diagnostic, only: [] do
+    collection do
+      get  :start
+      post :initialize_session
+      get  'question/:step', action: :question, as: :question
+      post :answer
+      get  :result
+    end
   end
 
   namespace :admin do
