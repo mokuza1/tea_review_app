@@ -1,48 +1,68 @@
 <turbo-frame id="diagnostic_modal">
 
-<div
-  data-controller="diagnostic-modal"
-  data-diagnostic-modal-target="overlay"
-  data-action="click->diagnostic-modal#closeBackground"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
->
+  <div
+    data-controller="diagnostic-modal"
+    data-diagnostic-modal-target="overlay"
+    data-action="click->diagnostic-modal#closeBackground"
+    class="fixed inset-0 bg-[#1a2e22]/60 flex items-center justify-center z-50 backdrop-blur-sm"
+  >
 
-  <div class="bg-white p-8 rounded-lg max-w-md w-full relative text-center">
+    <div class="bg-[#FDFBF9] p-8 md:p-12 rounded-xl max-w-md w-full relative border-2 border-[#D6CEC5] shadow-[0_20px_50px_rgba(0,0,0,0.3)] mx-4 text-center">
 
-    <button
-      data-action="click->diagnostic-modal#close"
-      class="absolute top-2 right-2 text-gray-500"
-    >
-      ✕
-    </button>
+      <%# 閉じるボタン %>
+      <button
+        data-action="click->diagnostic-modal#close"
+        class="absolute top-4 right-4 text-[#8C7B6C] hover:text-[#365442] transition-colors"
+      >
+        <span class="text-2xl">×</span>
+      </button>
 
-    <h2 class="text-xl font-bold mb-4">
-      診断結果
-    </h2>
+      <%# 装飾的なインナー枠 %>
+      <div class="absolute inset-2 border border-[#D6CEC5]/50 pointer-events-none rounded-lg"></div>
 
-    <p class="mb-2">
-      あなたにおすすめの紅茶は
-    </p>
+      <div class="relative z-10">
+        
+        <%# ヘッダー部分 %>
+        <span class="text-[10px] font-bold text-[#C5A065] tracking-[0.3em] uppercase mb-1 block">Your Result</span>
+        <h2 class="text-xl md:text-2xl font-serif font-bold text-[#365442] mb-6 tracking-widest">診断結果</h2>
 
-    <h2 class="text-2xl font-bold mb-2">
-      <%= @result[:title] %>
-    </h2>
+        <%# メイン結果：紅茶の名前 %>
+        <div class="py-8 border-y border-[#D6CEC5]/40 mb-6 bg-[#F9F7F2]/50">
+          <h3 class="text-2xl md:text-4xl font-serif font-bold text-[#A75F29] mb-3 tracking-wider drop-shadow-sm">
+            <%= @result[:title] %>
+          </h3>
+          <p class="text-sm md:text-base text-[#365442] font-serif italic opacity-90">
+            <%= @result[:subtitle] %>
+          </p>
+        </div>
 
-    <p class="text-gray-600 mb-4">
-      <%= @result[:subtitle] %>
-    </p>
+        <%# 解説文 %>
+        <div class="mb-10">
+          <p class="text-[#433D3C] leading-relaxed text-sm md:text-base font-medium">
+            <%= @result[:description] %>
+          </p>
+        </div>
 
-    <p class="mb-6">
-      <%= @result[:description] %>
-    </p>
+        <%# アクションボタン %>
+        <div class="flex flex-col gap-4">
+          <%# お気に入りや詳細へ飛ばすボタンをここに追加しても良いですね %>
+          
+          <%= link_to start_diagnostic_path,
+              data: { turbo_frame: "diagnostic_modal" },
+              class: "text-xs font-bold text-[#8C7B6C] hover:text-[#365442] tracking-widest transition-all border-b border-[#D6CEC5] hover:border-[#365442] pb-1 self-center" do %>
+            もう一度診断する
+          <% end %>
+        </div>
 
-    <%= link_to "もう一度診断する",
-        start_diagnostic_path,
-        data: { turbo_frame: "diagnostic_modal" },
-        class: "inline-block px-4 py-2 bg-green-700 text-white rounded" %>
+        <%# 下部の装飾アイコン %>
+        <div class="mt-8 opacity-40">
+           <div class="w-12 h-1 bg-[#C5A065] mx-auto opacity-30"></div>
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
-
-</div>
 
 </turbo-frame>

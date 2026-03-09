@@ -1,54 +1,78 @@
 <turbo-frame id="diagnostic_modal">
 
-<div
-  data-controller="diagnostic-modal"
-  data-diagnostic-modal-target="overlay"
-  data-action="click->diagnostic-modal#closeBackground"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
->
+  <div
+    data-controller="diagnostic-modal"
+    data-diagnostic-modal-target="overlay"
+    data-action="click->diagnostic-modal#closeBackground"
+    class="fixed inset-0 bg-[#1a2e22]/60 flex items-center justify-center z-50 backdrop-blur-sm"
+  >
 
-  <div class="bg-white p-8 rounded-lg max-w-md w-full relative">
+    <div class="bg-[#FDFBF9] p-8 md:p-12 rounded-xl max-w-md w-full relative border-2 border-[#D6CEC5] shadow-[0_20px_50px_rgba(0,0,0,0.3)] mx-4">
 
-    <button
-      data-action="click->diagnostic-modal#close"
-      class="absolute top-2 right-2 text-gray-500"
-    >
-      ✕
-    </button>
+      <%# 閉じるボタン %>
+      <button
+        data-action="click->diagnostic-modal#close"
+        class="absolute top-4 right-4 text-[#8C7B6C] hover:text-[#365442] transition-colors"
+      >
+        <span class="text-2xl">×</span>
+      </button>
 
-    <h2 class="text-lg font-bold mb-2">
-      質問 <%= @step %> / <%= @total_questions %>
-    </h2>
+      <%# 装飾的なインナー枠 %>
+      <div class="absolute inset-2 border border-[#D6CEC5]/50 pointer-events-none rounded-lg"></div>
 
-    <% progress = (@step.to_f / @total_questions * 100).round %>
+      <div class="relative z-10">
+        
+        <%# ステップ表示 & 進捗バー %>
+        <div class="text-center mb-6">
+          <span class="text-[10px] font-bold text-[#C5A065] tracking-[0.3em] uppercase">
+            Question <%= format('%02d', @step) %> / <%= format('%02d', @total_questions) %>
+          </span>
+          
+          <% progress = (@step.to_f / @total_questions * 100).round %>
+          <div class="w-24 h-[1px] bg-[#D6CEC5] mx-auto mt-2 relative">
+            <div class="absolute inset-y-0 left-0 bg-[#C5A065] transition-all duration-500" style="width:<%= progress %>%"></div>
+          </div>
+        </div>
 
-    <div class="w-full bg-gray-200 h-2 rounded mb-4">
-      <div
-        class="bg-green-700 h-2 rounded"
-        style="width:<%= progress %>%">
+        <%# 質問本文 %>
+        <h3 class="text-lg md:text-xl font-serif font-bold text-[#365442] text-center leading-relaxed mb-8">
+          <%= @question[:text] %>
+        </h3>
+
+        <%# 選択肢ボタン群 %>
+        <div class="space-y-3">
+          <% @question[:options].each_with_index do |option, i| %>
+            <%= button_to answer_diagnostic_path,
+                method: :post,
+                params: { answer: i },
+                form: { data: { turbo_frame: "diagnostic_modal" }, class: "w-full" },
+                class: "w-full group relative flex items-center justify-between px-6 py-4 bg-white border-2 border-[#D6CEC5] rounded-lg hover:border-[#365442] hover:bg-[#FDFBF9] transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer text-left" do %>
+              
+              <span class="text-[#433D3C] font-semibold group-hover:text-[#365442] transition-colors pr-4">
+                <%= option[:text] %>
+              </span>
+              
+              <span class="text-[#D6CEC5] group-hover:text-[#365442] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 5l7 7-7 7" />
+                </svg>
+              </span>
+
+            <% end %>
+          <% end %>
+        </div>
+
+        <%# フッターの装飾 %>
+        <div class="mt-8 flex justify-center">
+          <div class="w-8 h-[1px] bg-[#D6CEC5]/50"></div>
+          <div class="mx-3 w-1.5 h-1.5 rounded-full border border-[#D6CEC5]/50"></div>
+          <div class="w-8 h-[1px] bg-[#D6CEC5]/50"></div>
+        </div>
+
       </div>
-    </div>
 
-    <p class="mb-6">
-      <%= @question[:text] %>
-    </p>
-
-    <div class="space-y-2">
-
-      <% @question[:options].each_with_index do |option, i| %>
-
-        <%= button_to option[:text],
-            answer_diagnostic_path,
-            method: :post,
-            params: { answer: i },
-            form: { data: { turbo_frame: "diagnostic_modal" } },
-            class: "w-full border p-2 rounded hover:bg-gray-100" %>
-
-      <% end %>
     </div>
 
   </div>
-
-</div>
 
 </turbo-frame>

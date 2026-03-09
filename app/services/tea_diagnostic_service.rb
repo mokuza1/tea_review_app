@@ -84,37 +84,37 @@ class TeaDiagnosticService
 
     flower: {
       title: "フラワー",
-      subtitle: "花の華やかな香り",
+      subtitle: "華やかでやさしい香り",
       description: "優雅でやさしい気持ちになれる紅茶。ゆったりした時間を過ごしたいときにおすすめです。"
+    },
+
+    sweets: {
+      title: "スイート",
+      subtitle: "デザートを思わせる甘い香り",
+      description: "デザートのように楽しめる紅茶。おやつタイムをより幸せな時間にしてくれます。"
     },
 
     spice: {
       title: "スパイス",
-      subtitle: "体を温めるスパイシーな香り",
-      description: "シナモンやクローブなど、温かみのある香りが魅力。リラックスしたいときにぴったりです。"
-    },
-
-    sweets: {
-      title: "スイーツ",
-      subtitle: "甘く幸せな香り",
-      description: "デザートのように楽しめる紅茶。おやつタイムをより幸せな時間にしてくれます。"
+      subtitle: "温かくも刺激ある香り",
+      description: "シナモンやクローブなど、スパイシーな香りが魅力。リラックスしたいときにぴったりです。"
     },
 
     herb: {
       title: "ハーブ",
-      subtitle: "爽やかで清々しい香り",
+      subtitle: "爽やかで清涼感のある香り",
       description: "すっきりした飲み心地で気分転換にぴったり。リフレッシュしたいときの一杯です。"
     },
 
     unique: {
       title: "ユニーク",
-      subtitle: "個性的で奥深い香り",
+      subtitle: "特徴的で個性豊かな香り",
       description: "少し変わった魅力を楽しめる紅茶。新しい味に出会いたいあなたにおすすめです。"
     },
 
     non_flavor: {
       title: "ノンフレーバー",
-      subtitle: "茶葉そのものの自然な香り",
+      subtitle: "茶葉本来の香り",
       description: "シンプルで奥深い紅茶の味わい。紅茶本来の美味しさをゆっくり楽しめます。"
     }
   }.freeze
