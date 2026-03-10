@@ -1,0 +1,53 @@
+<turbo-frame id="diagnostic_modal">
+
+  <div
+    data-controller="diagnostic-modal"
+    data-diagnostic-modal-target="overlay"
+    data-action="click->diagnostic-modal#closeBackground"
+    class="fixed inset-0 bg-[#1a2e22]/60 flex items-center justify-center z-50 backdrop-blur-sm"
+  >
+
+    <div class="bg-[#FDFBF9] p-8 md:p-12 rounded-xl max-w-md w-full relative border-2 border-[#D6CEC5] shadow-[0_20px_50px_rgba(0,0,0,0.3)] mx-4">
+
+      <%# 閉じるボタン：少し控えめに、でも押しやすく %>
+      <button
+        data-action="click->diagnostic-modal#close"
+        class="absolute top-4 right-4 text-[#8C7B6C] hover:text-[#365442] transition-colors"
+      >
+        <span class="text-2xl">×</span>
+      </button>
+
+      <%# 装飾的なインナー枠 %>
+      <div class="absolute inset-2 border border-[#D6CEC5]/50 pointer-events-none rounded-lg"></div>
+
+      <div class="relative z-10 text-center">
+        <%# 装飾アイコン（もしあれば画像でも良いですが、ここではラインで表現） %>
+        <div class="w-12 h-1 bg-[#C5A065] mx-auto mb-6"></div>
+
+        <h2 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] mb-4 tracking-[0.2em]">
+          紅茶診断
+        </h2>
+
+        <div class="space-y-2 mb-10">
+          <p class="text-[#433D3C] font-serif leading-relaxed">
+            今の気分や好みの香りを紐解き、<br>
+            あなたに寄り添う一杯を見つけましょう
+          </p>
+          <p class="text-[10px] text-[#8C7B6C] tracking-[0.2em] font-bold uppercase">
+            Trace & Archive Your Tea Journey
+          </p>
+        </div>
+
+        <%= button_to initialize_session_diagnostic_path,
+            method: :post,
+            form: { data: { turbo_frame: "diagnostic_modal" } },
+            class: "w-full bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-serif font-bold tracking-[0.3em] py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border-b-4 border-[#243a2d] active:border-b-0 active:translate-y-1" do %>
+          診断をはじめる
+        <% end %>
+      </div>
+
+    </div>
+
+  </div>
+
+</turbo-frame>
