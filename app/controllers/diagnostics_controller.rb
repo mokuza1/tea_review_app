@@ -40,10 +40,16 @@ class DiagnosticsController < ApplicationController
       return
     end
 
+    # Serviceを呼び出して結果のキーを取得
     category = TeaDiagnosticService.diagnose(answers)
 
-    @category = category
+    # 表示データ取得
     @result = TeaDiagnosticService.result_data(category)
+
+    # DBカテゴリ取得
+    @flavor_category = FlavorCategory.find_by!(
+      name: @result[:category_name]
+    )
 
     session.delete(:diagnostic_answers)
   end

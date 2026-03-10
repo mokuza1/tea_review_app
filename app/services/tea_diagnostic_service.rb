@@ -77,45 +77,52 @@ class TeaDiagnosticService
 
   RESULTS = {
     fruit: {
+      category_name: "フルーツ：果実のフレッシュな香り", # DB検索用
       title: "フルーツ",
       subtitle: "果実のフレッシュな香り",
-      description: "元気になれるような爽やかな一杯。気分をリフレッシュしたいときにぴったりです。"
-    },
-
-    flower: {
-      title: "フラワー",
-      subtitle: "華やかでやさしい香り",
-      description: "優雅でやさしい気持ちになれる紅茶。ゆったりした時間を過ごしたいときにおすすめです。"
-    },
-
-    sweets: {
-      title: "スイート",
-      subtitle: "デザートを思わせる甘い香り",
-      description: "デザートのように楽しめる紅茶。おやつタイムをより幸せな時間にしてくれます。"
+      description: "元気になれるような爽やかな香り。気分をリフレッシュしたいときにぴったりです。"
     },
 
     spice: {
+      category_name: "スパイス：温かくも刺激ある香り",
       title: "スパイス",
       subtitle: "温かくも刺激ある香り",
-      description: "シナモンやクローブなど、スパイシーな香りが魅力。リラックスしたいときにぴったりです。"
+      description: "体をポカポカ温めてくれるスパイシーな香り。リラックスしたいときにもおすすめです。"
+    },
+
+    flower: {
+      category_name: "フラワー：華やかでやさしい香り",
+      title: "フラワー",
+      subtitle: "華やかでやさしい香り",
+      description: "花のように優雅でやさしい香り。ゆったりした時間を過ごしたいときにぴったりです。"
+    },
+
+    sweets: {
+      category_name: "スイート：デザートを思わせる甘い香り",
+      title: "スイート",
+      subtitle: "デザートを思わせる甘い香り",
+      description: "甘いお菓子のような幸せな香り。おやつ時間をより楽しくしてくれます。"
     },
 
     herb: {
+      category_name: "ハーブ：爽やかで清涼感のある香り",
       title: "ハーブ",
       subtitle: "爽やかで清涼感のある香り",
-      description: "すっきりした飲み心地で気分転換にぴったり。リフレッシュしたいときの一杯です。"
+      description: "すっきりした爽やかな香り。気分転換したいときやリフレッシュしたいときにおすすめです。"
     },
 
     unique: {
+      category_name: "ユニーク：特徴的で個性豊かな香り",
       title: "ユニーク",
       subtitle: "特徴的で個性豊かな香り",
-      description: "少し変わった魅力を楽しめる紅茶。新しい味に出会いたいあなたにおすすめです。"
+      description: "少し珍しい個性的な香り。新しい紅茶との出会いを楽しみたい人におすすめです。"
     },
 
     non_flavor: {
+      category_name: "ノンフレーバー：茶葉本来の香り",
       title: "ノンフレーバー",
       subtitle: "茶葉本来の香り",
-      description: "シンプルで奥深い紅茶の味わい。紅茶本来の美味しさをゆっくり楽しめます。"
+      description: "紅茶そのものの香りを楽しめるシンプルなタイプ。茶葉の個性をじっくり味わえます。"
     }
   }.freeze
 

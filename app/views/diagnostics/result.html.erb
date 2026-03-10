@@ -45,7 +45,12 @@
 
         <%# アクションボタン %>
         <div class="flex flex-col gap-4">
-          <%# お気に入りや詳細へ飛ばすボタンをここに追加しても良いですね %>
+
+          <%= link_to tea_products_path(q: { flavors_flavor_category_id_eq: @flavor_category.id }),
+              data: { turbo_frame: "_top" },
+              class: "bg-[#365442] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#2a4435] transition" do %>
+              <%= @result[:title] %>の紅茶を見る
+          <% end %>
           
           <%= link_to start_diagnostic_path,
               data: { turbo_frame: "diagnostic_modal" },
