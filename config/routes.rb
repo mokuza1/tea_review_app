@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     collection do
       get  :start
       post :initialize_session
-      get  'question/:step', action: :question, as: :question
+      get  "question/:step", action: :question, as: :question
       post :answer
       get  :result
     end

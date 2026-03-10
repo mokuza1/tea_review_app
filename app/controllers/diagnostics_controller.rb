@@ -1,5 +1,4 @@
 class DiagnosticsController < ApplicationController
-
   def start
   end
 
@@ -53,5 +52,4 @@ class DiagnosticsController < ApplicationController
 
     session.delete(:diagnostic_answers)
   end
-
 end

@@ -1,5 +1,4 @@
 class TeaDiagnosticService
-
   CATEGORIES = %i[
     fruit
     flower
@@ -131,7 +130,6 @@ class TeaDiagnosticService
   end
 
   class << self
-
     def questions
       QUESTIONS
     end
@@ -145,7 +143,6 @@ class TeaDiagnosticService
     end
 
     def diagnose(answer_indexes)
-
       scores = CATEGORIES.index_with { 0 }
 
       answer_indexes.each_with_index do |option_index, question_index|
@@ -160,6 +157,5 @@ class TeaDiagnosticService
 
       scores.max_by { |_, score| score }.first
     end
-
   end
 end
