@@ -44,17 +44,37 @@
         </div>
 
         <%# アクションボタン %>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3">
 
+          <%# メインアクション：一覧へ（一番目立たせる） %>
           <%= link_to tea_products_path(q: { flavors_flavor_category_id_eq: @flavor_category.id }),
               data: { turbo_frame: "_top" },
-              class: "bg-[#365442] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#2a4435] transition" do %>
-              <%= @result[:title] %>の紅茶を見る
+              class: "group relative w-full bg-[#365442] text-[#F9F7F2] py-4 px-6 rounded-lg font-serif font-bold tracking-[0.2em] shadow-md hover:shadow-lg hover:bg-[#2A4034] transition-all duration-300 active:translate-y-0.5 border-b-4 border-[#243a2d]" do %>
+              <span class="flex items-center justify-center w-full">
+                <span class="w-4 h-4"></span>
+                <span class="px-2 mr-[-0.2em]"><%= @result[:title] %>の紅茶を見る</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 5l7 7-7 7" />
+                </svg>
+              </span>
           <% end %>
-          
+
+          <%# セカンダリアクション：Xでシェア（背景を白にして圧迫感を減らす） %>
+          <%= link_to x_share_url(@result[:title]),
+              target: "_blank",
+              rel: "noopener",
+              class: "w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-bold text-[#1A1A1A] border-2 border-[#D6CEC5] bg-white hover:bg-[#FDFBF9] hover:border-[#1A1A1A] transition-all duration-300 group" do %>
+            <%# Xのアイコン（SVG）を入れるとより直感的です %>
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+              <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+            </svg>
+            <span class="text-sm tracking-wider">結果をXでシェア</span>
+          <% end %>
+
+          <%# 三次アクション：もう一度（テキストリンク） %>
           <%= link_to start_diagnostic_path,
               data: { turbo_frame: "diagnostic_modal" },
-              class: "text-xs font-bold text-[#8C7B6C] hover:text-[#365442] tracking-widest transition-all border-b border-[#D6CEC5] hover:border-[#365442] pb-1 self-center" do %>
+              class: "mt-2 text-xs font-bold text-[#8C7B6C] hover:text-[#365442] tracking-widest transition-all border-b border-[#D6CEC5] hover:border-[#365442] pb-1 self-center" do %>
             もう一度診断する
           <% end %>
         </div>
