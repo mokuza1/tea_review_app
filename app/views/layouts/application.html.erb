@@ -21,6 +21,15 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+
+    <meta property="og:title" content="紅茶辞典 | あなたに合う紅茶を見つけよう">
+    <meta property="og:description" content="初心者でもわかる紅茶辞典。あなたに合う紅茶タイプ診断もできます。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= request.original_url %>">
+    <meta property="og:image" content="<%= image_url('ogp.png') %>">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="<%= image_url('ogp.png') %>">
   </head>
 
   <body class="font-sans bg-[#f7f3ee]">
