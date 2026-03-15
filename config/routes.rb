@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
 
   resources :tea_products, only: %i[index show new create edit update] do
-    resources :reviews, only: %i[index create edit update destroy]
+    resources :reviews, only: %i[index new create edit update destroy]
     resource :favorite, only: %i[create destroy]
 
     member do
