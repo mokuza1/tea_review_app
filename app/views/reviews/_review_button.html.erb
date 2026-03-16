@@ -1,0 +1,25 @@
+<div>
+
+<% if current_user.nil? %>
+
+  <%= link_to "レビューを書く",
+      new_user_session_path,
+      class: "px-4 py-2 bg-[#365442] text-white rounded" %>
+
+<% elsif user_review.present? %>
+
+  <%= link_to "レビューを編集",
+      edit_tea_product_review_path(tea_product, user_review),
+      data: { turbo_frame: "review_modal" },
+      class: "px-4 py-2 bg-[#365442] text-white rounded" %>
+
+<% else %>
+
+  <%= link_to "レビューを書く",
+      new_tea_product_review_path(tea_product),
+      data: { turbo_frame: "review_modal" },
+      class: "px-4 py-2 bg-[#365442] text-white rounded" %>
+
+<% end %>
+
+</div>

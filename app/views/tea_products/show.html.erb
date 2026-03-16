@@ -188,6 +188,41 @@
           </div>
         <% end %>
         </div>
+  <!-- ========================= -->
+  <!-- レビューセクション -->
+  <!-- ========================= -->
+
+  <section class="mt-16">
+
+    <h2 class="text-2xl font-serif text-[#365442] mb-6">
+      レビュー
+    </h2>
+
+    <%= render "reviews/summary", tea_product: @tea_product %>
+
+    <div class="space-y-6 mt-6">
+      <% if @reviews.any? %>
+        <%= render @reviews %>
+      <% else %>
+        <p class="text-sm text-gray-500">
+          まだレビューはありません
+        </p>
+      <% end %>
+    </div>
+
+    <div class="mt-8">
+      <%= link_to "すべてのレビューを見る",
+        tea_product_reviews_path(@tea_product),
+      class: "text-sm text-[#365442] underline" %>
+    </div>
+
+    <div class="mt-8">
+      <%= render "reviews/review_button",
+                  tea_product: @tea_product,
+                  user_review: @user_review %>
+    </div>
+
+  </section>
 
       <div class="text-center mt-12">
         <%= link_to tea_products_path(q: params[:q]&.to_unsafe_h),

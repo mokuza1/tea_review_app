@@ -1,0 +1,11 @@
+<% reviews = @tea_product.reviews %>
+
+<div class="space-y-1">
+  <h3 class="font-semibold">総合評価</h3>
+
+  <div>おすすめ度 ⭐ <%= number_with_precision(@tea_product.reviews.average(:overall_rating), precision: 1) %></div>
+  <div>香り ⭐ <%= number_with_precision(@tea_product.reviews.average(:aroma_rating), precision: 1) %></div>
+  <div>渋み ⭐ <%= number_with_precision(@tea_product.reviews.average(:bitterness_rating), precision: 1) %></div>
+  <div>濃さ ⭐ <%= number_with_precision(@tea_product.reviews.average(:strength_rating), precision: 1) %></div>
+  <div>甘さ ⭐ <%= number_with_precision(@tea_product.reviews.average(:sweetness_rating), precision: 1) %></div>
+</div>
