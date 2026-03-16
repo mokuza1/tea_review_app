@@ -6,11 +6,11 @@
   </div>
 
   <div class="mt-2 space-y-1">
-    <div>おすすめ度 ⭐ <%= review.overall_rating %></div>
-    <div>香り ⭐ <%= review.aroma_rating %></div>
-    <div>渋み ⭐ <%= review.bitterness_rating %></div>
-    <div>濃さ ⭐ <%= review.strength_rating %></div>
-    <div>甘さ ⭐ <%= review.sweetness_rating %></div>
+    <div>おすすめ度 <span class="text-yellow-500"><%= render_stars(review.overall_rating) %></span></div>
+    <div>香り <span class="text-yellow-500"><%= render_stars(review.aroma_rating) %></span></div>
+    <div>渋み <span class="text-yellow-500"><%= render_stars(review.bitterness_rating) %></span></div>
+    <div>濃さ <span class="text-yellow-500"><%= render_stars(review.strength_rating) %></span></div>
+    <div>甘さ <span class="text-yellow-500"><%= render_stars(review.sweetness_rating) %></span></div>
   </div>
 
   <div class="mt-2 text-sm text-gray-600">
