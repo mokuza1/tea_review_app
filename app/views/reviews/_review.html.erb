@@ -13,6 +13,19 @@
     <div>甘さ ⭐ <%= review.sweetness_rating %></div>
   </div>
 
+  <div class="mt-2 text-sm text-gray-600">
+
+    <% drinks = [] %>
+    <% drinks << "ストレート" if review.recommended_straight %>
+    <% drinks << "ミルク" if review.recommended_milk %>
+    <% drinks << "アイス" if review.recommended_iced %>
+
+    <% if drinks.any? %>
+      おすすめの飲み方：<%= drinks.join(" / ") %>
+    <% end %>
+
+  </div>
+
   <% if review.comment.present? %>
     <p class="mt-2"><%= review.comment %></p>
   <% end %>

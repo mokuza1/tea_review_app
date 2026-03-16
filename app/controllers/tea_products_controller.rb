@@ -23,6 +23,15 @@ class TeaProductsController < ApplicationController
                            .order(created_at: :desc)
                            .limit(3)
     @user_review = current_user&.reviews&.find_by(tea_product: @tea_product)
+
+    # ===== レビュー集計 =====
+    all_reviews = @tea_product.reviews
+
+    @review_count = all_reviews.size
+
+    @recommended_straight_count = all_reviews.count(&:recommended_straight)
+    @recommended_milk_count = all_reviews.count(&:recommended_milk)
+    @recommended_iced_count = all_reviews.count(&:recommended_iced)
   end
 
   def new

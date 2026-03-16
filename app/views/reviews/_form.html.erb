@@ -79,6 +79,29 @@
           </div>
 
           <div>
+            <label class="font-semibold">おすすめの飲み方</label>
+
+            <div class="flex gap-4 mt-2">
+
+              <label class="flex items-center gap-1">
+                <%= f.check_box :recommended_straight %>
+                ストレート
+              </label>
+
+              <label class="flex items-center gap-1">
+                <%= f.check_box :recommended_milk %>
+                ミルク
+              </label>
+
+              <label class="flex items-center gap-1">
+                <%= f.check_box :recommended_iced %>
+                アイス
+              </label>
+
+            </div>
+          </div>
+
+          <div>
             <%= f.label :comment, "コメント（任意）", class: "font-semibold" %><br>
             <%= f.text_area :comment,
                   maxlength: 140,
