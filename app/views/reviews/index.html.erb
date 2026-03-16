@@ -1,6 +1,8 @@
 <h2 class="text-xl font-bold mb-4">レビュー一覧</h2>
 
-<%= render @reviews %>
+<% @reviews.each do |review| %>
+  <%= render "reviews/review", review: review %>
+<% end %>
 
 <div class="mt-6">
   <%= paginate @reviews %>

@@ -1,48 +1,53 @@
-<% reviews = @tea_product.reviews %>
-<div class="space-y-1">
-  <h3 class="font-semibold">総合評価</h3>
+<% summary = @review_summary %>
+<div class="space-y-2">
+
+  <h3 class="font-semibold text-lg">
+    総合評価
+  </h3>
 
   <div>
     おすすめ度
     <span class="text-yellow-500">
-      <%= render_stars(reviews.average(:overall_rating).to_f.round) %>
+      <%= render_stars(summary.overall_avg.to_f.round) %>
     </span>
-    (<%= number_with_precision(reviews.average(:overall_rating), precision: 1) %>)
+    (<%= number_with_precision(summary.overall_avg, precision: 1) %>)
   </div>
 
   <div>
     香り
     <span class="text-yellow-500">
-      <%= render_stars(reviews.average(:aroma_rating).to_f.round) %>
+      <%= render_stars(summary.aroma_avg.to_f.round) %>
     </span>
-    (<%= number_with_precision(reviews.average(:aroma_rating), precision: 1) %>)
+    (<%= number_with_precision(summary.aroma_avg, precision: 1) %>)
   </div>
 
   <div>
     渋み
     <span class="text-yellow-500">
-      <%= render_stars(reviews.average(:bitterness_rating).to_f.round) %>
+      <%= render_stars(summary.bitterness_avg.to_f.round) %>
     </span>
-    (<%= number_with_precision(reviews.average(:bitterness_rating), precision: 1) %>)
+    (<%= number_with_precision(summary.bitterness_avg, precision: 1) %>)
   </div>
 
   <div>
     濃さ
     <span class="text-yellow-500">
-      <%= render_stars(reviews.average(:strength_rating).to_f.round) %>
+      <%= render_stars(summary.strength_avg.to_f.round) %>
     </span>
-    (<%= number_with_precision(reviews.average(:strength_rating), precision: 1) %>)
+    (<%= number_with_precision(summary.strength_avg, precision: 1) %>)
   </div>
 
   <div>
     甘さ
     <span class="text-yellow-500">
-      <%= render_stars(reviews.average(:sweetness_rating).to_f.round) %>
+      <%= render_stars(summary.sweetness_avg.to_f.round) %>
     </span>
-    (<%= number_with_precision(reviews.average(:sweetness_rating), precision: 1) %>)
+    (<%= number_with_precision(summary.sweetness_avg, precision: 1) %>)
   </div>
 
-   <% if @review_count > 0 %>
+</div>
+
+   <% if summary.review_count.to_i > 0 %>
 
     <div class="mt-3">
 
@@ -54,20 +59,20 @@
 
         <div>
           ストレート
-          <%= (@recommended_straight_count * 100 / @review_count.to_f).round %>%
-          （<%= @recommended_straight_count %>件）
+          <%= (summary.recommended_straight_count * 100 / summary.review_count.to_f).round %>%
+          （<%= summary.recommended_straight_count %>件）
         </div>
 
         <div>
           ミルク
-          <%= (@recommended_milk_count * 100 / @review_count.to_f).round %>%
-          （<%= @recommended_milk_count %>件）
+          <%= (summary.recommended_milk_count * 100 / summary.review_count.to_f).round %>%
+          （<%= summary.recommended_milk_count %>件）
         </div>
 
         <div>
           アイス
-          <%= (@recommended_iced_count * 100 / @review_count.to_f).round %>%
-          （<%= @recommended_iced_count %>件）
+          <%= (summary.recommended_iced_count * 100 / summary.review_count.to_f).round %>%
+          （<%= summary.recommended_iced_count %>件）
         </div>
 
       </div>
