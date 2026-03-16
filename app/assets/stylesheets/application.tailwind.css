@@ -4,3 +4,28 @@
 @theme {
  --font-sans: "Hina Mincho", serif;
 }
+
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  font-size: 28px;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.rating input:checked ~ label {
+  color: #f5b301;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+  color: #f5b301;
+}

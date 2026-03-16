@@ -20,42 +20,62 @@
 
           <div>
             <label class="font-semibold">おすすめ度</label><br>
-            <% 1.upto(5) do |i| %>
-              <%= f.radio_button :overall_rating, i %>
-              <%= i %>
-            <% end %>
+            <div class="rating">
+              <% 5.downto(1) do |i| %>
+               <%= f.radio_button :overall_rating, i, id: "overall_star#{i}" %>
+               <%= f.label "overall_star#{i}" do %>
+                 ★
+               <% end %>
+              <% end %>
+            </div>
           </div>
 
           <div>
             <label class="font-semibold">香り</label><br>
-            <% 1.upto(5) do |i| %>
-              <%= f.radio_button :aroma_rating, i %>
-              <%= i %>
-            <% end %>
+            <div class="rating">
+              <% 5.downto(1) do |i| %>
+               <%= f.radio_button :aroma_rating, i, id: "aroma_star#{i}" %>
+               <%= f.label "aroma_star#{i}" do %>
+                 ★
+               <% end %>
+              <% end %>
+            </div>
           </div>
 
           <div>
             <label class="font-semibold">苦味</label><br>
-            <% 1.upto(5) do |i| %>
-              <%= f.radio_button :bitterness_rating, i %>
-              <%= i %>
-            <% end %>
+            <div class="rating">
+              <% 5.downto(1) do |i| %>
+               <%= f.radio_button :bitterness_rating, i, id: "bitterness_star#{i}" %>
+               <%= f.label "bitterness_star#{i}" do %>
+                 ★
+               <% end %>
+              <% end %>
+            </div>
           </div>
 
           <div>
             <label class="font-semibold">濃さ</label><br>
-            <% 1.upto(5) do |i| %>
-              <%= f.radio_button :strength_rating, i %>
-              <%= i %>
-            <% end %>
+            <div class="rating">
+              <% 5.downto(1) do |i| %>
+               <%= f.radio_button :strength_rating, i, id: "strength_star#{i}" %>
+               <%= f.label "strength_star#{i}" do %>
+                 ★
+               <% end %>
+              <% end %>
+            </div>
           </div>
 
           <div>
             <label class="font-semibold">甘さ</label><br>
-            <% 1.upto(5) do |i| %>
-              <%= f.radio_button :sweetness_rating, i %>
-              <%= i %>
-            <% end %>
+            <div class="rating">
+              <% 5.downto(1) do |i| %>
+               <%= f.radio_button :sweetness_rating, i, id: "sweetness_star#{i}" %>
+               <%= f.label "sweetness_star#{i}" do %>
+                 ★
+               <% end %>
+              <% end %>
+            </div>
           </div>
 
           <div>
