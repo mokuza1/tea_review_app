@@ -1,7 +1,13 @@
 <turbo-frame id="review_modal">
-  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
 
-    <div class="bg-white p-6 rounded w-[500px]">
+  <div
+    data-controller="review-modal"
+    data-action="click->review-modal#close"
+    class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+
+    <div
+      class="bg-white p-6 rounded w-[500px]"
+      data-action="click->review-modal#stop">
 
       <h2 class="text-lg font-bold mb-4">
         レビューを書く
