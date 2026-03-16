@@ -5,3 +5,11 @@
 <div class="mt-6">
   <%= paginate @reviews %>
 </div>
+
+<div class="mt-8 text-center">
+
+  <%= link_to "商品詳細に戻る",
+      tea_product_path(@tea_product),
+      class: "inline-flex items-center gap-2 px-4 py-2 border rounded text-[#365442] hover:bg-[#365442] hover:text-white transition" %>
+
+</div>
