@@ -1,17 +1,91 @@
-<h2 class="text-xl font-bold mb-4">レビュー一覧</h2>
+<div class="max-w-3xl mx-auto px-4 py-12">
+  <%# --- ヘッダー --- %>
+  <div class="flex items-center gap-4 mb-12">
+    <div class="h-[1px] flex-grow bg-[#D6CEC5]"></div>
+    <div class="text-center">
+      <h2 class="text-2xl font-serif font-bold text-[#365442] tracking-[0.2em]">
+        Tasting Logs
+      </h2>
+      <span class="block text-[10px] text-[#C5A065] font-bold tracking-[0.3em] uppercase mt-1">記録一覧</span>
+    </div>
+    <div class="h-[1px] flex-grow bg-[#D6CEC5]"></div>
+  </div>
 
-<% @reviews.each do |review| %>
-  <%= render "reviews/review", review: review %>
-<% end %>
+  <%# --- レビューカード一覧 --- %>
+  <div class="space-y-6">
+    <% @reviews.each do |review| %>
+      <div class="bg-[#FDFBF9] border border-[#D6CEC5] rounded-xl p-5 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+        
+        <%# 上段：おすすめ度(左) と ユーザー情報(右) %>
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex items-center gap-3">
+            <span class="text-sm font-bold text-[#433D3C] tracking-wider">おすすめ度</span>
+            <span class="text-[#C5A065] text-lg"><%= render_stars(review.overall_rating) %></span>
+          </div>
 
-<div class="mt-6">
-  <%= paginate @reviews %>
-</div>
+          <div class="text-right flex flex-col items-end gap-1">
+            <span class="text-xs font-bold text-[#365442]"><%= review.user.name %></span>
+            <span class="text-[10px] text-[#8C7B6C] font-mono"><%= review.created_at.strftime("%Y.%m.%d") %></span>
+          </div>
+        </div>
 
-<div class="mt-8 text-center">
+        <%# 中段：詳細パラメータ（4項目） %>
+        <div class="flex flex-wrap gap-x-8 gap-y-3 py-4 border-t border-[#D6CEC5]/40">
+          <% [["香り", review.aroma_rating], ["苦味", review.bitterness_rating], ["濃さ", review.strength_rating], ["甘さ", review.sweetness_rating]].each do |label, rating| %>
+            <div class="flex items-center gap-2">
+              <span class="text-[12px] font-bold text-[#433D3C]"><%= label %></span>
+              <span class="text-[#C5A065] text-[10px]"><%= render_stars(rating) %></span>
+            </div>
+          <% end %>
+        </div>
 
-  <%= link_to "商品詳細に戻る",
-      tea_product_path(@tea_product),
-      class: "inline-flex items-center gap-2 px-4 py-2 border rounded text-[#365442] hover:bg-[#365442] hover:text-white transition" %>
+        <%# 【追加】おすすめの飲み方セクション --- %>
+        <% 
+          drinks = []
+          drinks << "ストレート" if review.recommended_straight
+          drinks << "ミルク" if review.recommended_milk
+          drinks << "アイス" if review.recommended_iced
+        %>
 
+        <% if drinks.any? %>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 py-4 border-b border-[#D6CEC5]/40">
+            <span class="text-[12px] font-bold text-[#433D3C] tracking-wider flex-shrink-0">おすすめの飲み方</span>
+            <div class="flex flex-wrap gap-2">
+              <% drinks.each do |drink| %>
+                <span class="px-3 py-0.5 bg-white border border-[#D6CEC5] text-[#A75F29] text-[11px] font-bold rounded shadow-sm">
+                  # <%= drink %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%# 下段：コメント %>
+        <% if review.comment.present? %>
+          <div class="mt-5">
+            <p class="text-[#433D3C] text-sm md:text-base leading-relaxed line-clamp-4 font-serif">
+              <%= review.comment %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# --- ページネーション --- %>
+  <div class="mt-12 flex justify-center">
+    <%= paginate @reviews %>
+  </div>
+
+  <%# --- 下部ナビゲーション --- %>
+  <div class="text-center mt-20 pt-10 border-t border-[#D6CEC5]/30">
+    <%= link_to tea_product_path(@tea_product), class: "group inline-flex items-center gap-3 text-[#365442] hover:text-[#2A4034] transition" do %>
+      <span class="w-10 h-10 rounded-full border border-[#D6CEC5] flex items-center justify-center group-hover:bg-[#365442] group-hover:text-[#FDFBF9] group-hover:border-[#365442] transition-all duration-300">
+        ←
+      </span>
+      <span class="font-serif tracking-widest text-sm font-bold border-b border-transparent group-hover:border-[#365442] transition">
+        商品詳細に戻る
+      </span>
+    <% end %>
+  </div>
 </div>
