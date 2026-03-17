@@ -24,9 +24,26 @@
           </div>
 
           <div class="text-right flex flex-col items-end gap-1">
-            <span class="text-xs font-bold text-[#365442]"><%= review.user.name %></span>
-            <span class="text-[10px] text-[#8C7B6C] font-mono"><%= review.created_at.strftime("%Y.%m.%d") %></span>
-          </div>
+            <%# 名前 %>
+            <span class="text-xs font-bold text-[#365442] leading-none">
+              <%= review.user.name %>
+            </span>
+
+            <div class="flex items-center gap-2 mt-0.5">
+              <span class="text-[10px] text-[#8C7B6C] font-mono leading-none">
+                <%= review.created_at.strftime("%Y.%m.%d") %>
+              </span>
+
+              <% if user_signed_in? && current_user == review.user %>
+                <span class="text-[10px] text-[#D6CEC5] leading-none">|</span>
+                  <%= link_to tea_product_review_path(review.tea_product, review),
+                      data: { turbo_method: :delete, turbo_confirm: "この記録を完全に削除しますか？" },
+                      class: "inline-flex items-center text-[12px] text-red-400/80 hover:text-red-600 font-bold leading-none transition-colors" do %>
+                    削除
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
         </div>
 
         <%# 中段：詳細パラメータ（4項目） %>
