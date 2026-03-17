@@ -22,7 +22,7 @@ class TeaProductsController < ApplicationController
     reviews = @tea_product.reviews
 
     @reviews = reviews
-                  .eager_load(:user)
+                  .includes(:user)
                   .order(created_at: :desc)
                   .limit(3)
 
