@@ -11,21 +11,38 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     
     <%# 左側：レーティング集計 %>
-    <div class="space-y-4">
+    <div class="space-y-5">
       <% [
-        ["おすすめ度", summary.overall_avg, "Overall"],
-        ["香り", summary.aroma_avg, "Aroma"],
-        ["渋み", summary.bitterness_avg, "Astringency"],
-        ["濃さ", summary.strength_avg, "Body"],
-        ["甘さ", summary.sweetness_avg, "Sweetness"]
-      ].each do |label_jp, avg, label_en| %>
+        ["おすすめ度", summary.overall_avg, "Overall", "", ""],
+        ["香り", summary.aroma_avg, "Aroma", "控えめ", "強い"],
+        ["渋み", summary.bitterness_avg, "Astringency", "穏やか", "力強い"],
+        ["濃厚さ", summary.strength_avg, "Body", "すっきり", "コク"],
+        ["甘み", summary.sweetness_avg, "Sweetness", "キレ", "余韻"]
+      ].each do |label_jp, avg, label_en, low, high| %>
         <div class="flex items-center justify-between group">
           <div class="flex flex-col">
-            <span class="text-[10px] text-[#C5A065] font-bold uppercase leading-none mb-0.5"><%= label_en %></span>
+            <span class="text-[9px] text-[#C5A065] font-bold uppercase leading-none tracking-widest mb-0.5"><%= label_en %></span>
             <span class="text-sm font-bold text-[#433D3C]"><%= label_jp %></span>
           </div>
-          <div class="flex items-center gap-3">
-            <span class="text-[#C5A065] text-sm"><%= render_stars(avg.to_f.round) %></span>
+
+          <div class="flex items-center gap-4">
+            <%# 星と補足テキストを垂直に並べるためのコンテナ %>
+            <div class="flex flex-col items-stretch min-w-[75px] md:min-w-[85px]">
+              <%# 星表示 %>
+              <div class="text-[#C5A065] text-base leading-none text-center">
+                <%= render_stars(avg.to_f.round) %>
+              </div>
+              
+              <%# 補足テキスト：星の幅（コンテナの幅）いっぱいに広げて左右に配置 %>
+              <% if low.present? %>
+                <div class="flex justify-between mt-1">
+                  <span class="text-[10px] text-[#8C7B6C] font-bold leading-none"><%= low %></span>
+                  <span class="text-[10px] text-[#8C7B6C] font-bold leading-none text-right"><%= high %></span>
+                </div>
+              <% end %>
+            </div>
+
+            <%# 数値（4.5 など） %>
             <span class="text-xs font-serif font-bold text-[#8C7B6C] w-8">
               (<%= number_with_precision(avg, precision: 1) %>)
             </span>
@@ -34,7 +51,7 @@
       <% end %>
     </div>
 
-    <%# 右側：飲み方の統計 %>
+    <%# 右側：飲み方の統計 (変更なし) %>
     <% if summary.review_count.to_i > 0 %>
       <div class="bg-white/50 rounded-lg p-5 border border-[#D6CEC5]/30">
         <h4 class="text-sm font-bold text-[#365442] mb-4 text-center tracking-widest border-b border-[#365442]/10 pb-2">
@@ -50,9 +67,8 @@
             <div class="relative">
               <div class="flex justify-between text-[12px] mb-1 font-bold">
                 <span class="text-[#433D3C]"><%= label %></span>
-                <span class="text-[#A75F29]"><%= percent %>% <span class="text-[#8C7B6C] font-normal">(<%= count %>件)</span></span>
+                <span class="text-[#A75F29]"><%= percent %> % <span class="text-[#8C7B6C] font-normal"> ( <%= count %>件 )</span></span>
               </div>
-              <%# 簡易プログレスバー %>
               <div class="w-full h-1.5 bg-white rounded-full overflow-hidden border border-[#D6CEC5]/50">
                 <div class="h-full bg-[#A75F29] opacity-70 transition-all duration-1000" style="width: <%= percent %>%"></div>
               </div>

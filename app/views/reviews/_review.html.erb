@@ -6,7 +6,11 @@
   <%# 上段：Overall（左）と 投稿者（右）を入れ替え %>
   <div class="flex justify-between items-end mb-6">
     <div class="flex flex-col">
-      <span class="text-[15px] font-bold text-[#433D3C] tracking-[0.1em] uppercase mb-1">おすすめ度</span>
+      <%# おすすめ度に控えめな副題をセット %>
+      <div class="flex items-baseline gap-2 mb-1">
+        <span class="text-[15px] font-bold text-[#433D3C] tracking-[0.1em] uppercase">おすすめ度</span>
+        <span class="text-[11px] text-[#8C7B6C] font-bold hidden sm:block tracking-wider">〜私の「好き！」度合い〜</span>
+      </div>
       <div class="flex items-center gap-2">
         <span class="text-[#C5A065] text-2xl leading-none"><%= render_stars(review.overall_rating) %></span>
       </div>
@@ -33,27 +37,30 @@
     </div>
   </div>
 
-  <%# 詳細評価：背景色をつけて密度感をアップ %>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 bg-[#F2F4F0]/50 rounded-xl p-4 border border-[#365442]/5">
+  <%# 詳細評価：配列に両極のテキストを追加して表示 %>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2 mb-6 bg-[#F2F4F0]/50 rounded-xl p-4 border border-[#365442]/5">
     <% [
-      ["香り", review.aroma_rating],
-      ["渋み", review.bitterness_rating],
-      ["濃さ", review.strength_rating],
-      ["甘さ", review.sweetness_rating]
-    ].each do |label, rating| %>
+      ["香り", review.aroma_rating, "控えめ", "強い"],
+      ["渋み", review.bitterness_rating, "おだやか", "力強い"],
+      ["濃厚さ", review.strength_rating, "すっきり", "コク"],
+      ["甘み", review.sweetness_rating, "キレ", "余韻"]
+    ].each do |label, rating, low, high| %>
       <div class="flex flex-col items-center justify-center py-1">
         <span class="text-sm font-bold text-[#433D3C] mb-1"><%= label %></span>
-        <span class="text-[#C5A065] text-sm"><%= render_stars(rating) %></span>
+        <span class="text-[#C5A065] text-sm leading-none"><%= render_stars(rating) %></span>
+        
+        <%# 星の下に両極のニュアンスを極小テキストで配置 %>
+        <div class="flex justify-between w-full max-w-[85px] mt-1.5">
+          <span class="text-[10px] text-[#8C7B6C] font-bold leading-none"><%= low %></span>
+          <span class="text-[10px] text-[#8C7B6C] font-bold leading-none"><%= high %></span>
+        </div>
       </div>
     <% end %>
   </div>
 
   <%# おすすめの飲み方：タグ風 %>
   <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
-    <%# ラベル部分 %>
     <span class="text-xs font-bold text-[#433D3C] tracking-wider flex-shrink-0">おすすめの飲み方</span>
-
-    <%# タグを表示するコンテナ %>
     <div class="flex flex-wrap gap-2">
       <% drinks = [] %>
       <% drinks << "ストレート" if review.recommended_straight %>
@@ -68,7 +75,7 @@
     </div>
   </div>
 
-  <%# コメント：文字サイズを大きくし、背景と引用符で埋める %>
+  <%# コメント %>
   <% if review.comment.present? %>
     <div class="relative bg-white/60 border-l-4 border-[#D6CEC5] p-5 rounded-r-xl">
       <p class="text-[#433D3C] text-base md:text-lg leading-relaxed font-medium">
