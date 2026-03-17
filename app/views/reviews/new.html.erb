@@ -1,16 +1,1 @@
-<%# new.html.erb %>
-<%= turbo_frame_tag "review_modal" do %>
-  <div
-    data-controller="review-modal"
-    data-action="mousedown->review-modal#close" <%# clickをmousedownに変えると誤作動が減ります %>
-    class="fixed inset-0 flex items-center justify-center bg-[#1a2e22]/70 z-[60] backdrop-blur-md p-4"
-  >
-    <%# z-indexを明示し、pointer-eventsを確実に通す %>
-    <div
-      class="bg-[#FDFBF9] rounded-2xl max-w-xl w-full relative border-2 border-[#D6CEC5] shadow-2xl max-h-[90vh] flex flex-col overflow-hidden z-[70]"
-      data-action="mousedown->review-modal#stop"
-    >
-      <%= render "form" %>
-    </div>
-  </div>
-<% end %>
+<%= render "form" %>
