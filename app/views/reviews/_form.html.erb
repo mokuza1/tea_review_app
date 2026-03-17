@@ -33,10 +33,15 @@
                   <span class="text-sm font-bold text-[#433D3C]">おすすめ度</span>
                 </div>
                 <div class="rating justify-center">
-                  <% 5.downto(1) do |i| %>
-                    <%= f.radio_button :overall_rating, i, id: "overall_star#{i}" %>
-                    <%= f.label "overall_star#{i}", class: "text-4xl px-1" do %>★<% end %>
-                  <% end %>
+                    <% 5.downto(1) do |i| %>
+                      <%# フォームごとに固有のIDを生成 (例: overall_rating_review_123_5) %>
+                      <% unique_id = "overall_rating_#{dom_id(@review)}_#{i}" %>
+
+                      <%= f.radio_button :overall_rating, i, id: unique_id, class: "hidden" %>
+                      <%= f.label :overall_rating, value: i, for: unique_id, class: "text-4xl px-1 cursor-pointer" do %>
+                        ★
+                      <% end %>
+                    <% end %>
                 </div>
               </div>
 
@@ -55,8 +60,13 @@
                     </div>
                     <div class="rating">
                       <% 5.downto(1) do |i| %>
-                        <%= f.radio_button field, i, id: "#{field}_star#{i}" %>
-                        <%= f.label "#{field}_star#{i}", class: "text-2xl" do %>★<% end %>
+                        <%# フィールド名とモデルIDを組み合わせて重複を避ける %>
+                        <% detail_id = "#{field}_#{dom_id(@review)}_#{i}" %>
+
+                        <%= f.radio_button field, i, id: detail_id, class: "hidden" %>
+                        <%= f.label field, value: i, for: detail_id, class: "text-2xl cursor-pointer" do %>
+                          ★
+                        <% end %>
                       <% end %>
                     </div>
                   </div>
