@@ -40,10 +40,7 @@ class ReviewsController < ApplicationController
   def update
     if @review.update(review_params)
       flash[:notice] = "テイスティング記録を更新しました"
-      render turbo_stream: turbo_stream.append(
-        "review_modal", 
-        "<script>Turbo.visit('#{tea_product_path(@tea_product)}')</script>".html_safe
-      )
+      redirect_to tea_product_path(@tea_product)
     else
       render :edit, status: :unprocessable_entity
     end

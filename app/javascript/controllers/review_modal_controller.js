@@ -5,8 +5,9 @@ export default class extends Controller {
   close(event) {
     // クリックされたのが背景（このコントローラーが付与された要素自身）であるか確認
     if (event.target === this.element) {
-      this.element.closest("turbo-frame").src = null // 接続先をクリア
-      this.element.remove() // 要素自体を削除して完全に壁を取り払う
+      const frame = document.getElementById("review_modal")
+      frame.src = ""       // 追加：リクエスト先をクリア
+      frame.innerHTML = "" // 中身を消去
     }
   }
 
