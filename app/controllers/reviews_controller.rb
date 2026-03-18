@@ -22,7 +22,13 @@ class ReviewsController < ApplicationController
     @review.user = current_user
 
     if @review.save
-      redirect_to tea_product_path(@tea_product), notice: "レビューを投稿しました"
+      flash[:notice] = "テイスティング記録を保存しました"
+    
+      # 成功時はTurbo.visitで詳細画面全体を再読み込みさせる
+      render turbo_stream: turbo_stream.append(
+        "review_modal", 
+        "<script>Turbo.visit('#{tea_product_path(@tea_product)}')</script>".html_safe
+      )
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +39,11 @@ class ReviewsController < ApplicationController
 
   def update
     if @review.update(review_params)
-      redirect_to tea_product_path(@tea_product), notice: "レビューを更新しました"
+      flash[:notice] = "テイスティング記録を更新しました"
+      render turbo_stream: turbo_stream.append(
+        "review_modal", 
+        "<script>Turbo.visit('#{tea_product_path(@tea_product)}')</script>".html_safe
+      )
     else
       render :edit, status: :unprocessable_entity
     end
