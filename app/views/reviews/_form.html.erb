@@ -21,9 +21,17 @@
       <%# スクロールエリア %>
       <div class="flex-grow overflow-y-auto px-4 md:px-6 pb-8 custom-scrollbar">
         <div class="relative p-5 md:p-8 border border-[#D6CEC5]/60 rounded-xl bg-white/40">
-          
-          <%= form_with model: [@tea_product, @review],
-                data: { turbo_frame: "_top" } do |f| %>
+
+        <% if review.errors.any? %>
+            <div class="my-1 p-2 bg-red-100 text-red-700 rounded">
+              <p class="font-semibold mb-1 ml-3">
+                未入力部分があります
+              </p>
+            </div>
+          <% end %>
+
+          <%= form_with model: [@tea_product, review],
+                data: { turbo_frame: "review_modal" } do |f| %>
 
             <div class="space-y-10">
 
@@ -43,8 +51,12 @@
                 <div class="rating justify-center">
                   <% 5.downto(1) do |i| %>
                     <% unique_id = "overall_rating_#{dom_id(@review)}_#{i}" %>
-                    <%= f.radio_button :overall_rating, i, id: unique_id, class: "hidden" %>
-                    <%= f.label :overall_rating, value: i, for: unique_id, class: "text-4xl md:text-5xl px-1 md:px-2 cursor-pointer" do %>
+                    <%# input を先に書く %>
+                    <%= f.radio_button :overall_rating, i, id: unique_id, class: "sr-only peer" %>
+                    <%# label をその直後に置く %>
+                    <%= f.label :overall_rating, value: i, for: unique_id, 
+                        class: "text-4xl md:text-5xl px-1 md:px-2 cursor-pointer text-[#E5E1DB] 
+                                hover:text-[#C5A065] peer-checked:text-[#C5A065] transition-colors" do %>
                       ★
                     <% end %>
                   <% end %>

@@ -132,7 +132,7 @@
             <h2 class="text-[10px] sm:text-xs font-serif font-bold text-[#C5A065] tracking-widest">
               Tasting Logs
             </h2>
-            <%# モバイルでは text-xl 程度に落とさないとボタンと衝突するためサイズ調整 %>
+
             <p class="text-xl sm:text-3xl text-[#365442] font-bold uppercase mt-1 leading-tight">
               みんなの<br class="sm:hidden">テイスティング記録
             </p>
@@ -144,8 +144,8 @@
                        tea_product: @tea_product, 
                        user_review: @user_review %>
           </div>
-
         </div>
+        <%= turbo_frame_tag "review_modal" %>
 
         <%# サマリー表示 %>
         <div class="mb-10">
@@ -197,5 +197,4 @@
     </div>
   </main>
 
-  <%# もし共通のフッターがある場合はここに入ります（あるいはapplication.html.erbに記述） %>
 </div>
