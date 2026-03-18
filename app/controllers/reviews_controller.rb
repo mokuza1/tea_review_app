@@ -48,7 +48,7 @@ class ReviewsController < ApplicationController
 
   def destroy
     @review.destroy
-    redirect_to tea_product_path(@tea_product), notice: "レビューを削除しました"
+    redirect_to tea_product_path(@tea_product), notice: "テイスティング記録を削除しました"
   end
 
   private
