@@ -22,22 +22,22 @@
         <div class="flex items-center justify-between group">
           <div class="flex flex-col">
             <span class="text-[9px] text-[#C5A065] font-bold uppercase leading-none tracking-widest mb-0.5"><%= label_en %></span>
-            <span class="text-sm font-bold text-[#433D3C]"><%= label_jp %></span>
+            <span class="text-base font-bold text-[#433D3C]"><%= label_jp %></span>
           </div>
 
           <div class="flex items-center gap-4">
             <%# 星と補足テキストを垂直に並べるためのコンテナ %>
             <div class="flex flex-col items-stretch min-w-[75px] md:min-w-[85px]">
               <%# 星表示 %>
-              <div class="text-[#C5A065] text-base leading-none text-center">
+              <div class="text-[#B08F59] text-base leading-none text-center">
                 <%= render_stars(avg.to_f.round) %>
               </div>
               
               <%# 補足テキスト：星の幅（コンテナの幅）いっぱいに広げて左右に配置 %>
               <% if low.present? %>
                 <div class="flex justify-between mt-1">
-                  <span class="text-[10px] text-[#8C7B6C] font-bold leading-none"><%= low %></span>
-                  <span class="text-[10px] text-[#8C7B6C] font-bold leading-none text-right"><%= high %></span>
+                  <span class="text-[10px] text-[#886F44] font-bold leading-none"><%= low %></span>
+                  <span class="text-[10px] text-[#886F44] font-bold leading-none text-right"><%= high %></span>
                 </div>
               <% end %>
             </div>
@@ -65,7 +65,7 @@
           ].each do |label, count| %>
             <% percent = (count * 100 / summary.review_count.to_f).round %>
             <div class="relative">
-              <div class="flex justify-between text-[12px] mb-1 font-bold">
+              <div class="flex justify-between text-[13px] mb-1 font-bold">
                 <span class="text-[#433D3C]"><%= label %></span>
                 <span class="text-[#A75F29]"><%= percent %> % <span class="text-[#8C7B6C] font-normal"> ( <%= count %>件 )</span></span>
               </div>

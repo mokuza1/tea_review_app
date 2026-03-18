@@ -8,11 +8,11 @@
     <div class="flex flex-col">
       <%# おすすめ度に控えめな副題をセット %>
       <div class="flex items-baseline gap-2 mb-1">
-        <span class="text-[15px] font-bold text-[#433D3C] tracking-[0.1em] uppercase">おすすめ度</span>
+        <span class="text-[16px] font-bold text-[#433D3C] tracking-[0.1em] uppercase">おすすめ度</span>
         <span class="text-[11px] text-[#8C7B6C] font-bold hidden sm:block tracking-wider">〜私の「好き！」度合い〜</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[#C5A065] text-2xl leading-none"><%= render_stars(review.overall_rating) %></span>
+        <span class="text-[#B08F59] text-2xl leading-none"><%= render_stars(review.overall_rating) %></span>
       </div>
     </div>
     <div class="text-right">
@@ -47,7 +47,7 @@
     ].each do |label, rating, low, high| %>
       <div class="flex flex-col items-center justify-center py-1">
         <span class="text-sm font-bold text-[#433D3C] mb-1"><%= label %></span>
-        <span class="text-[#C5A065] text-sm leading-none"><%= render_stars(rating) %></span>
+        <span class="text-[#B08F59] text-sm leading-none"><%= render_stars(rating) %></span>
         
         <%# 星の下に両極のニュアンスを極小テキストで配置 %>
         <div class="flex justify-between w-full max-w-[85px] mt-1.5">

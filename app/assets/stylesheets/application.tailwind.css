@@ -29,5 +29,5 @@
 .rating input:checked + label, /* 追加：チェックされた本人のラベル */
 .rating label:hover,
 .rating label:hover ~ label {
-  color: #C5A065 !important; /* 強制的に適用 */
+  color: #886F44 !important; /* 強制的に適用 */
 }
