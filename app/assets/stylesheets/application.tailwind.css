@@ -24,9 +24,10 @@
   z-index: 1;         /* 追加：クリック判定を安定させる */
 }
 
-/* 選択済み、およびホバー時の色をブランドのゴールドに変更 */
+/* 選択済み、およびホバー時の色変更を修正 */
 .rating input:checked ~ label,
+.rating input:checked + label, /* 追加：チェックされた本人のラベル */
 .rating label:hover,
 .rating label:hover ~ label {
-  color: #C5A065;
+  color: #C5A065 !important; /* 強制的に適用 */
 }
