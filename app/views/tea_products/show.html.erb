@@ -80,7 +80,7 @@
             <div class="space-y-4">
               <% @tea_product.flavors.group_by(&:flavor_category).each do |category, flavors| %>
                 <div class="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-6">
-                  <span class="text-sm font-bold text-[#365442] min-w-[80px] pt-1"><%= category.name %> :</span>
+                  <span class="text-sm font-bold text-[#365442] min-w-[80px] pt-1"><%= category.name %></span>
                   <ul class="flex flex-wrap gap-2">
                     <% flavors.each do |flavor| %>
                       <li class="px-3 py-1 text-sm bg-white border border-[#D6CEC5] text-[#5C5046] rounded shadow-sm">
