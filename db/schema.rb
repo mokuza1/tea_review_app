@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_07_073522) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_15_072229) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,6 +93,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_073522) do
     t.index ["name"], name: "index_purchase_locations_on_name"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.integer "aroma_rating", null: false
+    t.integer "bitterness_rating", null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.integer "overall_rating", null: false
+    t.boolean "recommended_iced", default: false
+    t.boolean "recommended_milk", default: false
+    t.boolean "recommended_straight", default: false
+    t.integer "strength_rating", null: false
+    t.integer "sweetness_rating", null: false
+    t.bigint "tea_product_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["tea_product_id"], name: "index_reviews_on_tea_product_id"
+    t.index ["user_id", "tea_product_id"], name: "index_reviews_on_user_id_and_tea_product_id", unique: true
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
   create_table "tea_product_flavors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "flavor_id", null: false
@@ -152,6 +171,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_073522) do
   add_foreign_key "favorites", "tea_products"
   add_foreign_key "favorites", "users"
   add_foreign_key "flavors", "flavor_categories"
+  add_foreign_key "reviews", "tea_products"
+  add_foreign_key "reviews", "users"
   add_foreign_key "tea_product_flavors", "flavors"
   add_foreign_key "tea_product_flavors", "tea_products"
   add_foreign_key "tea_product_purchase_locations", "purchase_locations"

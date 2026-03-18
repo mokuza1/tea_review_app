@@ -18,6 +18,17 @@ class TeaProductsController < ApplicationController
       .viewable_by(current_user)
       .includes(:brand, tea_product_purchase_locations: :purchase_location, flavors: :flavor_category)
       .find(params[:id])
+
+    reviews = @tea_product.reviews
+
+    @reviews = reviews
+                  .includes(:user)
+                  .order(created_at: :desc)
+                  .limit(3)
+
+    @review_summary = ReviewSummaryService.call(reviews)
+
+    @user_review = current_user&.reviews&.find_by(tea_product: @tea_product)
   end
 
   def new

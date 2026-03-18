@@ -1,0 +1,86 @@
+<div class="bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded-2xl p-6 md:p-8 mb-8 shadow-sm relative overflow-hidden group">
+  
+  <%# 左側のアクセントしおり %>
+  <div class="absolute left-0 top-0 w-1.5 h-full bg-[#365442] opacity-30 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+  <%# 上段：Overall（左）と 投稿者（右）を入れ替え %>
+  <div class="flex justify-between items-end mb-6">
+    <div class="flex flex-col">
+      <%# おすすめ度に控えめな副題をセット %>
+      <div class="flex items-baseline gap-2 mb-1">
+        <span class="text-[16px] font-bold text-[#433D3C] tracking-[0.1em] uppercase">おすすめ度</span>
+        <span class="text-[11px] text-[#8C7B6C] font-bold hidden sm:block tracking-wider">〜私の「好き！」度合い〜</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[#B08F59] text-2xl leading-none"><%= render_stars(review.overall_rating) %></span>
+      </div>
+    </div>
+    <div class="text-right">
+      <span class="block font-serif font-bold text-sm text-[#365442] tracking-wide mb-1">
+        <%= review.user.name %>
+      </span>
+
+      <div class="flex items-center justify-end gap-2">
+        <span class="text-[11px] text-[#8C7B6C] font-mono leading-none">
+          <%= review.created_at.strftime("%Y.%m.%d") %>
+        </span>
+        <%# 自分の投稿の場合のみ表示 %>
+        <% if user_signed_in? && current_user == review.user %>
+          <span class="text-[10px] text-[#D6CEC5] leading-none">|</span>
+          <%= link_to tea_product_review_path(review.tea_product, review),
+              data: { turbo_method: :delete, turbo_confirm: "この記録を完全に削除しますか？" },
+              class: "inline-flex items-center text-[12px] text-red-400/80 hover:text-red-600 font-bold leading-none transition-colors" do %>
+            削除
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# 詳細評価：配列に両極のテキストを追加して表示 %>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2 mb-6 bg-[#F2F4F0]/50 rounded-xl p-4 border border-[#365442]/5">
+    <% [
+      ["香り", review.aroma_rating, "控えめ", "強い"],
+      ["渋み", review.bitterness_rating, "おだやか", "力強い"],
+      ["濃厚さ", review.strength_rating, "すっきり", "コク"],
+      ["甘み", review.sweetness_rating, "キレ", "余韻"]
+    ].each do |label, rating, low, high| %>
+      <div class="flex flex-col items-center justify-center py-1">
+        <span class="text-sm font-bold text-[#433D3C] mb-1"><%= label %></span>
+        <span class="text-[#B08F59] text-sm leading-none"><%= render_stars(rating) %></span>
+        
+        <%# 星の下に両極のニュアンスを極小テキストで配置 %>
+        <div class="flex justify-between w-full max-w-[85px] mt-1.5">
+          <span class="text-[10px] text-[#8C7B6C] font-bold leading-none"><%= low %></span>
+          <span class="text-[10px] text-[#8C7B6C] font-bold leading-none"><%= high %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%# おすすめの飲み方：タグ風 %>
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
+    <span class="text-xs font-bold text-[#433D3C] tracking-wider flex-shrink-0">おすすめの飲み方</span>
+    <div class="flex flex-wrap gap-2">
+      <% drinks = [] %>
+      <% drinks << "ストレート" if review.recommended_straight %>
+      <% drinks << "ミルク" if review.recommended_milk %>
+      <% drinks << "アイス" if review.recommended_iced %>
+
+      <% drinks.each do |drink| %>
+        <span class="px-3 py-1 bg-white border border-[#D6CEC5] text-[#A75F29] text-[13px] font-bold rounded shadow-sm">
+          # <%= drink %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <%# コメント %>
+  <% if review.comment.present? %>
+    <div class="relative bg-white/60 border-l-4 border-[#D6CEC5] p-5 rounded-r-xl">
+      <p class="text-[#433D3C] text-base md:text-lg leading-relaxed font-medium">
+        <%= review.comment %>
+      </p>
+    </div>
+  <% end %>
+</div>
