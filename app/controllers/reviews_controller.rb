@@ -23,10 +23,10 @@ class ReviewsController < ApplicationController
 
     if @review.save
       flash[:notice] = "テイスティング記録を保存しました"
-    
+
       # 成功時はTurbo.visitで詳細画面全体を再読み込みさせる
       render turbo_stream: turbo_stream.append(
-        "review_modal", 
+        "review_modal",
         "<script>Turbo.visit('#{tea_product_path(@tea_product)}')</script>".html_safe
       )
     else

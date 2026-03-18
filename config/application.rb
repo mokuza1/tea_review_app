@@ -37,6 +37,5 @@ module Myapp
 
     # バリデーションエラー時の field_with_errors 挿入を無効化
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag.html_safe }
-
   end
 end
