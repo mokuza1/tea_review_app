@@ -77,6 +77,8 @@ group :development do
   gem "pry-rails"
 
   gem "bullet"
+
+  gem "letter_opener_web"
 end
 
 group :test do
