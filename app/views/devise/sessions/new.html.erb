@@ -1,104 +1,112 @@
-<% if flash[:reset_sent] %>
-  <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded">
-
-    <p class="text-green-800 font-medium">
-      再設定メールを送信しました
-    </p>
-
-    <p class="text-sm text-green-700 mt-2">
-      メール内のリンクからパスワードを再設定してください。
-    </p>
-
-    <p class="text-sm text-green-700 mt-3">
-      メールが届かない場合は以下をご確認ください：
-    </p>
-
-    <ul class="text-sm text-green-700 mt-2 list-disc ml-5">
-      <li>迷惑メールフォルダ</li>
-      <li>メールアドレスの入力ミス</li>
-    </ul>
-
-    <div class="mt-4">
-      <%= link_to "再送する",
-          new_password_path(resource_name, email: flash[:reset_email]),
-          class: "text-blue-600 underline" %>
-    </div>
-
-  </div>
-<% end %>
-
 <div class="min-h-screen bg-[#F1EFE9] flex items-start justify-center px-4 pt-24 pb-12">
+  <div class="w-full max-w-md">
 
-  <div class="w-full max-w-md bg-white border-2 border-[#B5A89A] rounded-lg shadow-xl p-8 md:p-10">
-
-    <div class="text-center mb-8">
-      <h2 class="text-2xl font-serif font-bold text-[#365442] tracking-widest">
-        MEMBER LOGIN
-      </h2>
-      <p class="text-[10px] text-[#8C7B6C] font-bold mt-1 uppercase tracking-[0.2em]">
-        <%= t("devise.sessions.new.sign_in") %>
-      </p>
-      <div class="mt-4 w-10 h-[1px] bg-[#D6CEC5] mx-auto"></div>
-
-      <% if params[:favorite_required] %>
-        <div class="mt-6 bg-yellow-50 border border-[#A75F29] text-yellow-800 px-4 py-3 rounded text-sm text-center">
-          ログインするとお気に入り登録ができます。
+    <%# --- 再設定メール送信完了メッセージ（カードの外側に配置して視認性を高める） --- %>
+    <% if flash[:reset_sent] %>
+      <div class="mb-6 p-6 bg-white border-l-4 border-[#365442] shadow-md rounded-r-lg">
+        <div class="flex items-center gap-2 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#365442]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p class="text-[#365442] font-bold text-sm tracking-wider">再設定メールを送信しました</p>
         </div>
-      <% elsif params[:review_required] %>
-        <div class="mt-6 bg-yellow-50 border border-[#A75F29] text-yellow-800 px-4 py-3 rounded text-sm text-center">
-          ログインするとレビュー投稿ができます。
+
+        <p class="text-xs text-[#8C7B6C] font-bold leading-relaxed mb-4">
+          メール内のリンクからパスワードを再設定してください。<br>
+          届かない場合は、迷惑メールフォルダやアドレスの入力ミスをご確認ください。
+        </p>
+
+        <div class="pt-3 border-t border-[#D6CEC5]/50">
+          <%= link_to new_password_path(resource_name, email: flash[:reset_email]),
+                class: "text-[13px] font-bold text-[#A75F29] hover:text-[#365442] transition-colors flex items-center gap-1 uppercase tracking-widest" do %>
+            <span>再送を希望する</span>
+            <span class="text-lg leading-none relative -top-[3px] ml-0.5">›</span>
+          <% end %>
         </div>
-      <% end %>
-    </div>
-
-    <%= form_for(resource,
-          as: resource_name,
-          url: session_path(resource_name)) do |f| %>
-
-      <div class="mb-5">
-        <%= f.label :email, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
-        <%= f.email_field :email,
-              autofocus: true,
-              autocomplete: "email",
-              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
-                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition
-                     font-normal text-lg text-[#365442] tracking-normal" %>
       </div>
-
-      <div class="mb-5">
-        <%= f.label :password, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
-        <%= f.password_field :password,
-              autocomplete: "current-password",
-              class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
-                     focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition
-                     font-normal text-lg text-[#365442] tracking-normal" %>
-      </div>
-
-      <% if devise_mapping.rememberable? %>
-        <div class="flex items-center gap-3 mb-8">
-          <%= f.check_box :remember_me,
-                class: "w-4 h-4 rounded border-2 border-[#D6CEC5] text-[#365442] focus:ring-[#365442]" %>
-          <%= f.label :remember_me, class: "text-xs font-bold text-[#8C7B6C] tracking-wide" %>
-        </div>
-      <% end %>
-
-      <div>
-        <%= f.submit t("devise.sessions.new.sign_in"),
-              class: "w-full bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-bold
-                     py-4 rounded shadow-lg transition tracking-[0.2em] cursor-pointer" %>
-      </div>
-
     <% end %>
 
-    <div class="mt-8 text-center text-xs font-bold text-[#8C7B6C] tracking-wider divide-x divide-[#D6CEC5]">
-      <%= render "devise/shared/links" %>
-    </div>
+    <%# --- メインログインカード --- %>
+    <div class="bg-white border-2 border-[#B5A89A] rounded-lg shadow-xl p-8 md:p-10">
 
-    <div class="mt-4 text-sm">
-      <%= link_to "パスワードを忘れた方はこちら", new_password_path(resource_name),
-          class: "text-blue-600 hover:underline" %>
-    </div>
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-serif font-bold text-[#365442] tracking-widest">
+          MEMBER LOGIN
+        </h2>
+        <p class="text-[10px] text-[#8C7B6C] font-bold mt-1 uppercase tracking-[0.2em]">
+          <%= t("devise.sessions.new.sign_in") %>
+        </p>
+        <div class="mt-4 w-10 h-[1px] bg-[#D6CEC5] mx-auto"></div>
 
+        <% if params[:favorite_required] %>
+          <div class="mt-6 bg-[#FDFBF9] border border-[#A75F29]/50 text-[#A75F29] px-4 py-3 rounded text-[12px] font-bold tracking-wider">
+            ログインするとお気に入り登録ができます。
+          </div>
+        <% elsif params[:review_required] %>
+          <div class="mt-6 bg-[#FDFBF9] border border-[#A75F29]/50 text-[#A75F29] px-4 py-3 rounded text-[12px] font-bold tracking-wider">
+            ログインするとレビュー投稿ができます。
+          </div>
+        <% end %>
+      </div>
+
+      <%= form_for(resource,
+            as: resource_name,
+            url: session_path(resource_name)) do |f| %>
+
+        <div class="mb-5">
+          <%= f.label :email, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+          <%= f.email_field :email,
+                autofocus: true,
+                autocomplete: "email",
+                class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                       focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition
+                       font-normal text-lg text-[#365442] tracking-normal" %>
+        </div>
+
+        <div class="mb-5">
+          <%= f.label :password, class: "block text-xs font-bold text-[#365442] tracking-widest mb-2 uppercase" %>
+          <%= f.password_field :password,
+                autocomplete: "current-password",
+                class: "w-full p-3 bg-[#FDFBF9] border-2 border-[#D6CEC5] rounded
+                       focus:ring-2 focus:ring-[#365442] focus:border-[#365442] outline-none transition
+                       font-normal text-lg text-[#365442] tracking-normal" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center gap-3 mb-8">
+            <%= f.check_box :remember_me,
+                  class: "w-4 h-4 rounded border-2 border-[#D6CEC5] text-[#365442] focus:ring-[#365442]" %>
+            <%= f.label :remember_me, class: "text-xs font-bold text-[#8C7B6C] tracking-wide" %>
+          </div>
+        <% end %>
+
+        <div>
+          <%= f.submit t("devise.sessions.new.sign_in"),
+                class: "w-full bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] font-bold
+                       py-4 rounded shadow-lg transition tracking-[0.2em] cursor-pointer" %>
+        </div>
+      <% end %>
+
+      <%# --- リンクエリア：アカウント登録とパスワード再設定を統合 --- %>
+      <div class="mt-10 pt-8 border-t border-[#D6CEC5]/40 text-center space-y-4">
+        
+        <%# 1. アカウント登録リンク（Deviseの共有リンクから取得する場合、または手動） %>
+        <div class="flex flex-col items-center gap-4">
+          <% if devise_mapping.registerable? && controller_name != 'registrations' %>
+            <%= link_to "新規アカウント登録はこちら", new_registration_path(resource_name),
+                  class: "text-[11px] font-bold text-[#8C7B6C] hover:text-[#365442] tracking-[0.15em] transition-colors border-b border-[#D6CEC5] pb-0.5" %>
+          <% end %>
+
+          <%# 2. パスワードを忘れた方（デザインを登録リンクと統一） %>
+          <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+            <%= link_to "パスワードを忘れた方はこちら", new_password_path(resource_name),
+                  class: "text-[11px] font-bold text-[#8C7B6C] hover:text-[#365442] tracking-[0.15em] transition-colors border-b border-[#D6CEC5] pb-0.5" %>
+          <% end %>
+        </div>
+
+      </div>
+
+    </div>
   </div>
 </div>
 
