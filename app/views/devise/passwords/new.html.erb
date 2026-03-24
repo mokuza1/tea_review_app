@@ -9,7 +9,7 @@
 
   <div>
     <%= f.label :email, "メールアドレス" %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.email_field :email, value: params[:email], autofocus: true %>
   </div>
 
   <div class="mt-4">

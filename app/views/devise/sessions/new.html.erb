@@ -1,3 +1,32 @@
+<% if flash[:reset_sent] %>
+  <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded">
+
+    <p class="text-green-800 font-medium">
+      再設定メールを送信しました
+    </p>
+
+    <p class="text-sm text-green-700 mt-2">
+      メール内のリンクからパスワードを再設定してください。
+    </p>
+
+    <p class="text-sm text-green-700 mt-3">
+      メールが届かない場合は以下をご確認ください：
+    </p>
+
+    <ul class="text-sm text-green-700 mt-2 list-disc ml-5">
+      <li>迷惑メールフォルダ</li>
+      <li>メールアドレスの入力ミス</li>
+    </ul>
+
+    <div class="mt-4">
+      <%= link_to "再送する",
+          new_password_path(resource_name, email: flash[:reset_email]),
+          class: "text-blue-600 underline" %>
+    </div>
+
+  </div>
+<% end %>
+
 <div class="min-h-screen bg-[#F1EFE9] flex items-start justify-center px-4 pt-24 pb-12">
 
   <div class="w-full max-w-md bg-white border-2 border-[#B5A89A] rounded-lg shadow-xl p-8 md:p-10">
