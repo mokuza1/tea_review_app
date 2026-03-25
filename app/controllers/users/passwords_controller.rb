@@ -21,6 +21,8 @@ class Users::PasswordsController < Devise::PasswordsController
   def after_sending_reset_password_instructions_path_for(resource_name)
     email = params.dig(resource_name, :email)
 
+    flash.delete(:notice)
+
     flash[:reset_sent] = true
     flash[:reset_email] = email
 
