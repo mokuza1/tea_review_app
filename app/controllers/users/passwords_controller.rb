@@ -1,5 +1,4 @@
 class Users::PasswordsController < Devise::PasswordsController
-
   def edit
     token = params[:reset_password_token]
 
@@ -27,4 +26,5 @@ class Users::PasswordsController < Devise::PasswordsController
 
     new_session_path(resource_name)
   end
+
 end
