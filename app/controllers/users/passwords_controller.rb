@@ -28,5 +28,4 @@ class Users::PasswordsController < Devise::PasswordsController
 
     new_session_path(resource_name)
   end
-
 end
