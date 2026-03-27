@@ -52,6 +52,7 @@ gem "ransack", "~> 4.4", ">= 4.4.1"
 
 gem "aws-sdk-s3", require: false
 
+gem "redis", "~> 5.0"
 gem "rack-attack"
 
 group :development, :test do
