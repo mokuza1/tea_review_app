@@ -1,0 +1,2 @@
+class TeaProductSubmission < ApplicationRecord
+end
