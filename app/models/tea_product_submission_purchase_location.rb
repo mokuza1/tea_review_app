@@ -1,0 +1,2 @@
+class TeaProductSubmissionPurchaseLocation < ApplicationRecord
+end
