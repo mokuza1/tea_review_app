@@ -19,10 +19,12 @@ Rails.application.routes.draw do
     get :favorites
   end
 
-  resources :tea_products, only: %i[index show new create edit update] do
+  resources :tea_products, only: %i[index show] do
     resources :reviews, only: %i[index new create edit update destroy]
     resource :favorite, only: %i[create destroy]
+  end
 
+  resources :tea_product_submissions, except: %i[index show destroy] do
     member do
       patch :submit
     end
