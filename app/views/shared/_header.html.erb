@@ -30,7 +30,7 @@
         </label>
 
         <div class="hidden md:flex items-center space-x-1 text-sm font-medium font-bold text-[#433D3C]">
-          <%= link_to "投稿する", new_tea_product_path,
+          <%= link_to "投稿する", new_tea_product_submission_path,
                 class: "px-4 py-2 text-[#A75F29] font-serif tracking-wider hover:bg-[#FDFBF9] rounded transition" %>
           <%= link_to "マイページ", mypage_path,
                 class: "px-4 py-2 hover:text-[#365442] font-serif tracking-wider transition" %>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="hidden peer-checked:block md:hidden border-t border-[#365442]/10 mt-2 py-4 space-y-4 text-right">
-      <%= link_to "投稿する", new_tea_product_path, class: "block text-[#A75F29] font-serif tracking-wider px-2" %>
+      <%= link_to "投稿する", new_tea_product_submission_path, class: "block text-[#A75F29] font-serif tracking-wider px-2" %>
       <%= link_to "マイページ", mypage_path, class: "block font-serif tracking-wider px-2" %>
       <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "block text-gray-400 text-sm px-2" %>
     </div>

@@ -38,7 +38,7 @@
 
           <tbody class="divide-y-2 divide-[#F1EFE9]">
 
-            <% @tea_products.each do |tea| %>
+            <% @posts.each do |tea| %>
 
               <tr class="hover:bg-[#FDFBF9] transition-colors">
 
@@ -57,16 +57,27 @@
 
                 <!-- 紅茶名 -->
                 <td class="p-4">
-                  <%= link_to tea_product_path(tea), class: "group" do %>
+                  <% if tea.is_a?(TeaProduct) %>
+                    <%= link_to tea_product_path(tea), class: "group" do %>
 
-                    <span class="text-base font-bold text-[#365442]
-                                 group-hover:text-[#A75F29]
-                                 group-hover:underline
-                                 transition decoration-2">
+                      <span class="text-base font-bold text-[#365442]
+                                   group-hover:text-[#A75F29]
+                                   group-hover:underline
+                                   transition decoration-2">
 
-                      <%= tea.name %>
+                        <%= tea.name %>
 
-                    </span>
+                      </span>
+                    <% end %>
+
+                  <% else %>
+                    <%= link_to edit_tea_product_submission_path(tea), class: "group" do %>
+
+                      <span class="text-base font-bold text-[#365442]">
+                        <%= tea.name %>
+                      </span>
+
+                    <% end %>
 
                     <div class="text-[10px] text-[#8C7B6C] mt-1 font-semibold uppercase tracking-tighter">
                       Created at: <%= tea.created_at.strftime("%Y.%m.%d") %>
@@ -102,9 +113,9 @@
                 <!-- 操作 -->
                 <td class="p-4 text-center">
 
-                  <% if tea.draft? || tea.rejected? %>
+                  <% if tea.is_a?(TeaProductSubmission) && (tea.draft? || tea.rejected?) %>
 
-                    <%= link_to edit_tea_product_path(tea),
+                    <%= link_to edit_tea_product_submission_path(tea),
                         class: "inline-block bg-[#365442] hover:bg-[#2A4034]
                                text-[#F9F7F2] text-xs font-bold
                                px-4 py-2 rounded shadow transition tracking-widest" do %>
@@ -134,7 +145,7 @@
     </div>
 
     <div class="mt-10 text-center">
-      <%= link_to "新規投稿を作成する", new_tea_product_path,
+      <%= link_to "新規投稿を作成する", new_tea_product_submission_path,
           class: "inline-block border-2 border-[#365442] text-[#365442]
                  hover:bg-[#365442] hover:text-white
                  font-bold px-8 py-3 rounded-lg transition-all duration-300 tracking-widest" %>

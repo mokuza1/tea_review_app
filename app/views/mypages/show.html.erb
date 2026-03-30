@@ -18,7 +18,7 @@
         <span class="w-1.5 h-4 bg-[#A75F29] rounded-full"></span>
         自分の投稿
         <span class="text-xs bg-[#EBE5DE] text-[#5D554E] px-2 py-1 rounded">
-          <%= @tea_products_count %>件
+          <%= @posts_count %>件
         </span>
       </h2>
 
@@ -29,13 +29,13 @@
 
     <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
 
-      <% if @recent_tea_products.any? %>
+      <% if @recent_posts.any? %>
 
         <table class="w-full text-sm border-collapse">
 
           <tbody class="divide-y-2 divide-[#F1EFE9]">
 
-            <% @recent_tea_products.each do |tea| %>
+            <% @recent_posts.each do |tea| %>
 
               <tr class="hover:bg-[#FDFBF9]">
 
@@ -87,7 +87,7 @@
 
     <div class="mt-6 text-center">
 
-      <%= link_to "新規投稿を作成する", new_tea_product_path,
+      <%= link_to "新規投稿を作成する", new_tea_product_submission_path,
           class: "inline-block border-2 border-[#365442] text-[#365442]
                  hover:bg-[#365442] hover:text-white
                  font-bold px-8 py-3 rounded-lg transition-all duration-300 tracking-widest" %>
