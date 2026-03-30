@@ -1,7 +1,7 @@
 class TeaProductsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
-  before_action :set_tea_product, only: %i[edit update]
-  before_action :prepare_edit_form, only: %i[edit update submit]
+  #before_action :authenticate_user!, except: %i[index show]
+  before_action :set_tea_product, only: %i[show]#%i[edit update]
+  #before_action :prepare_edit_form, only: %i[edit update submit]
 
   def index
     base_scope = TeaProduct.where(status: :published)
@@ -30,6 +30,8 @@ class TeaProductsController < ApplicationController
 
     @user_review = current_user&.reviews&.find_by(tea_product: @tea_product)
   end
+
+=begin
 
   def new
     @tea_product = current_user.tea_products.build(status: :draft)
@@ -160,6 +162,7 @@ class TeaProductsController < ApplicationController
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   end
 
+=end
   private
 
   def set_tea_product
@@ -170,6 +173,7 @@ class TeaProductsController < ApplicationController
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   end
 
+=begin
   # 大カテゴリ再描画
   def prepare_edit_form
     return unless @tea_product
@@ -203,6 +207,7 @@ class TeaProductsController < ApplicationController
       ]
     )
   end
+=end
 
   def search_params
     return {} unless params[:q]

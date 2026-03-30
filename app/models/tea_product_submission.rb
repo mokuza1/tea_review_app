@@ -163,9 +163,9 @@ class TeaProductSubmission < ApplicationRecord
       new_submission.flavor_ids = flavor_ids
 
       # 購入場所コピー
-      purchase_locations.each do |loc|
+      tea_product_submission_purchase_locations.each do |tpl|
         new_submission.tea_product_submission_purchase_locations.create!(
-          purchase_location: loc
+          purchase_location: tpl.purchase_location
         )
       end
 
@@ -179,13 +179,14 @@ class TeaProductSubmission < ApplicationRecord
   def resolve_brand!(brand_id:, brand_name:)
     if brand_id.present?
       self.brand = Brand.find(brand_id)
-    else
-      raise ActiveRecord::RecordInvalid, self if brand_name.blank?
-
+    elsif brand_name.present?
       self.brand = Brand.create_or_find_by!(name_ja: brand_name) do |b|
         b.status = :draft
         b.user = user
       end
+    else
+      # どちらも空の場合は何もしない
+      self.brand = nil 
     end
   end
 
