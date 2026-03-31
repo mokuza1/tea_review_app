@@ -13,7 +13,7 @@ export default class extends Controller {
       : []
 
     // 初期ロード：チェックされているカテゴリのフレーバーを読み込む
-    this.element.querySelectorAll('input[name="tea_product[selected_flavor_category_ids][]"]:checked').forEach(checkbox => {
+    this.element.querySelectorAll('input[name="tea_product_submission[selected_flavor_category_ids][]"]:checked').forEach(checkbox => {
       this.fetchAndRender(checkbox.value, checkbox.nextElementSibling.textContent.trim())
     })
   }
@@ -58,7 +58,7 @@ export default class extends Controller {
 
       const checkbox = document.createElement("input")
       checkbox.type = "checkbox"
-      checkbox.name = "tea_product[flavor_ids][]"
+      checkbox.name = "tea_product_submission[flavor_ids][]"
       checkbox.value = flavor.id
       checkbox.classList.add("mr-2")
 

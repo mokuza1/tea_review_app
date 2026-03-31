@@ -110,7 +110,7 @@
                        name="tea_product_submission[selected_flavor_category_ids][]"
                        data-action="change->flavor-select#toggleCategory"
                        class="rounded text-[#365442] focus:ring-[#365442]"
-                       <%= "checked" if @selected_flavor_category_ids&.include?(category.id.to_s) || tea_product_submission.flavors.any? { |f| f.flavor_category_id == category.id } %>>
+                       <%= "checked" if tea_product_submission.selected_flavor_category_ids&.include?(category.id.to_s) || tea_product_submission.flavors.any? { |f| f.flavor_category_id == category.id } %>>
                 <span class="text-sm font-semibold text-[#26302A]"><%= category.name %></span>
               </label>
             <% end %>
@@ -143,7 +143,7 @@
 
       <template data-purchase-locations-target="template">
         <%= f.fields_for :tea_product_submission_purchase_locations,
-              TeaProductPurchaseLocation.new.tap { |tpl| tpl.build_purchase_location },
+              TeaProductSubmissionPurchaseLocation.new.tap { |tpl| tpl.build_purchase_location },
               child_index: "NEW_RECORD" do |location_form| %>
           <%= render "purchase_location_fields", f: location_form %>
         <% end %>
