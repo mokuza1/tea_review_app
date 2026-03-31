@@ -57,7 +57,9 @@ Rails.application.routes.draw do
   namespace :admin do
     root "dashboard#index"
 
-    resources :tea_products, only: %i[index show] do
+    resources :tea_products, only: %i[index show]
+
+    resources :tea_product_submissions, only: %i[index show] do
       member do
         patch :approve
         patch :reject
