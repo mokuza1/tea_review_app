@@ -76,6 +76,10 @@ class TeaProductSubmission < ApplicationRecord
 
   validate :image_type
 
+  def status_i18n
+    enum_i18n(:status)
+  end
+
   # =====================
   # ステータス操作
   # =====================

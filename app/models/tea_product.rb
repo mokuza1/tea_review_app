@@ -19,6 +19,8 @@ class TeaProduct < ApplicationRecord
 
   has_many :tea_product_submissions, dependent: :nullify
 
+  has_one :tea_product_submission
+
   #accepts_nested_attributes_for :tea_product_purchase_locations,
                                 #allow_destroy: true,
                                 #reject_if: :reject_empty_purchase_locations
