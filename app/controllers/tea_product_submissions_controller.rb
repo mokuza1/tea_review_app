@@ -117,7 +117,10 @@ class TeaProductSubmissionsController < ApplicationController
   def set_tea_product_submission
     # Userの tea_product_submissions から検索する
     @tea_product_submission = current_user.tea_product_submissions
-                                          .includes(:brand)
+                                          .includes(
+                                            :brand,
+                                            tea_product_submission_purchase_locations: :purchase_location
+                                          )
                                           .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tea_products_path, alert: "データが見つかりませんでした"

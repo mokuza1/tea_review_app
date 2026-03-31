@@ -19,6 +19,8 @@ class TeaProductsController < ApplicationController
       .includes(:brand, tea_product_purchase_locations: :purchase_location, flavors: :flavor_category)
       .find(params[:id])
 
+    @submission = @tea_product.tea_product_submission
+
     reviews = @tea_product.reviews
 
     @reviews = reviews
