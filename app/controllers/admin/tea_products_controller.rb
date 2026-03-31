@@ -1,4 +1,9 @@
 class Admin::TeaProductsController < Admin::BaseController
+
+  def index
+    @tea_products = TeaProduct.order(created_at: :desc)
+  end
+=begin
   def index
     @tea_products = TeaProduct
     .includes(:user)
