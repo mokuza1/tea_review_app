@@ -2,7 +2,7 @@ class Admin::TeaProductSubmissionsController < Admin::BaseController
   def index
     @submissions = TeaProductSubmission
       .pending
-      .includes(:user, :brand)
+      .includes(:user)
       .order(created_at: :desc)
   end
 

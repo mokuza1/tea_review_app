@@ -1,8 +1,20 @@
 class Admin::TeaProductsController < Admin::BaseController
-
   def index
-    @tea_products = TeaProduct.order(created_at: :desc)
+    @tea_products = TeaProduct
+      .includes(:user)
+      .order(created_at: :desc)
   end
+
+  def show
+    @tea_product = TeaProduct.includes(
+      :user,
+      :brand,
+      :purchase_locations,
+      flavors: :flavor_category
+    ).find(params[:id])
+  end
+end
+
 =begin
   def index
     @tea_products = TeaProduct
@@ -47,3 +59,4 @@ class Admin::TeaProductsController < Admin::BaseController
     redirect_to admin_tea_products_path, alert: "却下できない状態です"
   end
 end
+=end
