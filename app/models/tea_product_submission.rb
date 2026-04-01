@@ -33,6 +33,14 @@ class TeaProductSubmission < ApplicationRecord
 
   has_one_attached :image
 
+  # 自分を「以前の申請(previous)」として指名しているレコードが存在しない＝最新である
+  scope :latest_only, -> {
+    where.not(id: TeaProductSubmission.select(:previous_submission_id).where.not(previous_submission_id: nil))
+  }
+
+  # まだ承認（商品化）されていないもの
+  scope :active, -> { where(tea_product_id: nil) }
+
   # =====================
   # enum
   # =====================
