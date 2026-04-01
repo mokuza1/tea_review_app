@@ -120,11 +120,42 @@
   </div>
 
   <!-- 更新申請の場合 -->
-  <% if @submission.tea_product.present? %>
-    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-      <p class="text-sm text-yellow-800 font-semibold">
-        これは既存データの更新申請です
-      </p>
+  <% if @submission.previous_submission.present? %>
+    <% previous = @submission.previous_submission %>
+
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 space-y-6">
+      <h3 class="text-lg font-semibold">
+        変更内容
+      </h3>
+
+      <% if @submission.previous_submission&.rejection_reason.present? %>
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p class="text-sm font-semibold text-red-600 mb-1">⚠️ 前回の却下理由</p>
+          <p class="text-sm text-red-800">
+            <%= @submission.previous_submission.rejection_reason %>
+          </p>
+        </div>
+      <% end %>
+
+      <%= diff_field "商品名", previous.name, @submission.name %>
+
+      <%= diff_field "説明", previous.description, @submission.description %>
+
+      <%= diff_field "ブランド",
+            previous.brand&.display_name,
+            @submission.brand&.display_name %>
+
+      <%= diff_field "カフェイン",
+            previous.enum_i18n(:caffeine_level),
+            @submission.enum_i18n(:caffeine_level) %>
+
+      <%= diff_field "茶葉タイプ",
+            previous.enum_i18n(:tea_type),
+            @submission.enum_i18n(:tea_type) %>
+
+      <%= diff_flavors previous, @submission %>
+
+      <%= diff_purchase_locations previous, @submission %>
     </div>
   <% end %>
 

@@ -11,7 +11,8 @@ class Admin::TeaProductSubmissionsController < Admin::BaseController
       :user,
       :brand,
       :purchase_locations,
-      flavors: :flavor_category
+      { flavors: :flavor_category },
+      { previous_submission: { flavors: :flavor_category } }
     ).find(params[:id])
   end
 
