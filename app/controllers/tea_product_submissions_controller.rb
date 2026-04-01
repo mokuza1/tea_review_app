@@ -78,9 +78,10 @@ class TeaProductSubmissionsController < ApplicationController
         if was_rejected
           # 却下状態からの更新なら、ここで新しい下書きを生成し、操作対象を切り替える
           @tea_product_submission = @tea_product_submission.build_resubmission
+        else
+          @tea_product_submission.assign_attributes(normalized)
         end
 
-        @tea_product_submission.assign_attributes(normalized)
         @tea_product_submission.resolve_brand!(brand_id: brand_id, brand_name: brand_name)
         
         # もしここでバリデーションエラーになっても、@tea_product_submission には
