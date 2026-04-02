@@ -102,6 +102,7 @@ class TeaProductSubmissionsController < ApplicationController
     begin
       # 最後に保存された内容を申請状態(:pending)にする
       @tea_product_submission.submit!
+      @tea_product_submission.submit_with_brand!
       
       redirect_to mypage_path, notice: "申請しました（審査をお待ちください）"
     rescue ActiveRecord::RecordInvalid

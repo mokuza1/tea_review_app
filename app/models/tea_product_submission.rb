@@ -102,6 +102,18 @@ class TeaProductSubmission < ApplicationRecord
     save!
   end
 
+  def submit_with_brand!
+    transaction do
+      # 投稿申請
+      update!(status: :pending)
+
+      # ブランド申請（必要な場合のみ）
+      if brand&.draft?
+        brand.submit
+      end
+    end
+  end
+
   def approve!(admin)
     raise InvalidStatusTransition unless pending?
 

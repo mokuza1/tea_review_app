@@ -1,4 +1,5 @@
 class Admin::BrandsController < Admin::BaseController
+  class InvalidStatusTransition < StandardError; end
   def index
     @brands = Brand
       .includes(:user)
