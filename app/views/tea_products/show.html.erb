@@ -4,14 +4,25 @@
     <div class="max-w-4xl mx-auto">
 
       <%# --- 却下通知 --- %>
-      <% if @tea_product.rejected? && @tea_product.rejection_reason.present? %>
+      <% submission = @tea_product.tea_product_submission %>
+
+      <% if submission&.rejected? && submission.rejection_reason.present? %>
         <div class="mb-8 bg-red-50 border border-red-200 rounded-lg p-4 shadow-sm">
           <p class="text-base font-bold text-red-700 px-4 mb-3">
             この投稿は却下されました。
           </p>
+
+          <%# 理由表示（UX的にあった方が良い） %>
+          <div class="px-4 mb-4 text-sm text-red-800">
+            <%= simple_format(submission.rejection_reason) %>
+          </div>
+
           <div class="text-right">
-            <%= link_to edit_tea_product_path(@tea_product), class: "inline-flex items-center gap-2 text-sm font-medium text-red-700 hover:text-red-900 transition group" do %>
-              <span class="border-b border-transparent group-hover:border-red-700 transition">理由を確認して編集する</span>
+            <%= link_to edit_tea_product_submission_path(submission),
+                class: "inline-flex items-center gap-2 text-sm font-medium text-red-700 hover:text-red-900 transition group" do %>
+              <span class="border-b border-transparent group-hover:border-red-700 transition">
+                理由を確認して編集する
+              </span>
               <span class="transform group-hover:translate-x-1 transition font-bold">→</span>
             <% end %>
           </div>

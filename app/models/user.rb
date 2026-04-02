@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :favorite_tea_products, through: :favorites, source: :tea_product
   has_many :reviews, dependent: :destroy
 
+  has_many :tea_product_submissions, dependent: :destroy
+
   # 投稿者として
   has_many :brands
   has_many :tea_products

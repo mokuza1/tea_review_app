@@ -1,10 +1,8 @@
 class Admin::TeaProductsController < Admin::BaseController
   def index
     @tea_products = TeaProduct
-    .includes(:user)
-    .order(created_at: :desc)
-
-    @tea_products = @tea_products.where(status: params[:status]) if params[:status].present?
+      .includes(:user)
+      .order(created_at: :desc)
   end
 
   def show
@@ -14,31 +12,5 @@ class Admin::TeaProductsController < Admin::BaseController
       :purchase_locations,
       flavors: :flavor_category
     ).find(params[:id])
-  end
-
-  def approve
-    tea_product = TeaProduct.find(params[:id])
-    tea_product.approve!(current_user)
-
-    redirect_to admin_tea_products_path, notice: "承認しました"
-  rescue InvalidStatusTransition
-    redirect_to admin_tea_products_path, alert: "承認できない状態です"
-  end
-
-  def reject
-    tea_product = TeaProduct.find(params[:id])
-    reason = params[:rejection_reason].to_s.strip
-
-    if reason.blank?
-      redirect_to admin_tea_product_path(tea_product),
-                  alert: "却下理由を入力してください" and return
-    end
-
-    tea_product.reject!(current_user, reason: reason)
-
-    redirect_to admin_tea_products_path, notice: "却下しました"
-
-  rescue InvalidStatusTransition
-    redirect_to admin_tea_products_path, alert: "却下できない状態です"
   end
 end

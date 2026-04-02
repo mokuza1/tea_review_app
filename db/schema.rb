@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_15_072229) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_29_055512) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -132,6 +132,49 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_072229) do
     t.index ["tea_product_id"], name: "index_tea_product_purchase_locations_on_tea_product_id"
   end
 
+  create_table "tea_product_submission_flavors", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "flavor_id", null: false
+    t.bigint "tea_product_submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flavor_id"], name: "index_tea_product_submission_flavors_on_flavor_id"
+    t.index ["tea_product_submission_id", "flavor_id"], name: "idx_tps_flavors_unique", unique: true
+    t.index ["tea_product_submission_id"], name: "idx_tps_flavors_on_submission_id"
+  end
+
+  create_table "tea_product_submission_purchase_locations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "purchase_location_id", null: false
+    t.bigint "tea_product_submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_location_id"], name: "idx_on_purchase_location_id_5fe4b7a3c4"
+    t.index ["tea_product_submission_id", "purchase_location_id"], name: "idx_tpspl_on_submission_and_location", unique: true
+    t.index ["tea_product_submission_id"], name: "idx_tps_purchase_locations_on_submission_id"
+  end
+
+  create_table "tea_product_submissions", force: :cascade do |t|
+    t.datetime "approved_at"
+    t.bigint "approved_by_id"
+    t.bigint "brand_id"
+    t.integer "caffeine_level"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name"
+    t.bigint "previous_submission_id"
+    t.text "rejection_reason"
+    t.integer "status", default: 0, null: false
+    t.bigint "tea_product_id"
+    t.integer "tea_type"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["approved_by_id"], name: "index_tea_product_submissions_on_approved_by_id"
+    t.index ["brand_id"], name: "index_tea_product_submissions_on_brand_id"
+    t.index ["previous_submission_id"], name: "index_tea_product_submissions_on_previous_submission_id"
+    t.index ["status"], name: "index_tea_product_submissions_on_status"
+    t.index ["tea_product_id"], name: "index_tea_product_submissions_on_tea_product_id"
+    t.index ["user_id"], name: "index_tea_product_submissions_on_user_id"
+  end
+
   create_table "tea_products", force: :cascade do |t|
     t.datetime "approved_at"
     t.bigint "approved_by_id"
@@ -177,6 +220,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_072229) do
   add_foreign_key "tea_product_flavors", "tea_products"
   add_foreign_key "tea_product_purchase_locations", "purchase_locations"
   add_foreign_key "tea_product_purchase_locations", "tea_products"
+  add_foreign_key "tea_product_submission_flavors", "flavors"
+  add_foreign_key "tea_product_submission_flavors", "tea_product_submissions"
+  add_foreign_key "tea_product_submission_purchase_locations", "purchase_locations"
+  add_foreign_key "tea_product_submission_purchase_locations", "tea_product_submissions"
+  add_foreign_key "tea_product_submissions", "brands"
+  add_foreign_key "tea_product_submissions", "tea_product_submissions", column: "previous_submission_id"
+  add_foreign_key "tea_product_submissions", "tea_products"
+  add_foreign_key "tea_product_submissions", "users"
+  add_foreign_key "tea_product_submissions", "users", column: "approved_by_id"
   add_foreign_key "tea_products", "brands"
   add_foreign_key "tea_products", "users"
   add_foreign_key "tea_products", "users", column: "approved_by_id"

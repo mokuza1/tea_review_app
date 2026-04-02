@@ -1,5 +1,5 @@
 <h2 class="text-2xl font-bold mb-6">
-  TeaProduct 承認詳細
+  TeaProduct 詳細
 </h2>
 
 <div class="bg-white border rounded-lg p-6 space-y-6">
@@ -9,7 +9,7 @@
     <h3 class="text-lg font-semibold mb-2">基本情報</h3>
 
     <div class="mb-4">
-      <% if @tea_product.image.attached? %>
+      <% if @tea_product.image&.attached? %>
         <%= image_tag @tea_product.image, class: "w-64 h-64 object-cover rounded-lg" %>
       <% else %>
         <div class="w-64 h-64 bg-gray-100 border rounded-lg flex items-center justify-center">
@@ -19,6 +19,7 @@
     </div>
 
     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+
       <div>
         <dt class="text-gray-500">商品名</dt>
         <dd class="font-medium"><%= @tea_product.name %></dd>
@@ -26,7 +27,7 @@
 
       <div>
         <dt class="text-gray-500">投稿者</dt>
-        <dd class="font-medium"><%= @tea_product.user.name %></dd>
+        <dd class="font-medium"><%= @tea_product.user&.name || "不明" %></dd>
       </div>
 
       <div>
@@ -44,13 +45,13 @@
       </div>
 
       <div>
-        <dt class="text-gray-500">カフェインレベル</dt>
+        <dt class="text-gray-500">カフェイン</dt>
         <dd class="font-medium">
           <%= @tea_product.enum_i18n(:caffeine_level) %>
         </dd>
       </div>
 
-<!-- フレーバー：カテゴリごとに表示 -->
+      <!-- フレーバー -->
       <div class="sm:col-span-2">
         <dt class="text-gray-500">フレーバー</dt>
         <dd class="font-medium">
@@ -75,6 +76,7 @@
         </dd>
       </div>
 
+      <!-- 購入場所 -->
       <div class="sm:col-span-2">
         <dt class="text-gray-500">購入場所</dt>
         <dd class="font-medium">
@@ -96,11 +98,12 @@
       </div>
 
       <div>
-        <dt class="text-gray-500">ステータス</dt>
+        <dt class="text-gray-500">公開状態</dt>
         <dd class="font-medium">
-          <%= @tea_product.enum_i18n(:status) %>
+          公開中
         </dd>
       </div>
+
     </dl>
   </div>
 
@@ -112,57 +115,22 @@
     </p>
   </div>
 
-  <!-- 承認情報（承認済みの場合） -->
-  <% if @tea_product.published? || @tea_product.rejected? %>
-    <div>
-      <h3 class="text-lg font-semibold mb-2">承認情報</h3>
-      <p class="text-sm text-gray-700">
-        承認者：
-        <%= @tea_product.approved_by&.name %><br>
-        承認日時：
-        <%= l(@tea_product.approved_at) %>
-      </p>
-    </div>
-  <% end %>
+  <!-- メタ情報 -->
+  <div>
+    <h3 class="text-lg font-semibold mb-2">管理情報</h3>
+    <p class="text-sm text-gray-700">
+      作成日：<%= l(@tea_product.created_at) %><br>
+      更新日：<%= l(@tea_product.updated_at) %>
+    </p>
+  </div>
 
   <!-- 操作 -->
   <div class="flex justify-between pt-4 border-t">
 
-  <!-- 左側 -->
+    <!-- 戻る -->
     <%= link_to "一覧に戻る",
-          admin_root_path,
-          class: "text-sm text-gray-600 hover:underline self-start" %>
-
-    <% if @tea_product.pending? %>
-      <!-- 右側 -->
-      <div class="flex flex-col items-end gap-6">
-
-        <%= button_to "承認",
-            approve_admin_tea_product_path(@tea_product),
-            method: :patch,
-            class: "px-6 py-2 bg-green-600 text-white rounded font-semibold shadow" %>
-
-        <!-- 却下フォーム -->
-        <div class="bg-red-50 border border-red-200 rounded-lg p-4 w-72">
-
-          <%= form_with url: reject_admin_tea_product_path(@tea_product),
-                method: :patch,
-                local: true,
-                class: "flex flex-col gap-3" do |f| %>
-
-            <%= text_area_tag :rejection_reason,
-                  nil,
-                  rows: 3,
-                  placeholder: "却下理由を入力してください",
-                  class: "w-full border rounded p-2" %>
-
-            <%= f.submit "却下する",
-                  class: "px-4 py-2 bg-red-600 text-white rounded font-semibold" %>
-
-          <% end %>
-
-      </div>
-    <% end %>
+          admin_tea_products_path,
+          class: "text-sm text-gray-600 hover:underline" %>
 
   </div>
 

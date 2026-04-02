@@ -1,3 +1,4 @@
+# 未使用
 class SubmitTeaProductService
   def initialize(tea_product)
     @tea_product = tea_product
