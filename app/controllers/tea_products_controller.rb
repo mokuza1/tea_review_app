@@ -1,7 +1,5 @@
 class TeaProductsController < ApplicationController
-  #before_action :authenticate_user!, except: %i[index show]
-  before_action :set_tea_product, only: %i[show]#%i[edit update]
-  #before_action :prepare_edit_form, only: %i[edit update submit]
+  before_action :set_tea_product, only: %i[show]
 
   def index
     base_scope = TeaProduct.where(status: :published)
@@ -33,138 +31,6 @@ class TeaProductsController < ApplicationController
     @user_review = current_user&.reviews&.find_by(tea_product: @tea_product)
   end
 
-=begin
-
-  def new
-    @tea_product = current_user.tea_products.build(status: :draft)
-    tpl = @tea_product.tea_product_purchase_locations.build
-    tpl.build_purchase_location
-  end
-
-  def create
-    normalized = tea_product_params.dup
-    brand_id   = normalized.delete(:brand_id).presence
-    brand_name = normalized.delete(:brand_name).to_s.strip
-
-    @tea_product = current_user.tea_products.build(normalized)
-
-    # エラー時にフォームが空にならないよう、値を保持させる
-    @tea_product.brand_id = brand_id
-    @tea_product.brand_name = brand_name
-
-    # 両方空の時だけチェックする（両方ある場合は brand_id を優先するロジックにする）
-    if brand_id.blank? && brand_name.blank?
-      flash.now[:alert] = "ブランドを選択するか、新しく入力してください"
-      render :new, status: :unprocessable_entity and return
-    end
-
-    @tea_product.status = :draft
-
-    ActiveRecord::Base.transaction do
-      # --- ブランド紐付けロジック ---
-      if brand_id.present?
-        @tea_product.brand = Brand.find(brand_id)
-      else
-        # 手入力の場合：既存を探す。なければ新規作成(status: :draft)
-        # ※DB側に name_ja のユニークインデックスが必須
-        @tea_product.brand = Brand.create_or_find_by!(name_ja: brand_name) do |b|
-          b.status = :draft
-          b.user = current_user
-        end
-      end
-
-      @tea_product.save!
-    end
-
-    redirect_to edit_tea_product_path(@tea_product),
-                notice: "下書きを作成しました"
-  rescue ActiveRecord::RecordInvalid => e
-    flash.now[:alert] = "保存に失敗しました"
-    render :new, status: :unprocessable_entity
-  end
-
-  def edit
-    unless @tea_product.draft? || @tea_product.rejected?
-      redirect_to tea_products_path, alert: "編集できない状態です"
-    end
-
-    @tea_product = TeaProduct.includes(
-      tea_product_purchase_locations: :purchase_location
-    ).find(params[:id])
-
-    if @tea_product.tea_product_purchase_locations.blank?
-        tpl = @tea_product.tea_product_purchase_locations.build
-        tpl.build_purchase_location
-    end
-  end
-
-  def update
-    # パラメータの整理
-    normalized = tea_product_params.dup
-    brand_id   = normalized.delete(:brand_id).presence
-    brand_name = normalized.delete(:brand_name).to_s.strip
-
-    # 画面再表示用に仮想属性・関連IDをセット
-    @tea_product.brand_id = brand_id
-    @tea_product.brand_name = brand_name
-
-    # ブランド未入力チェック（新規でも既存でもない場合）
-    if brand_id.blank? && brand_name.blank?
-      flash.now[:alert] = "ブランドを選択するか、新しく入力してください"
-      prepare_edit_form
-      render :edit, status: :unprocessable_entity and return
-    end
-
-    was_rejected = @tea_product.rejected?
-
-    ActiveRecord::Base.transaction do
-      # --- ブランド紐付けロジック ---
-      if brand_id.present?
-        @tea_product.brand = Brand.find(brand_id)
-      else
-        # 手入力の場合：既存を探すか、新規(draft)で作成
-        @tea_product.brand = Brand.create_or_find_by!(name_ja: brand_name) do |b|
-          b.status = :draft
-          b.user = current_user
-        end
-      end
-
-      # ---- TeaProduct 本体更新 ----
-      if @tea_product.rejected?
-        @tea_product.update_with_resubmission!(normalized)
-      else
-        @tea_product.update!(normalized)
-      end
-    end
-
-    if was_rejected
-      redirect_to edit_tea_product_path(@tea_product),
-                  notice: "再申請用に下書きへ戻しました"
-    else
-      redirect_to edit_tea_product_path(@tea_product),
-                  notice: "商品を更新しました"
-    end
-  rescue ActiveRecord::RecordInvalid => e
-    prepare_edit_form
-    flash.now[:alert] = "保存に失敗しました"
-    render :edit, status: :unprocessable_entity
-  end
-
-  def submit
-    @tea_product = current_user.tea_products.find(params[:id])
-
-    if SubmitTeaProductService.new(@tea_product).call
-      redirect_to mypage_path,
-                  notice: "申請しました（最後に保存した内容が申請されます）"
-    else
-      prepare_edit_form
-      render :edit, status: :unprocessable_entity
-    end
-  rescue ActiveRecord::RecordNotFound
-    redirect_to tea_products_path, alert: "商品が見つかりませんでした"
-  end
-
-=end
   private
 
   def set_tea_product
@@ -175,41 +41,6 @@ class TeaProductsController < ApplicationController
     redirect_to tea_products_path, alert: "商品が見つかりませんでした"
   end
 
-=begin
-  # 大カテゴリ再描画
-  def prepare_edit_form
-    return unless @tea_product
-
-    @tea_product.selected_flavor_category_ids =
-      params.dig(:tea_product, :selected_flavor_category_ids) ||
-      @tea_product.flavors
-                  .pluck(:flavor_category_id)
-                  .uniq
-  end
-
-  def tea_product_params
-    params.require(:tea_product).permit(
-      :name,
-      :brand_id,
-      :brand_name,
-      :tea_type,
-      :caffeine_level,
-      :description,
-      :image,
-      { selected_flavor_category_ids: [] },
-      { flavor_ids: [] },
-      tea_product_purchase_locations_attributes: [
-        :id,
-        :_destroy,
-        purchase_location_attributes: [
-          :id,
-          :location_type,
-          :name
-        ]
-      ]
-    )
-  end
-=end
 
   def search_params
     return {} unless params[:q]
