@@ -49,11 +49,26 @@ class TeaProductSubmissionsController < ApplicationController
   def edit
     unless @tea_product_submission.draft? || @tea_product_submission.rejected?
       redirect_to tea_products_path, alert: "編集できない状態です"
+      return
+    end
+
+    # すでに再申請用があるならそれを使う
+    if @tea_product_submission.rejected?
+      existing = @tea_product_submission.next_submissions.find_by(status: :draft)
+
+      if existing
+        redirect_to edit_tea_product_submission_path(existing)
+        return
+      else
+        new_submission = @tea_product_submission.build_resubmission
+        redirect_to edit_tea_product_submission_path(new_submission)
+        return
+      end
     end
 
     if @tea_product_submission.tea_product_submission_purchase_locations.blank?
-        tpl = @tea_product_submission.tea_product_submission_purchase_locations.build
-        tpl.build_purchase_location
+      tpl = @tea_product_submission.tea_product_submission_purchase_locations.build
+      tpl.build_purchase_location
     end
   end
 
