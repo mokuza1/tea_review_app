@@ -210,7 +210,7 @@ class TeaProductSubmission < ApplicationRecord
       end
     else
       # どちらも空の場合は何もしない
-      self.brand = nil 
+      self.brand = nil
     end
   end
 

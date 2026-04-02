@@ -1,5 +1,4 @@
 class TeaProduct < ApplicationRecord
-
   include PreventableDestroyIfPublished
 
   belongs_to :user

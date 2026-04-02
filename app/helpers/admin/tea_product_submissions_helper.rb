@@ -1,5 +1,4 @@
 module Admin::TeaProductSubmissionsHelper
-
   def diff_field(label, old, new)
     return if normalize(old) == normalize(new)
 
@@ -87,5 +86,4 @@ module Admin::TeaProductSubmissionsHelper
   def normalize(value)
     value.presence || ""
   end
-
 end

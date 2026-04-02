@@ -8,13 +8,14 @@ namespace :data_migration do
         # --- ステータス取得 ---
         raw_status = product.read_attribute_before_type_cast(:status)
 
-        submission_status = case raw_status
-                            when 0  then :draft
-                            when 10 then :pending
-                            when 15 then :rejected
-                            when 20 then :approved
-                            else :draft
-                            end
+        submission_status =
+          case raw_status
+          when 0  then :draft
+          when 10 then :pending
+          when 15 then :rejected
+          when 20 then :approved
+          else :draft
+          end
 
         # --- 重複防止 ---
         if submission_status == :approved &&

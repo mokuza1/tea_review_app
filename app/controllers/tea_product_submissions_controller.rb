@@ -6,7 +6,7 @@ class TeaProductSubmissionsController < ApplicationController
   def new
     # TeaProduct ではなく Submission をビルドする
     @tea_product_submission = current_user.tea_product_submissions.build(status: :draft)
-    
+
     tpl = @tea_product_submission.tea_product_submission_purchase_locations.build
     tpl.build_purchase_location
   end
@@ -17,7 +17,7 @@ class TeaProductSubmissionsController < ApplicationController
     brand_name = normalized.delete(:brand_name).to_s.strip
 
     @tea_product_submission = current_user.tea_product_submissions.build(normalized)
-    
+
     # フォーム再描画用に値を保持
     @tea_product_submission.brand_id = brand_id
     @tea_product_submission.brand_name = brand_name
@@ -98,7 +98,7 @@ class TeaProductSubmissionsController < ApplicationController
         end
 
         @tea_product_submission.resolve_brand!(brand_id: brand_id, brand_name: brand_name)
-        
+
         # もしここでバリデーションエラーになっても、@tea_product_submission には
         # ユーザーが入力した最新の属性とエラー情報が乗っている状態になる
         @tea_product_submission.save!
@@ -118,7 +118,7 @@ class TeaProductSubmissionsController < ApplicationController
       # 最後に保存された内容を申請状態(:pending)にする
       @tea_product_submission.submit!
       @tea_product_submission.submit_with_brand!
-      
+
       redirect_to mypage_path, notice: "申請しました（審査をお待ちください）"
     rescue ActiveRecord::RecordInvalid
       prepare_edit_form
