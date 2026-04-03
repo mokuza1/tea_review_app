@@ -1,82 +1,106 @@
-<h1>プライバシーポリシー</h1>
+<div class="min-h-screen bg-[#F1EFE9] py-12 px-4 sm:px-6">
+  <div class="max-w-3xl mx-auto">
+    
+    <%# --- ヘッダーエリア --- %>
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-serif font-bold text-[#365442] tracking-widest uppercase">
+        Privacy Policy
+      </h1>
+      <p class="text-[10px] text-[#8C7B6C] font-bold mt-2 uppercase tracking-[0.2em]">
+        プライバシーポリシー
+      </p>
+      <div class="mt-6 w-12 h-[1px] bg-[#D6CEC5] mx-auto"></div>
+    </div>
 
-<p>
-プライバシーポリシー
+    <%# --- メインコンテンツカード --- %>
+    <div class="bg-white border-2 border-[#B5A89A] rounded-xl shadow-sm p-8 md:p-12 text-[#433D3C]">
+      
+      <p class="text-sm font-bold leading-relaxed mb-10 pb-8 border-b border-[#D6CEC5]/50">
+        みんなの紅茶図鑑（以下「本サービス」といいます。）は、ユーザーの個人情報を適切に取り扱うことを重要な責務と考えています。
+        本プライバシーポリシーは、本サービスにおいて取得・利用する情報、その利用目的、管理方法等について定めるものです。
+      </p>
 
-みんなの紅茶図鑑（以下「本サービス」といいます。）は、ユーザーの個人情報を適切に取り扱うことを重要な責務と考えています。
-本プライバシーポリシーは、本サービスにおいて取得・利用する情報、その利用目的、管理方法等について定めるものです。
+      <div class="space-y-12">
+        
+        <%# 各セクション %>
+        <section>
+          <h2 class="flex items-center gap-3 text-base font-bold text-[#365442] mb-4 tracking-wider">
+            <span class="font-serif text-xl opacity-40">01.</span>
+            適用範囲
+          </h2>
+          <p class="text-sm font-serif leading-relaxed pl-11">
+            本プライバシーポリシーは、本サービスを利用するすべてのユーザーに適用されます。
+            ユーザーは、本サービスの利用開始をもって、本ポリシーに同意したものとみなされます。
+          </p>
+        </section>
 
-1. 適用範囲
+        <section>
+          <h2 class="flex items-center gap-3 text-base font-bold text-[#365442] mb-4 tracking-wider">
+            <span class="font-serif text-xl opacity-40">02.</span>
+            取得する情報
+          </h2>
+          <div class="pl-11">
+            <p class="text-sm font-serif mb-3">本サービスでは、以下の情報を取得する場合があります。</p>
+            <ul class="space-y-2 text-sm font-serif text-[#433D3C]">
+              <li class="flex items-start gap-2 before:content-['・'] before:text-[#A75F29]">アカウント登録情報（メールアドレス、ユーザー名 等）</li>
+              <li class="flex items-start gap-2 before:content-['・'] before:text-[#A75F29]">プロフィール情報（ニックネーム等）</li>
+              <li class="flex items-start gap-2 before:content-['・'] before:text-[#A75F29]">投稿・コンテンツ情報（写真、レビュー等）</li>
+              <li class="flex items-start gap-2 before:content-['・'] before:text-[#A75F29]">外部サービス連携情報（Googleログイン等）</li>
+              <li class="flex items-start gap-2 before:content-['・'] before:text-[#A75F29]">アクセスログ情報（IPアドレス、環境情報 等）</li>
+              <li class="flex items-start gap-2 before:content-['・'] before:text-[#A75F29]">Cookie等の識別情報</li>
+            </ul>
+          </div>
+        </section>
 
-本プライバシーポリシーは、本サービスを利用するすべてのユーザーに適用されます。
-ユーザーは、本サービスの利用開始をもって、本ポリシーに同意したものとみなされます。
+        <section>
+          <h2 class="flex items-center gap-3 text-base font-bold text-[#365442] mb-4 tracking-wider">
+            <span class="font-serif text-xl opacity-40">03.</span>
+            情報の利用目的
+          </h2>
+          <div class="pl-11">
+            <p class="text-sm font-serif mb-3">取得した情報は、以下の目的で利用します。</p>
+            <ul class="space-y-2 text-sm font-serif">
+              <li class="flex items-start gap-2 before:content-['□'] before:text-[#D6CEC5] before:text-[10px] before:mt-0.5">本サービスの登録受付、本人確認および認証のため</li>
+              <li class="flex items-start gap-2 before:content-['□'] before:text-[#D6CEC5] before:text-[10px] before:mt-0.5">ユーザーによるデータの保存および履歴管理のため</li>
+              <li class="flex items-start gap-2 before:content-['□'] before:text-[#D6CEC5] before:text-[10px] before:mt-0.5">サービスの利便性向上および機能改善のための分析</li>
+              <li class="flex items-start gap-2 before:content-['□'] before:text-[#D6CEC5] before:text-[10px] before:mt-0.5">本サービスに関する案内・通知、お問い合わせ対応のため</li>
+              <li class="flex items-start gap-2 before:content-['□'] before:text-[#D6CEC5] before:text-[10px] before:mt-0.5">規約違反行為への対応のため</li>
+            </ul>
+          </div>
+        </section>
 
-2. 取得する情報
+        <%# 4番以降はシンプルに構成 %>
+        <% [
+          ["04", "Cookie等の利用", "ログイン状態の維持や利便性向上のために利用します。単独で個人を特定する目的では使用されません。"],
+          ["05", "第三者提供", "ユーザーの同意がある場合や法令に基づく場合を除き、第三者に提供することはありません。"],
+          ["06", "外部サービスの利用", "Googleログイン等の外部サービスを利用します。将来的に解析ツール等を導入する場合は本ポリシーにて明示します。"],
+          ["07", "情報の管理", "不正アクセス防止のため、適切なセキュリティ対策に努めます。"],
+          ["08", "情報の変更・削除", "ユーザーは自身の情報をいつでも変更・削除可能です。退会後も法令上必要な範囲で一定期間保持する場合があります。"],
+          ["09", "ポリシーの変更", "必要に応じて変更されることがあり、重要な変更は本サービス上で告知します。"],
+          ["10", "準拠法", "本プライバシーポリシーは、日本法に準拠して解釈されます。"],
+          ["11", "お問い合わせ", "本サービス内のお問い合わせ窓口よりご連絡ください。"]
+        ].each do |num, title, text| %>
+          <section>
+            <h2 class="flex items-center gap-3 text-base font-bold text-[#365442] mb-4 tracking-wider">
+              <span class="font-serif text-xl opacity-40"><%= num %>.</span>
+              <%= title %>
+            </h2>
+            <p class="text-sm font-serif leading-relaxed pl-11">
+              <%= text %>
+            </p>
+          </section>
+        <% end %>
 
-本サービスでは、以下の情報を取得する場合があります。
+      </div>
 
-・アカウント登録情報（メールアドレス、ユーザー名 等）
-・プロフィール情報（ニックネーム等）
-・投稿・コンテンツ情報（写真、レビュー等のユーザー投稿内容）
-・外部サービス連携情報（Googleログイン等におけるIDおよび、連携により取得が許可された情報）
-・アクセスログ情報（IPアドレス、ブラウザ情報、アクセス日時 等）
-・Cookie等を用いて生成された識別情報
+      <%# --- 戻るボタン --- %>
+      <div class="mt-16 pt-8 border-t border-[#D6CEC5]/40 text-center">
+        <%= link_to :back, class: "text-[11px] font-bold text-[#8C7B6C] hover:text-[#365442] tracking-[0.15em] transition-colors border-b border-[#D6CEC5] pb-0.5 inline-flex items-center gap-1" do %>
+          <span class="text-lg leading-none relative -top-[1px]">‹</span>
+          <span class="leading-none">戻る</span>
+        <% end %>
+      </div>
 
-3. 情報の利用目的
-
-取得した情報は、以下の目的で利用します。
-
-・本サービスの登録受付、本人確認および認証のため
-・ユーザーによるデータの保存および履歴管理のため
-・サービスの利便性向上および機能改善のための分析
-・本サービスに関する案内・通知のため
-・お問い合わせ対応のため
-・利用規約または法令に違反する行為への対応のため
-・サービスの変更、提供中止、終了等の通知のため
-・その他、本サービスの提供・維持・保護および改善のため
-
-なお、分析にあたっては、個人が特定されない形で統計的に処理されたデータを利用する場合があります。
-
-4. Cookie等の利用について
-
-本サービスでは、ログイン状態の維持や利便性向上のためにCookie等の技術を利用する場合があります。
-これらの情報は、単独で個人を特定する目的では使用されません。
-
-5. 第三者提供について
-
-本サービスは、以下の場合を除き、ユーザーの個人情報を第三者に提供することはありません。
-
-・ユーザー本人の同意がある場合
-・法令に基づく開示要請があった場合
-・人の生命、身体または財産の保護のために必要がある場合
-・業務委託先に対して、利用目的の達成に必要な範囲で提供する場合
-
-6. 外部サービスの利用
-
-本サービスでは、ユーザーの利便性向上のため、外部サービス（Googleログイン等）を利用する場合があります。
-
-また、現時点では広告配信サービスや外部アクセス解析ツールは利用していませんが、将来的にこれらを導入する場合には、本ポリシーを改定し、その内容を明示します。
-
-7. 情報の管理
-
-本サービスは、不正アクセス、漏えい、改ざん等を防止するため、適切なセキュリティ対策に努めます。
-ただし、インターネットの性質上、その安全性を完全に保証するものではありません。
-
-8. 情報の変更・削除
-
-ユーザーは、本サービス上の機能を通じて、自身の登録情報を確認・変更・削除することができます。
-また、退会後も、法令または運営上必要な範囲で一定期間情報を保持する場合があります。
-
-9. プライバシーポリシーの変更
-
-本ポリシーは、必要に応じて変更されることがあります。
-重要な変更がある場合は、本サービス上で告知します。
-
-10. 準拠法
-
-本プライバシーポリシーは、日本法に準拠して解釈されます。
-
-11. お問い合わせ
-
-本サービスに関するお問い合わせ方法については、本サービス内にて案内します。
-</p>
+    </div>
+  </div>
+</div>
