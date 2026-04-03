@@ -1,4 +1,4 @@
-<header class="w-full border-b-2 border-[#D6CEC5] bg-[#F9F7F2] sticky top-0 z-50">
+<header class="w-full border-b-2 border-[#365442]/20 bg-[#F2F4F0] sticky top-0 z-50">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 py-2">
 
     <input type="checkbox" id="menu-toggle" class="hidden peer">
@@ -11,17 +11,24 @@
         <% end %>
       </div>
 
-      <div class="flex items-center gap-3 sm:gap-6">
-        
+      <div class="flex items-center gap-2 sm:gap-4">
+
+        <%= link_to about_path, 
+              class: "flex items-center px-2.5 py-2 bg-white border border-[#365442]/40 text-[#365442] rounded-full shadow-sm hover:bg-white/50 transition-all duration-300" do %>
+          <span class="text-[11px] sm:text-xs font-serif font-bold tracking-tighter sm:tracking-widest whitespace-nowrap">
+            初めての方へ
+          </span>
+        <% end %>
+
         <%= link_to start_diagnostic_path,
               data: { turbo_frame: "diagnostic_modal" },
-              class: "flex items-center gap-1 px-3 py-1.5 bg-white border border-[#C5A065] text-[#A75F29] rounded-full shadow-sm hover:bg-[#FDFBF9] hover:shadow transition-all duration-300 group" do %>
-          <span class="text-sm sm:text-sm font-serif font-bold tracking-tighter sm:tracking-widest">
+              class: "flex items-center px-2.5 py-1.5 bg-white border border-[#C5A065] text-[#A75F29] rounded-full shadow-sm hover:shadow transition-all duration-300 group" do %>
+          <span class="text-[13px] sm:text-xs font-serif font-bold tracking-tighter sm:tracking-widest whitespace-nowrap">
             紅茶診断
           </span>
         <% end %>
 
-        <label for="menu-toggle" class="md:hidden cursor-pointer p-1">
+        <label for="menu-toggle" class="md:hidden cursor-pointer p-1 ml-1">
           <div class="space-y-1.5">
             <span class="block w-6 h-0.5 bg-[#365442]"></span>
             <span class="block w-6 h-0.5 bg-[#365442]"></span>
@@ -29,20 +36,20 @@
           </div>
         </label>
 
-        <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+        <div class="hidden md:flex items-center space-x-1 border-l border-[#365442]/10 ml-2 pl-2">
           <%= link_to "ログイン",
                 new_user_session_path,
-                class: "text-[#433D3C] hover:text-[#365442] font-serif tracking-wider transition" %>
+                class: "px-3 py-2 text-[14px] text-[#433D3C] hover:text-[#365442] font-serif font-semibold tracking-wider hover:bg-white/50 rounded transition" %>
 
           <%= link_to "新規登録",
                 new_user_registration_path,
-                class: "rounded bg-[#365442] text-[#F9F7F2] px-5 py-2 font-serif tracking-widest hover:bg-[#2A4034] shadow-sm hover:shadow-md transition duration-300" %>
+                class: "px-3 py-2 text-[14px] rounded bg-[#365442] text-[#F9F7F2] px-5 py-2 font-serif tracking-widest hover:bg-[#2A4034] shadow-sm hover:shadow-md transition duration-300" %>
         </div>
       </div>
 
     </div>
 
-    <div class="hidden peer-checked:block md:hidden border-t border-[#D6CEC5]/50 mt-2 py-4 space-y-4 text-right">
+    <div class="hidden peer-checked:block md:hidden border-t border-[#365442]/10 mt-2 py-4 space-y-4 text-right">
       <%= link_to "ログイン",
             new_user_session_path,
             class: "block text-[#433D3C] font-serif tracking-wider px-2" %>
@@ -50,7 +57,7 @@
       <div class="px-2">
         <%= link_to "新規登録",
               new_user_registration_path,
-              class: "inline-block rounded bg-[#365442] text-[#F9F7F2] px-6 py-2.5 font-serif tracking-widest shadow-md" %>
+              class: "inline-block rounded bg-[#365442] text-[#F9F7F2] text-[14px] px-5 py-2 font-serif tracking-widest shadow-md" %>
       </div>
     </div>
 
