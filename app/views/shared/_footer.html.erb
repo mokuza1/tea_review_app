@@ -1,12 +1,19 @@
-<footer class="w-full border-t-4 border-[#365442] bg-[#F9F7F2] mt-auto">
-  <div class="mx-auto flex flex-col h-24 max-w-7xl items-center justify-center px-4">
+<footer class="w-full border-t-2 border-[#365442] bg-[#F9F7F2] mt-auto">
+  <div class="mx-auto flex flex-col py-6 max-w-7xl items-center justify-center px-4">
     
-    <div class="text-[#365442] font-serif text-sm tracking-[0.2em] mb-2 opacity-60">
+    <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 text-[13px] font-bold text-[#8C7B6C] tracking-[0.1em] uppercase mb-3">
+      <%= link_to "プライバシーポリシー", privacy_path, 
+            class: "hover:text-[#365442] transition-colors duration-300 border-b border-transparent hover:border-[#365442] pb-0.5" %>
+      <%= link_to "利用規約", terms_path, 
+            class: "hover:text-[#365442] transition-colors duration-300 border-b border-transparent hover:border-[#365442] pb-0.5" %>
+    </div>
+
+    <div class="text-[#365442] font-serif text-[14px] tracking-[0.4em] mb-1.5 opacity-60">
       THE TEA ENCYCLOPEDIA
     </div>
 
-    <p class="text-[10px] sm:text-xs text-[#8C7B6C] font-sans tracking-widest uppercase">
-      Copyright © 2026 みんなの紅茶図鑑. All Rights Reserved.
+    <p class="text-[11px] text-[#365442] font-bold tracking-[0.1em] uppercase opacity-70">
+      © 2026 みんなの紅茶図鑑
     </p>
   </div>
 </footer>
