@@ -123,4 +123,171 @@
 参考figma：https://www.figma.com/design/gcZCgMaVid3iVncASX5k0p/%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=m6drLg3N6stMioQk-1
 
 ## ER図
-[![Image from Gyazo](https://i.gyazo.com/166ac8e0d4a3f4f8e91f8ec118c0f493.png)](https://gyazo.com/166ac8e0d4a3f4f8e91f8ec118c0f493)
+```mermaid
+erDiagram
+
+  users {
+    bigint id PK
+    string email
+    string encrypted_password
+    string name
+    integer role
+    string provider
+    string uid
+  }
+
+  brands {
+    bigint id PK
+    string name_ja
+    string name_en
+    string country
+    text description
+    integer status
+    bigint user_id FK
+    bigint approved_by_id FK
+  }
+
+  tea_products {
+    bigint id PK
+    string name
+    text description
+    integer tea_type
+    integer caffeine_level
+    integer status
+    bigint brand_id FK
+    bigint user_id FK
+    bigint approved_by_id FK
+  }
+
+  tea_product_submissions {
+    bigint id PK
+    string name
+    text description
+    integer tea_type
+    integer caffeine_level
+    integer status
+    text rejection_reason
+    bigint brand_id FK
+    bigint tea_product_id FK
+    bigint previous_submission_id FK
+    bigint user_id FK
+    bigint approved_by_id FK
+  }
+
+  reviews {
+    bigint id PK
+    integer overall_rating
+    integer aroma_rating
+    integer bitterness_rating
+    integer sweetness_rating
+    integer strength_rating
+    text comment
+    boolean recommended_straight
+    boolean recommended_milk
+    boolean recommended_iced
+    bigint user_id FK
+    bigint tea_product_id FK
+  }
+
+  favorites {
+    bigint id PK
+    bigint user_id FK
+    bigint tea_product_id FK
+  }
+
+  flavor_categories {
+    bigint id PK
+    string name
+  }
+
+  flavors {
+    bigint id PK
+    string name
+    bigint flavor_category_id FK
+  }
+
+  tea_product_flavors {
+    bigint id PK
+    bigint tea_product_id FK
+    bigint flavor_id FK
+  }
+
+  tea_product_submission_flavors {
+    bigint id PK
+    bigint tea_product_submission_id FK
+    bigint flavor_id FK
+  }
+
+  purchase_locations {
+    bigint id PK
+    string name
+    integer location_type
+  }
+
+  tea_product_purchase_locations {
+    bigint id PK
+    bigint tea_product_id FK
+    bigint purchase_location_id FK
+  }
+
+  tea_product_submission_purchase_locations {
+    bigint id PK
+    bigint tea_product_submission_id FK
+    bigint purchase_location_id FK
+  }
+
+  active_storage_blobs {
+    bigint id PK
+    string key
+    string filename
+  }
+
+  active_storage_attachments {
+    bigint id PK
+    string name
+    string record_type
+    bigint record_id
+    bigint blob_id FK
+  }
+
+  active_storage_variant_records {
+    bigint id PK
+    bigint blob_id FK
+  }
+
+  %% ========== Associations ==========
+
+  users ||--o{ brands : creates
+  users ||--o{ tea_products : creates
+  users ||--o{ tea_product_submissions : creates
+  users ||--o{ reviews : writes
+  users ||--o{ favorites : likes
+
+  users ||--o{ brands : approves
+  users ||--o{ tea_products : approves
+  users ||--o{ tea_product_submissions : approves
+
+  brands ||--o{ tea_products : has
+  brands ||--o{ tea_product_submissions : has
+
+  tea_products ||--o{ reviews : has
+  tea_products ||--o{ favorites : has
+  tea_products ||--o{ tea_product_flavors : has
+  tea_products ||--o{ tea_product_purchase_locations : has
+  tea_products ||--o{ tea_product_submissions : original
+
+  tea_product_submissions ||--o{ tea_product_submission_flavors : has
+  tea_product_submissions ||--o{ tea_product_submission_purchase_locations : has
+  tea_product_submissions ||--o{ tea_product_submissions : previous
+
+  flavors ||--o{ tea_product_flavors : used_in
+  flavors ||--o{ tea_product_submission_flavors : used_in
+
+  flavor_categories ||--o{ flavors : has
+
+  purchase_locations ||--o{ tea_product_purchase_locations : used_in
+  purchase_locations ||--o{ tea_product_submission_purchase_locations : used_in
+
+  active_storage_blobs ||--o{ active_storage_attachments : has
+  active_storage_blobs ||--o{ active_storage_variant_records : has
+```
