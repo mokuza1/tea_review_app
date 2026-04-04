@@ -87,6 +87,11 @@
         </div>
       <% end %>
 
+
+      <%= button_to "Googleでログイン",
+          user_google_oauth2_omniauth_authorize_path,
+          data: { turbo: false } %>
+
       <%# --- リンクエリア：アカウント登録とパスワード再設定を統合 --- %>
       <div class="mt-10 pt-8 border-t border-[#D6CEC5]/40 text-center space-y-4">
         

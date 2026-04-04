@@ -69,6 +69,10 @@
 
     <% end %>
 
+    <%= button_to "Googleでログイン",
+        user_google_oauth2_omniauth_authorize_path,
+        data: { turbo: false } %>
+
     <div class="mt-8 text-center text-xs font-bold text-[#8C7B6C] tracking-wider divide-x divide-[#D6CEC5]">
       <%= render "devise/shared/links" %>
     </div>
