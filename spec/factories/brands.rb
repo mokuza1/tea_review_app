@@ -7,7 +7,7 @@ FactoryBot.define do
     
     country { "United Kingdom" }
     description { "美味しい紅茶のブランドです。" }
-    status { :draft }
+    status { :published }
     association :user
   end
 end
