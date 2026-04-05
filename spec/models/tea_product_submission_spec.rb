@@ -55,7 +55,7 @@ RSpec.describe TeaProductSubmission, type: :model do
       expect {
         submission.approve!(admin)
       }.not_to change(TeaProduct, :count)
-      
+
       expect(product.reload.name).to eq submission.name
     end
   end
@@ -75,7 +75,7 @@ RSpec.describe TeaProductSubmission, type: :model do
 
     it "元の情報を引き継いだ新しい下書きレコードが作成されること" do
       new_submission = old_submission.build_resubmission
-      
+
       expect(new_submission.status).to eq "draft"
       expect(new_submission.name).to eq old_submission.name
       expect(new_submission.previous_submission_id).to eq old_submission.id
@@ -96,7 +96,7 @@ RSpec.describe TeaProductSubmission, type: :model do
       expect {
         submission.resolve_brand!(brand_id: nil, brand_name: "新しいお茶ブランド")
       }.to change(Brand, :count).by(1)
-      
+
       # 修正点：Brandモデルの正規化によりカタカナで保存されるため、期待値をカタカナにする
       expect(submission.brand.name_ja).to eq "新シイオ茶ブランド"
       expect(submission.brand.status).to eq "draft"

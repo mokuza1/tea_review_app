@@ -39,7 +39,7 @@ RSpec.describe Brand, type: :model do
         expect {
           brand.approve!(admin)
         }.to change { brand.status }.from("pending").to("published")
-        
+
         expect(brand.approved_by).to eq admin
         expect(brand.approved_at).to be_present
       end
@@ -55,7 +55,7 @@ RSpec.describe Brand, type: :model do
     it ".publishedは公開済みのブランドのみを返すこと" do
       published_brand = create(:brand, status: :published)
       draft_brand = create(:brand, status: :draft)
-      
+
       expect(Brand.published).to include(published_brand)
       expect(Brand.published).not_to include(draft_brand)
     end
