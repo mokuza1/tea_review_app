@@ -12,7 +12,7 @@ class Brand < ApplicationRecord
 
   has_many :tea_products
 
-  validates :name_ja, length: { maximum: 255 }, allow_blank: true, presence: true
+  validates :name_ja, length: { maximum: 255 }, presence: true, uniqueness: true
   validates :name_en, length: { maximum: 255 }, allow_blank: true
   validates :country, length: { maximum: 100 }, allow_blank: true
   validates :description, length: { maximum: 1000 }, allow_blank: true
