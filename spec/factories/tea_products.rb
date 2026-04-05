@@ -1,4 +1,3 @@
-# spec/factories/tea_products.rb
 FactoryBot.define do
   factory :tea_product do
     sequence(:name) { |n| "#{Faker::Tea.variety} #{n}" }
