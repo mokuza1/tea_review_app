@@ -69,5 +69,27 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  config.include FactoryBot::Syntax::Methods
+  # support フォルダのファイルを読み込む設定
+  Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+
+  RSpec.configure do |config|
+    config.include FactoryBot::Syntax::Methods
+    config.include Devise::Test::IntegrationHelpers, type: :request
+    config.include Devise::Test::IntegrationHelpers, type: :system
+    config.include LoginMacros, type: :system # 自作マクロの読み込み
+
+    # System Spec のデフォルト設定（JSを使わない高速なテスト）
+    config.before(:each, type: :system) do
+      driven_by :rack_test
+    end
+
+    # JSが必要なテスト（js: true）の時だけ Chrome を立ち上げる設定
+    config.before(:each, type: :system, js: true) do
+      driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ] do |options|
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--lang=ja-JP')
+      end
+    end
+  end
 end
