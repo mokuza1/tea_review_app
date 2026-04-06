@@ -1,6 +1,6 @@
 module LoginMacros
   def manual_login(user)
-    visit new_user_session_path 
+    visit new_user_session_path
 
     fill_in "user[email]", with: user.email
     fill_in "user[password]", with: 'password' # FactoryBotで設定しているパスワード

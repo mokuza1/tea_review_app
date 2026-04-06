@@ -18,7 +18,7 @@ RSpec.describe "TeaProductSubmissions", type: :request do
           tea_type: "black",
           caffeine_level: "caffeinated",
           description: "香りが素晴らしいです。",
-          flavor_ids: [flavor.id]
+          flavor_ids: [ flavor.id ]
         }
       }
     end
@@ -29,14 +29,14 @@ RSpec.describe "TeaProductSubmissions", type: :request do
       }.to change(TeaProductSubmission, :count).by(1)
 
       expect(response).to redirect_to(edit_tea_product_submission_path(TeaProductSubmission.last))
-      
+
       follow_redirect!
       expect(response.body).to include "下書きを作成しました"
     end
 
     it "名前が空であっても、下書き(draft)としてなら保存に成功すること" do
       invalid_params = { tea_product_submission: { name: "", brand_id: brand.id } }
-      
+
       expect {
         post tea_product_submissions_path, params: invalid_params
       }.to change(TeaProductSubmission, :count).by(1) # モデルの仕様通り保存される

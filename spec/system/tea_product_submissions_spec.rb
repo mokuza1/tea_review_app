@@ -4,9 +4,9 @@ RSpec.describe "TeaProductSubmissions", type: :system do
   let(:user) { create(:user) }
   # 一覧表示用にデータをいくつか作成しておく
   let!(:tea_product) do
-    create(:tea_product, 
-      user: user, 
-      name: "テストの紅茶", 
+    create(:tea_product,
+      user: user,
+      name: "テストの紅茶",
       description: "これはテスト用の説明文です"
     )
   end
