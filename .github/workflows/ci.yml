@@ -1,4 +1,4 @@
-name: RSpec Tests
+name: CI
 
 on:
   push:
@@ -6,8 +6,31 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: bin/brakeman --no-pager
+      - run: bundle exec bundle-audit update && bundle exec bundle-audit check
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: bin/rubocop -f github
+
   test:
+    needs: [scan, lint]
     runs-on: ubuntu-latest
 
     services:
@@ -50,10 +73,10 @@ jobs:
 
       - name: Database setup
         run: |
-          bin/rails db:schema:load
+          bin/rails db:create db:schema:load
 
       - name: Precompile assets
-        run: bundle exec rails assets:precompile
+        run: bin/rails assets:precompile
 
       - name: Run tests
         run: bundle exec rspec
