@@ -1,5 +1,5 @@
 module LoginMacros
-  def login_as(user)
+  def manual_login(user)
     visit new_user_session_path 
 
     fill_in "user[email]", with: user.email
