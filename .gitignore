@@ -42,3 +42,6 @@
 # データベースバックアップファイル
 *.sql
 backup.sql
+
+# test coverage
+/coverage/
