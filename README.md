@@ -115,13 +115,13 @@ https://www.kocha-zukan.com/
 |---------|-----------|--------------|
 | バックエンド | Ruby on Rails 8.1 | Ruby 3.3.6 |
 | フロントエンド | Hotwire（Turbo / Stimulus） | Tailwind CSS / esbuild |
-| データベース | PostgreSQL / Redis | Solid Cache / Active Job |
+| データベース | PostgreSQL | Solid Cache |
 | 認証・認可 | Devise | OmniAuth（Google OAuth） |
 | ライブラリ | Ransack / Kaminari | 検索・ページネーション |
-| ストレージ | ActiveStorage | AWS S3 / ImageProcessing |
+| ストレージ | ActiveStorage | AWS S3 |
 | インフラ | Render | GitHub Actions（CI/CD） / Resend |
 | セキュリティ | Rack::Attack | Brakeman / bundler-audit |
-| テスト | RSpec | FactoryBot / Capybara / SimpleCov |
+| テスト | RSpec | FactoryBot / SimpleCov |
 | 開発環境 | Docker | RuboCop / Bullet / Pry |
 
 ### 🔧 選定理由
@@ -129,12 +129,12 @@ https://www.kocha-zukan.com/
 - OS などの環境に依存せず、誰がどこで開発しても同じ動作を保証するため。
 
 ### **Ruby on Rails 8.1**
-- 最新バージョンを採用することでHotwireなどのモダンな標準機能を活用。将来的に主流となる構成に触れ、開発経験を得るため。
+- 最新バージョンを採用することでHotwireなどのモダンな標準機能を活用し、将来的な主流構成に沿った設計とした。
 - 新バージョン特有の不具合リスクはあるが、長期的な保守性を重視。
  
 ### **Hotwire（Turbo / Stimulus）**
-- JavaScriptの記述量を抑えつつ、Railsの標準機能内でリッチなUI/UXを実現するため採用。
-- モーダル表示において、Railsと親和性の高いHotwireを使うことで、開発効率を維持しながら直感的な操作感を提供している。
+- JavaScriptの記述量を抑えつつ、Railsの標準機能内でSPAライクなUI/UXを実現するため採用。
+- 非同期更新やモーダル表示において、Railsと親和性の高いHotwireを使うことで、開発効率を維持しながら直感的な操作感を提供している。
 
 ### **ActiveStorage + AWS S3**
 - 画像データをサーバー本体から分離し、拡張性と可用性を確保するため採用。
@@ -142,13 +142,13 @@ https://www.kocha-zukan.com/
 
 ### **Ransack**
 - 本アプリのコア機能であるスペック検索において、複雑な検索条件を可読性・保守性の高い形で実装するため採用。
-- 自前でクエリを書くよりも可読性が高く、将来的な検索項目の追加にも柔軟に対応できる点を評価している。
+- 自前でクエリを書くよりも可読性が高く、将来的な検索項目の追加にも柔軟に対応。
 
 ### **Googleログイン（OmniAuth）**
 - 新規登録の心理的ハードルを下げるために導入。
 
 ### **Render（アプリケーション / データベース）**
-- アプリケーションとデータベースを同一プラットフォーム上で管理することで、環境差異を最小化し、運用・保守コストを削減するため採用。
+- アプリケーションとデータベースを同一プラットフォーム上で管理することで、環境差異を最小化し、運用の安定性を向上。
 - 外部DBサービス（例：Neon）と比較し、構成をシンプルに保つことを優先。
 
 ### **GitHub Actions**
