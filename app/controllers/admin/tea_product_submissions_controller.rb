@@ -4,6 +4,7 @@ class Admin::TeaProductSubmissionsController < Admin::BaseController
       .pending
       .includes(:user)
       .order(created_at: :desc)
+      .page(params[:page]).per(10)
   end
 
   def show

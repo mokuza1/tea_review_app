@@ -1,5 +1,5 @@
 <h2 class="text-xl font-bold mb-6">
-  TeaProducts 管理
+  投稿 一覧
 </h2>
 
 <table class="w-full border border-gray-200 text-sm">
@@ -29,3 +29,7 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="mt-6">
+  <%= paginate @tea_products %>
+</div>

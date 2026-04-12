@@ -3,6 +3,7 @@ class Admin::TeaProductsController < Admin::BaseController
     @tea_products = TeaProduct
       .includes(:user)
       .order(created_at: :desc)
+      .page(params[:page]).per(20)
   end
 
   def show
