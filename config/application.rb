@@ -18,6 +18,7 @@ module Myapp
 
     config.i18n.default_locale = :ja
     config.i18n.available_locales = [ :ja, :en ]
+    config.active_model.i18n_customize_full_message = true
 
     config.time_zone = "Tokyo"
     # Configuration for the application, engines, and railties goes here.
@@ -33,5 +34,8 @@ module Myapp
       g.helper false
       g.test_framework nil
     end
+
+    # バリデーションエラー時の field_with_errors 挿入を無効化
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag.html_safe }
   end
 end

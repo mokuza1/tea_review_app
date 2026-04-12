@@ -1,0 +1,108 @@
+<div class="min-h-screen bg-[#F1EFE9] py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+
+    <%# --- ヘッダー --- %>
+    <div class="text-center mb-16">
+      <h1 class="text-3xl font-serif font-bold text-[#365442] tracking-[0.2em] uppercase">
+        About
+      </h1>
+      <p class="text-[10px] text-[#8C7B6C] font-bold mt-2 uppercase tracking-[0.3em]">
+        みんなの紅茶図鑑とは
+      </p>
+      <div class="mt-8 w-12 h-[1px] bg-[#D6CEC5] mx-auto"></div>
+      
+      <div class="mt-10 px-4">
+        <p class="text-sm sm:text-base text-[#433D3C] leading-[2] font-serif">
+          「このフレーバー、他のブランドだとどう違うんだろう？」<br>
+          そんな疑問を解決するために生まれた、<br class="hidden sm:block">
+          <span class="inline-block border-b border-[#A75F29] pb-0.5 text-[#365442] font-bold">ブランド横断型の紅茶スペック辞典</span>です。
+        </p>
+      </div>
+    </div>
+
+    <%# --- 開発のきっかけ --- %>
+    <section class="mb-16 bg-white border-2 border-[#B5A89A] rounded-xl p-8 md:p-12 shadow-sm">
+      <h2 class="flex items-center gap-3 text-lg font-bold text-[#365442] mb-6 tracking-wider">
+        <span class="font-serif text-2xl opacity-30 italic">Concept</span>
+        開発のきっかけ
+      </h2>
+      <div class="space-y-6 text-sm sm:text-base font-serif leading-relaxed text-[#433D3C]">
+        <p>
+          紅茶のことを調べようとすると、個人の感想ブログが多く、ブランド同士を同じ基準で比較するのが難しいと感じたことはありませんか？
+        </p>
+        <p>
+          「みんなの紅茶図鑑」は、主観的な感想だけでなく、<span class="text-[#A75F29] font-bold">「スペック（情報）」</span>を軸に検索・比較できる場所を作りたいという思いから生まれました。
+        </p>
+      </div>
+    </section>
+
+    <%# --- 3つの特徴 --- %>
+    <section class="mb-20">
+      <div class="text-center mb-10">
+        <h2 class="text-sm font-bold text-[#8C7B6C] tracking-[0.4em] uppercase">Features</h2>
+        <p class="text-[#365442] font-serif font-bold text-xl mt-1">特徴</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <% [
+          ["01", "横断検索", "ブランドの枠を超え、フレーバーや茶葉タイプから理想の一杯を探せます。"],
+          ["02", "定量評価", "香り・味・渋みを数値化。自分好みのバランスがひと目でわかります。"],
+          ["03", "育てる辞典", "ユーザーの投稿により、みんなの知識で辞典が日々成長していきます。"]
+        ].each do |num, title, text| %>
+          <div class="text-center group">
+            <div class="font-serif text-3xl text-[#D6CEC5] group-hover:text-[#A75F29] transition-colors duration-500 mb-3"><%= num %></div>
+            <h3 class="text-[18px] font-bold text-[#365442] mb-3 tracking-widest underline underline-offset-8 decoration-[#D6CEC5]"><%= title %></h3>
+            <p class="text-[14px] leading-relaxed text-[#8C7B6C] font-semibold"><%= text %></p>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <%# --- おすすめの方 --- %>
+    <section class="mb-20 bg-[#365442] text-[#F9F7F2] p-10 md:p-14 rounded-xl shadow-xl">
+      <h2 class="text-center font-serif tracking-widest mb-10 opacity-90 text-lg">こんな方におすすめ...</h2>
+      <ul class="space-y-6 max-w-md mx-auto">
+        <% [
+          "紅茶に興味があるけれど、何から買えばいいかわからない方",
+          "「ミルクティーに合うもの」など、目的別に比較したい方",
+          "お気に入りの紅茶を記録し、魅力を発信したい方"
+        ].each do |text| %>
+          <li class="flex items-start gap-4 text-sm sm:text-base">
+            <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#A75F29] shrink-0"></span>
+            <p class="leading-relaxed"><%= text %></p>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+
+    <%# --- できること --- %>
+    <section class="mb-20">
+      <h2 class="text-center font-serif text-[#365442] text-xl mb-10 tracking-widest">Function</h2>
+      <div class="grid grid-cols-1 gap-4">
+        <% ["フレーバー・ブランドからの詳細検索", "「ストレート向き」「ミルク向き」の判定チェック", "気になった紅茶のお気に入り保存"].each do |task| %>
+          <div class="flex items-center p-5 bg-white border border-[#D6CEC5] rounded-lg">
+            <span class="w-8 h-[1px] bg-[#A75F29] mr-4"></span>
+            <span class="text-[15px] font-bold text-[#433D3C] tracking-wider"><%= task %></span>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <%# --- CTA --- %>
+    <div class="flex flex-col items-center gap-8 py-12 border-t border-[#D6CEC5]">
+      <p class="text-base sm:text-lg font-serif font-bold text-[#365442] tracking-widest text-center">
+        さっそく、新しい紅茶を探してみませんか？
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md justify-center px-4">
+        <%= link_to "紅茶を探してみる", root_path,
+              class: "text-center bg-[#365442] text-white px-8 py-4 rounded-full font-bold shadow-lg hover:bg-[#2A4034] transition duration-300 tracking-widest text-sm" %>
+
+        <% unless user_signed_in? %>
+          <%= link_to "新規登録（無料）", new_user_registration_path,
+                class: "text-center border border-[#365442] text-[#365442] px-8 py-4 rounded-full font-bold hover:bg-white transition duration-300 tracking-widest text-sm" %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</div>

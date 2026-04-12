@@ -5,21 +5,21 @@
 <!-- KPI cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
   <div class="bg-white p-6 rounded-lg shadow-sm border">
-    <p class="text-sm text-gray-500">未承認 TeaProducts</p>
+    <p class="text-sm text-gray-500">承認待ち 投稿</p>
     <p class="text-3xl font-bold mt-2">
-      <%= @pending_tea_products_count %>
+      <%= @pending_submissions_count %>
     </p>
   </div>
 
   <div class="bg-white p-6 rounded-lg shadow-sm border">
-    <p class="text-sm text-gray-500">未承認 Brands</p>
+    <p class="text-sm text-gray-500">承認待ち ブランド</p>
     <p class="text-3xl font-bold mt-2">
       <%= @pending_brands_count %>
     </p>
   </div>
 
   <div class="bg-white p-6 rounded-lg shadow-sm border">
-    <p class="text-sm text-gray-500">公開中 TeaProducts</p>
+    <p class="text-sm text-gray-500">公開中 投稿</p>
     <p class="text-3xl font-bold mt-2">
       <%= @published_tea_products_count %>
     </p>
@@ -40,11 +40,11 @@
   </h3>
 
   <div class="flex flex-wrap gap-4">
-    <%= link_to "承認待ち TeaProducts",
-          admin_tea_products_path(status: :pending),
+    <%= link_to "承認待ち 投稿",
+          admin_tea_product_submissions_path,
           class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm" %>
 
-    <%= link_to "承認待ち Brands",
+    <%= link_to "承認待ち ブランド",
           admin_brands_path(status: :pending),
           class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm" %>
   </div>

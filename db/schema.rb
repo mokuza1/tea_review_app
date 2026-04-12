@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_03_162806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,6 +58,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
     t.index ["user_id"], name: "index_brands_on_user_id"
   end
 
+  create_table "favorites", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "tea_product_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["tea_product_id"], name: "index_favorites_on_tea_product_id"
+    t.index ["user_id", "tea_product_id"], name: "index_favorites_on_user_id_and_tea_product_id", unique: true
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
   create_table "flavor_categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -83,6 +93,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
     t.index ["name"], name: "index_purchase_locations_on_name"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.integer "aroma_rating", null: false
+    t.integer "bitterness_rating", null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.integer "overall_rating", null: false
+    t.boolean "recommended_iced", default: false
+    t.boolean "recommended_milk", default: false
+    t.boolean "recommended_straight", default: false
+    t.integer "strength_rating", null: false
+    t.integer "sweetness_rating", null: false
+    t.bigint "tea_product_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["tea_product_id"], name: "index_reviews_on_tea_product_id"
+    t.index ["user_id", "tea_product_id"], name: "index_reviews_on_user_id_and_tea_product_id", unique: true
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
   create_table "tea_product_flavors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "flavor_id", null: false
@@ -103,6 +132,49 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
     t.index ["tea_product_id"], name: "index_tea_product_purchase_locations_on_tea_product_id"
   end
 
+  create_table "tea_product_submission_flavors", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "flavor_id", null: false
+    t.bigint "tea_product_submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flavor_id"], name: "index_tea_product_submission_flavors_on_flavor_id"
+    t.index ["tea_product_submission_id", "flavor_id"], name: "idx_tps_flavors_unique", unique: true
+    t.index ["tea_product_submission_id"], name: "idx_tps_flavors_on_submission_id"
+  end
+
+  create_table "tea_product_submission_purchase_locations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "purchase_location_id", null: false
+    t.bigint "tea_product_submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_location_id"], name: "idx_on_purchase_location_id_5fe4b7a3c4"
+    t.index ["tea_product_submission_id", "purchase_location_id"], name: "idx_tpspl_on_submission_and_location", unique: true
+    t.index ["tea_product_submission_id"], name: "idx_tps_purchase_locations_on_submission_id"
+  end
+
+  create_table "tea_product_submissions", force: :cascade do |t|
+    t.datetime "approved_at"
+    t.bigint "approved_by_id"
+    t.bigint "brand_id"
+    t.integer "caffeine_level"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name"
+    t.bigint "previous_submission_id"
+    t.text "rejection_reason"
+    t.integer "status", default: 0, null: false
+    t.bigint "tea_product_id"
+    t.integer "tea_type"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["approved_by_id"], name: "index_tea_product_submissions_on_approved_by_id"
+    t.index ["brand_id"], name: "index_tea_product_submissions_on_brand_id"
+    t.index ["previous_submission_id"], name: "index_tea_product_submissions_on_previous_submission_id"
+    t.index ["status"], name: "index_tea_product_submissions_on_status"
+    t.index ["tea_product_id"], name: "index_tea_product_submissions_on_tea_product_id"
+    t.index ["user_id"], name: "index_tea_product_submissions_on_user_id"
+  end
+
   create_table "tea_products", force: :cascade do |t|
     t.datetime "approved_at"
     t.bigint "approved_by_id"
@@ -111,6 +183,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "name"
+    t.text "rejection_reason"
     t.integer "status", default: 0, null: false
     t.integer "tea_type"
     t.datetime "updated_at", null: false
@@ -125,12 +198,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "name", default: "", null: false
+    t.string "provider"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.integer "role", default: 0, null: false
+    t.string "uid"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -138,11 +214,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_074156) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "brands", "users"
   add_foreign_key "brands", "users", column: "approved_by_id"
+  add_foreign_key "favorites", "tea_products"
+  add_foreign_key "favorites", "users"
   add_foreign_key "flavors", "flavor_categories"
+  add_foreign_key "reviews", "tea_products"
+  add_foreign_key "reviews", "users"
   add_foreign_key "tea_product_flavors", "flavors"
   add_foreign_key "tea_product_flavors", "tea_products"
   add_foreign_key "tea_product_purchase_locations", "purchase_locations"
   add_foreign_key "tea_product_purchase_locations", "tea_products"
+  add_foreign_key "tea_product_submission_flavors", "flavors"
+  add_foreign_key "tea_product_submission_flavors", "tea_product_submissions"
+  add_foreign_key "tea_product_submission_purchase_locations", "purchase_locations"
+  add_foreign_key "tea_product_submission_purchase_locations", "tea_product_submissions"
+  add_foreign_key "tea_product_submissions", "brands"
+  add_foreign_key "tea_product_submissions", "tea_product_submissions", column: "previous_submission_id"
+  add_foreign_key "tea_product_submissions", "tea_products"
+  add_foreign_key "tea_product_submissions", "users"
+  add_foreign_key "tea_product_submissions", "users", column: "approved_by_id"
   add_foreign_key "tea_products", "brands"
   add_foreign_key "tea_products", "users"
   add_foreign_key "tea_products", "users", column: "approved_by_id"

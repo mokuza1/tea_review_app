@@ -1,0 +1,157 @@
+<turbo-frame id="review_modal">
+  <div
+    data-controller="review-modal"
+    data-action="click->review-modal#close"
+    class="fixed inset-0 flex items-center justify-center bg-[#1a2e22]/70 z-50 backdrop-blur-md p-4"
+  >
+    <div
+      class="bg-[#FDFBF9] rounded-2xl max-w-xl w-full relative border-2 border-[#D6CEC5] shadow-[0_20px_50px_rgba(0,0,0,0.4)] max-h-[90vh] flex flex-col overflow-hidden"
+      data-action="click->review-modal#stop"
+    >
+      
+      <%# 固定ヘッダー %>
+      <div class="px-6 pt-8 pb-4 flex-shrink-0 relative">
+        <%# 英字タイトル：スマホでもPCでも主張しすぎないサイズに（テイスティング記録の半分程度の印象） %>
+        <h2 class="text-xs md:text-sm font-serif font-bold text-[#C5A065] text-center tracking-[0.2em] mb-1">
+          Tasting Record
+        </h2>
+        <p class="text-lg md:text-xl text-center text-[#365442] font-bold uppercase">テイスティング記録</p>
+      </div>
+
+      <%# スクロールエリア %>
+      <div class="flex-grow overflow-y-auto px-4 md:px-6 pb-8 custom-scrollbar">
+        <div class="relative p-5 md:p-8 border border-[#D6CEC5]/60 rounded-xl bg-white/40">
+
+        <% if review.errors.any? %>
+            <div class="my-1 p-2 bg-red-100 text-red-700 rounded">
+              <p class="font-semibold mb-1 ml-3">
+                未入力部分があります
+              </p>
+            </div>
+          <% end %>
+
+          <%= form_with model: [@tea_product, review],
+                data: { turbo_frame: "_top" } do |f| %>
+
+            <div class="space-y-10">
+
+              <%# --- おすすめ度 --- %>
+              <div class="text-center border-b border-[#D6CEC5]/40 pb-8">
+                <div class="mb-4">
+                  <span class="block text-[10px] font-bold text-[#C5A065] tracking-widest uppercase mb-1">Overall Rating</span>
+                  <span class="text-base md:text-lg font-bold text-[#365442]">おすすめ度</span>
+                  
+                  <%# 副題・メッセージ %>
+                  <p class="text-xs md:text-sm text-[#8C7B6C] mt-2 font-bold leading-relaxed">
+                    <span class="inline-block">あなたの「好き！」を教えてください。</span><br>
+                    <span class="inline-block text-xs md:text-xs">クセが強いお茶も、好きな人には最高の1本になります。</span>
+                  </p>
+               </div>
+                
+                <div class="rating justify-center">
+                  <% 5.downto(1) do |i| %>
+                    <% unique_id = "overall_rating_#{dom_id(@review)}_#{i}" %>
+                    <%# input を先に書く %>
+                    <%= f.radio_button :overall_rating, i, id: unique_id, class: "sr-only peer" %>
+                    <%# label をその直後に置く %>
+                    <%= f.label :overall_rating, value: i, for: unique_id, 
+                        class: "text-4xl md:text-5xl px-1 md:px-2 cursor-pointer text-[#E5E1DB] 
+                                hover:text-[#C5A065] peer-checked:text-[#C5A065] transition-colors" do %>
+                      ★
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+
+              <%# --- 詳細評価（縦一列・星中央配置） --- %>
+              <%# grid-cols-2 をやめ、flex-col で縦1列に %>
+              <div class="flex flex-col gap-y-8">
+                <% [
+                  [:aroma_rating, "Aroma", "香り", "香りの強さは？", "控えめ", "非常に強い"],
+                  [:bitterness_rating, "Bitterness", "渋み", "渋みの感じ方は？", "おだやか", "力強い"],
+                  [:strength_rating, "Strength", "濃厚さ", "口当たりは？", "すっきり", "コクがある"],
+                  [:sweetness_rating, "Sweetness", "甘み", "後味の余韻は？", "キレがある", "甘い・余韻あり"]
+                ].each do |field, label_en, label_jp, question, low, high| %>
+                  
+                  <div class="flex flex-col border-b border-[#D6CEC5]/40 pb-6">
+                    <%# 項目名と問いかけ（中央揃えに変更してバランスを取る） %>
+                    <div class="text-center mb-3">
+                      <span class="block text-[10px] text-[#C5A065] uppercase tracking-widest"><%= label_en %></span>
+                      <div class="flex items-center justify-center gap-2 mt-1">
+                        <span class="text-base font-bold text-[#433D3C]"><%= label_jp %></span>
+                        <span class="text-xs text-[#8C7B6C] font-bold">（<%= question %>）</span>
+                      </div>
+                    </div>
+
+                    <%# 星評価エリア（左：説明、中央：星、右：説明） %>
+                    <div class="flex items-center justify-center w-full gap-2 md:gap-4">
+                      <%# 左側の説明文（右寄せにして星に近づける） %>
+                      <div class="flex-1 text-right">
+                        <span class="text-[11px] md:text-xs text-[#8C7B6C] font-bold"><%= low %></span>
+                      </div>
+                      
+                      <%# 中央の星 %>
+                      <div class="rating justify-center flex-shrink-0">
+                        <% 5.downto(1) do |i| %>
+                          <% detail_id = "#{field}_#{dom_id(@review)}_#{i}" %>
+                          <%= f.radio_button field, i, id: detail_id, class: "hidden" %>
+                          <%= f.label field, value: i, for: detail_id, class: "text-3xl cursor-pointer px-0.5" do %>
+                            ★
+                          <% end %>
+                        <% end %>
+                      </div>
+
+                      <%# 右側の説明文（左寄せにして星に近づける） %>
+                      <div class="flex-1 text-left">
+                        <span class="text-[11px] md:text-xs text-[#8C7B6C] font-bold"><%= high %></span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                <% end %>
+              </div>
+
+              <%# --- おすすめの飲み方 --- %>
+              <div>
+                <label class="block text-[10px] font-bold text-[#C5A065] tracking-widest uppercase mb-1">Recommended Serve</label>
+                <span class="block text-base font-bold text-[#365442] mb-3">おすすめの飲み方</span>
+                <div class="flex flex-wrap gap-3">
+                  <% [[:recommended_straight, "ストレート"], [:recommended_milk, "ミルク"], [:recommended_iced, "アイス"]].each do |field, label| %>
+                    <label class="cursor-pointer group">
+                      <%= f.check_box field, class: "hidden peer" %>
+                      <span class="px-5 py-2 rounded-full border border-[#D6CEC5] bg-white text-[#8C7B6C] text-sm font-bold transition-all peer-checked:bg-[#A75F29] peer-checked:text-white peer-checked:border-[#A75F29] inline-block hover:bg-[#FDFBF9]">
+                        <%= label %>
+                      </span>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+
+              <%# --- コメントエリア --- %>
+              <div>
+                <label class="block text-[10px] font-bold text-[#C5A065] tracking-widest uppercase mb-1">Tasting Notes</label>
+                <div class="flex items-baseline mb-3">
+                  <span class="text-sm font-bold text-[#365442]">テイスティングノート（感想）</span>
+                  <span class="text-[11px] text-[#8C7B6C] font-bold ml-2">※140文字以内</span>
+                </div>
+                <%= f.text_area :comment,
+                      maxlength: 140, rows: 3,
+                      placeholder: "（任意）味わいの感想を記録しましょう",
+                      class: "w-full bg-white/80 border-2 border-[#D6CEC5] p-3 rounded-lg focus:ring-0 focus:border-[#365442] transition-colors font-medium text-[#433D3C] text-sm" %>
+              </div>
+
+              <%# --- ボタン --- %>
+              <div class="pt-4 flex flex-col items-center gap-6">
+                <%= f.submit "記録を保存する",
+                      class: "w-full max-w-[240px] bg-[#365442] text-[#F9F7F2] py-3.5 rounded-xl font-serif font-bold tracking-widest shadow-lg hover:bg-[#2A4034] transition-all cursor-pointer border-b-4 border-[#1e3126] active:border-b-0 active:translate-y-1" %>
+                
+                <%= link_to "キャンセル", tea_product_path(@tea_product), data: { turbo_frame: "_top" }, class: "text-xs font-bold text-[#8C7B6C] hover:text-[#365442] transition-colors border-b border-[#D6CEC5] tracking-widest" %>
+              </div>
+              
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</turbo-frame>

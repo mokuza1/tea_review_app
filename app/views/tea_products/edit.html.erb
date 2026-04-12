@@ -8,6 +8,24 @@
         <div class="mt-6 w-12 h-[1px] bg-[#D6CEC5] mx-auto"></div>
       </div>
 
+      <% if @tea_product.rejected? && @tea_product.rejection_reason.present? %>
+        <div class="mb-10 bg-red-50 border border-red-200 rounded-xl p-6">
+
+          <p class="text-xs font-bold text-red-600 tracking-[0.2em] uppercase mb-2">
+            REJECTION REASON / 却下の理由
+          </p>
+
+          <p class="text-base text-red-950 font-semibold leading-relaxed mb-4">
+            <%= @tea_product.rejection_reason %>
+          </p>
+
+          <p class="text-sm text-red-700">
+            上記の理由をご確認のうえ、内容を修正して再度保存・申請してください。
+          </p>
+
+        </div>
+      <% end %>
+
       <%= render "form", tea_product: @tea_product %>
 
       <% if @tea_product.draft? || @tea_product.rejected? %>

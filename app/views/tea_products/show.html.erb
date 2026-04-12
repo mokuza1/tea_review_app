@@ -1,181 +1,211 @@
 <div class="min-h-screen bg-[#F1EFE9] flex flex-col">
-
-  <section class="px-6 py-12 md:py-20 flex-grow">
+  <%# メインコンテンツエリア：flex-growでフッターを下に押し出す %>
+  <main class="px-6 py-12 md:py-20 flex-grow">
     <div class="max-w-4xl mx-auto">
 
-      <div
-        class="bg-white border-2 border-[#D6CEC5]
-               rounded-xl shadow-[0_20px_60px_rgba(54,84,66,0.12)] p-8 md:p-16 relative overflow-hidden">
-        
+      <%# --- 却下通知 --- %>
+      <% submission = @tea_product.tea_product_submission %>
+
+      <% if submission&.rejected? && submission.rejection_reason.present? %>
+        <div class="mb-8 bg-red-50 border border-red-200 rounded-lg p-4 shadow-sm">
+          <p class="text-base font-bold text-red-700 px-4 mb-3">
+            この投稿は却下されました。
+          </p>
+
+          <%# 理由表示（UX的にあった方が良い） %>
+          <div class="px-4 mb-4 text-sm text-red-800">
+            <%= simple_format(submission.rejection_reason) %>
+          </div>
+
+          <div class="text-right">
+            <%= link_to edit_tea_product_submission_path(submission),
+                class: "inline-flex items-center gap-2 text-sm font-medium text-red-700 hover:text-red-900 transition group" do %>
+              <span class="border-b border-transparent group-hover:border-red-700 transition">
+                理由を確認して編集する
+              </span>
+              <span class="transform group-hover:translate-x-1 transition font-bold">→</span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# --- 商品詳細カード --- %>
+      <div class="bg-white border-2 border-[#D6CEC5] rounded-xl shadow-[0_20px_60px_rgba(54,84,66,0.12)] p-8 md:p-16 relative overflow-hidden mb-16">
         <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#365442]/5 rounded-full blur-3xl pointer-events-none"></div>
 
+        <%# 上段：画像と基本情報 %>
         <div class="flex flex-col sm:flex-row gap-8 md:gap-12 mb-12 border-b border-[#EBE5DE] pb-10">
-
-          <div
-            class="w-full sm:w-64 aspect-square flex-shrink-0
-                   bg-[#F2F0EB] border border-[#D6CEC5] shadow-inner rounded-lg overflow-hidden
-                   flex items-center justify-center relative group">
-
+          <div class="w-full sm:w-64 aspect-square flex-shrink-0 bg-[#F2F0EB] border border-[#D6CEC5] shadow-inner rounded-lg overflow-hidden flex items-center justify-center relative group">
             <% if @tea_product.image.attached? %>
-               <div class="w-full h-full mix-blend-multiply transition duration-700 group-hover:scale-105">
-                 <%= image_tag @tea_product.image,
-                     class: "w-full h-full object-cover" %>
-               </div>
-               <div class="absolute inset-0 bg-gradient-to-tr from-[#365442]/10 to-transparent opacity-0 group-hover:opacity-40 transition"></div>
+              <div class="w-full h-full mix-blend-multiply transition duration-700 group-hover:scale-105">
+                <%= image_tag @tea_product.image, class: "w-full h-full object-cover" %>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-tr from-[#365442]/10 to-transparent opacity-0 group-hover:opacity-40 transition"></div>
             <% else %>
               <div class="text-center">
                 <span class="block text-2xl mb-1 text-[#D6CEC5]">☕</span>
                 <span class="text-xs font-serif tracking-widest text-[#998B7D]">NO IMAGE</span>
               </div>
             <% end %>
-
           </div>
 
           <div class="flex-1 pt-2 flex flex-col justify-center">
-
             <% if @tea_product.brand.present? %>
               <p class="text-sm font-bold text-[#A75F29] tracking-widest uppercase mb-3 flex items-center gap-2">
                 <span class="w-8 h-[1px] bg-[#A75F29]/50"></span>
                 <%= @tea_product.brand.name_ja.presence || @tea_product.brand.name_en %>
               </p>
             <% end %>
-
             <h1 class="text-3xl md:text-4xl font-serif font-medium text-[#365442] mb-6 leading-tight">
               <%= @tea_product.name %>
             </h1>
-
+            <%= turbo_frame_tag "favorite_button_#{@tea_product.id}" do %>
+              <%= render "favorites/button", tea_product: @tea_product %>
+            <% end %>
           </div>
-
         </div>
 
+        <%# 中段：スペック情報 %>
         <div class="grid sm:grid-cols-2 gap-x-12 gap-y-8 mb-12">
-
           <% if @tea_product.tea_type.present? %>
             <div class="border-l-2 border-[#D6CEC5] pl-4">
-              <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-2">
-                TEA TYPE
-              </p>
-              <span
-                class="inline-block text-lg font-serif text-[#433D3C]">
-                <%= @tea_product.enum_i18n(:tea_type) %>
-              </span>
+              <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-2">TEA TYPE</p>
+              <span class="inline-block text-lg font-serif text-[#433D3C]"><%= @tea_product.enum_i18n(:tea_type) %></span>
             </div>
           <% end %>
-
           <% if @tea_product.caffeine_level.present? %>
             <div class="border-l-2 border-[#D6CEC5] pl-4">
-              <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-2">
-                CAFFEINE
-              </p>
-              <span
-                class="inline-block text-lg font-serif text-[#433D3C]">
-                <%= @tea_product.enum_i18n(:caffeine_level) %>
-              </span>
+              <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-2">CAFFEINE</p>
+              <span class="inline-block text-lg font-serif text-[#433D3C]"><%= @tea_product.enum_i18n(:caffeine_level) %></span>
             </div>
           <% end %>
-
         </div>
 
+        <%# 下段：フレーバーノート %>
         <% if @tea_product.flavors.present? %>
           <div class="mb-12 bg-[#F6F4F0] rounded-lg p-6 border border-[#EBE5DE]/50">
-
             <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-4 flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-[#365442]"></span>
               FLAVOR NOTES
             </p>
-
             <div class="space-y-4">
-
-              <% @tea_product.flavors
-                  .group_by(&:flavor_category)
-                  .each do |category, flavors| %>
-
+              <% @tea_product.flavors.group_by(&:flavor_category).each do |category, flavors| %>
                 <div class="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-6">
-
-                  <span
-                    class="text-sm font-bold text-[#365442] min-w-[80px] pt-1">
-                    <%= category.name %> :
-                  </span>
-
+                  <span class="text-sm font-bold text-[#365442] min-w-[80px] pt-1"><%= category.name %></span>
                   <ul class="flex flex-wrap gap-2">
                     <% flavors.each do |flavor| %>
-                      <li
-                        class="px-3 py-1 text-sm
-                               bg-white border border-[#D6CEC5]
-                               text-[#5C5046]
-                               rounded shadow-sm">
+                      <li class="px-3 py-1 text-sm bg-white border border-[#D6CEC5] text-[#5C5046] rounded shadow-sm">
                         <%= flavor.name %>
                       </li>
                     <% end %>
                   </ul>
-
                 </div>
-
               <% end %>
-
             </div>
           </div>
         <% end %>
 
+        <%# 購入場所 %>
         <% if @tea_product.purchase_locations.present? %>
           <div class="mb-12">
-
-            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-4 border-b border-[#EBE5DE] pb-2">
-              PURCHASED AT
-            </p>
-
+            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-4 border-b border-[#EBE5DE] pb-2">PURCHASED AT</p>
             <ul class="space-y-3">
               <% @tea_product.purchase_locations.each do |location| %>
                 <li class="flex items-center gap-4 text-[#433D3C]">
-                  
-                  <span
-                    class="text-xs bg-[#365442] text-[#F9F7F2]
-                           px-2 py-1 rounded
-                           font-serif tracking-wider min-w-[60px] text-center">
+                  <span class="text-xs bg-[#365442] text-[#F9F7F2] px-2 py-1 rounded font-serif tracking-wider min-w-[60px] text-center">
                     <%= location.enum_i18n(:location_type) %>
                   </span>
-
                   <span class="text-base font-medium border-b border-dotted border-[#8C7B6C]">
                     <%= location.name %>
                   </span>
-
                 </li>
               <% end %>
             </ul>
-
           </div>
         <% end %>
 
+        <%# 商品説明 %>
         <% if @tea_product.description.present? %>
           <div>
-
-            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-3">
-              DESCRIPTION
-            </p>
-
+            <p class="text-xs font-bold text-[#8C7B6C] tracking-widest uppercase mb-3">DESCRIPTION</p>
             <div class="text-[#433D3C] leading-loose font-serif text-justify text-base md:text-lg">
               <%= simple_format(@tea_product.description) %>
             </div>
-
           </div>
         <% end %>
+      </div>
+
+      <%# --- レビューセクション --- %>
+      <section class="mt-16 pt-12 border-t-2 border-[#D6CEC5]/50">
+        <div class="flex flex-row items-end justify-between gap-2 mb-10">
+    
+          <div class="relative">
+            <h2 class="text-[10px] sm:text-xs font-serif font-bold text-[#C5A065] tracking-widest">
+              Tasting Logs
+            </h2>
+
+            <p class="text-xl sm:text-3xl text-[#365442] font-bold uppercase mt-1 leading-tight">
+              みんなの<br class="sm:hidden">テイスティング記録
+            </p>
+          </div>
+
+          <%# 記録ボタン：横幅を維持するために flex-shrink-0 を指定 %>
+          <div class="flex-shrink-0 mb-1">
+            <%= render "reviews/review_button", 
+                       tea_product: @tea_product, 
+                       user_review: @user_review %>
+          </div>
+        </div>
+        <%= turbo_frame_tag "review_modal" %>
+
+        <%# サマリー表示 %>
+        <div class="mb-10">
+          <%= render "reviews/summary", tea_product: @tea_product %>
         </div>
 
-      <div class="text-center mt-12">
-        <%= link_to tea_products_path(q: params[:q]&.to_unsafe_h),
-              class: "group inline-flex items-center gap-2 text-[#365442] hover:text-[#2A4034] transition" do %>
-          
-          <span class="w-8 h-8 rounded-full border border-[#365442] flex items-center justify-center group-hover:bg-[#365442] group-hover:text-[#F9F7F2] transition duration-300">
+        <%# レビューリスト %>
+        <div class="space-y-6">
+          <% if @reviews.present? %>
+            <div class="grid grid-cols-1 gap-4">
+              <% @reviews.each do |review| %>
+                <%= render "reviews/review", review: review %>
+              <% end %>
+            </div>
+            
+            <%# もっと見る導線 %>
+            <div class="mt-8 text-center">
+              <%= link_to tea_product_reviews_path(@tea_product), class: "group inline-flex items-center gap-2 text-sm font-bold text-[#8C7B6C] hover:text-[#365442] transition-colors" do %>
+                <span>すべての記録を見る（<%= @tea_product.reviews.count %>件）</span>
+                <span class="transform group-hover:translate-x-1 transition-transform">→</span>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="py-16 text-center border-2 border-dashed border-[#D6CEC5] rounded-xl bg-white/30">
+              <p class="text-[#8C7B6C] text-sm">
+                まだこの紅茶の記録はありません。<br>
+                最初のテイスティングノートを書きませんか？
+              </p>
+            </div>
+          <% end %>
+        </div>
+      </section>
+
+      <%# モーダル用フレーム %>
+      <turbo-frame id="review_modal"></turbo-frame>
+
+      <%# --- フッター前のナビゲーション --- %>
+      <div class="text-center mt-20 pt-10 border-t border-[#D6CEC5]/30">
+        <%= link_to tea_products_path(q: params[:q]&.to_unsafe_h), class: "group inline-flex items-center gap-3 text-[#365442] hover:text-[#2A4034] transition" do %>
+          <span class="w-10 h-10 rounded-full border border-[#D6CEC5] flex items-center justify-center group-hover:bg-[#365442] group-hover:text-[#FDFBF9] group-hover:border-[#365442] transition-all duration-300">
             ←
           </span>
-          <span class="font-serif tracking-widest text-sm border-b border-transparent group-hover:border-[#365442] transition">
+          <span class="font-serif tracking-widest text-sm font-bold border-b border-transparent group-hover:border-[#365442] transition">
             一覧に戻る
           </span>
-
         <% end %>
       </div>
 
     </div>
-  </section>
+  </main>
 
 </div>

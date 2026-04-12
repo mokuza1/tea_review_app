@@ -68,19 +68,18 @@ if Rails.env.development?
   brands = brand_names.map.with_index do |name, i|
     status = i < 5 ? :published : :draft
 
-    Brand.create!(
-      name_ja: name,
-      name_en: name,
-      country: Faker::Address.country,
-      description: Faker::Lorem.paragraph(sentence_count: 2),
-      user: users.sample,
-      status: status,
-      approved_by: status == :published ? admin : nil,
-      approved_at: status == :published ? Faker::Time.backward(days: 60) : nil
-    )
+    Brand.find_or_create_by!(name_ja: name) do |b|
+      b.name_en = name
+      b.country = Faker::Address.country
+      b.description = Faker::Lorem.paragraph(sentence_count: 2)
+      b.user = users.sample
+      b.status = status
+      b.approved_by = status == :published ? admin : nil
+      b.approved_at = status == :published ? Faker::Time.backward(days: 60) : nil
+    end
   end
 
-  published_brands = brands.select(&:published?)
+  published_brands = Brand.where(name_ja: brand_names.first(5))
 
   puts "Brands created: #{brands.size}"
 
@@ -165,28 +164,28 @@ if Rails.env.development?
 
   # pending（承認待ち）5件
   5.times do |n|
-    product = TeaProduct.new(
+    submission = TeaProductSubmission.new(
       name: "承認待ちのお茶 #{n + 1}",
       user: users.sample,
       brand: published_brands.sample,
-      tea_type: TeaProduct.tea_types.keys.sample,
-      caffeine_level: TeaProduct.caffeine_levels.keys.sample,
+      tea_type: TeaProductSubmission.tea_types.keys.sample,
+      caffeine_level: TeaProductSubmission.caffeine_levels.keys.sample,
       description: Faker::Lorem.sentence,
       status: :pending
     )
 
     # フレーバー1〜3個
-    product.flavors << all_flavors.sample(rand(1..3))
+    submission.flavors << all_flavors.sample(rand(1..3))
 
     # 購入場所は1件のみ（バリデーションに合わせる）
-    product.purchase_locations << all_locations.sample
+    submission.purchase_locations << all_locations.sample
 
-    product.save!
+    submission.save!
   end
 
   # draft（下書き）5件
   5.times do
-    TeaProduct.create!(
+    TeaProductSubmission.create!(
       user: users.sample,
       status: :draft
     )
@@ -213,45 +212,8 @@ if Rails.env.development?
   end
 
   puts "TeaProducts created: #{TeaProduct.count}"
+  puts "TeaProductSubmissions created: #{TeaProductSubmission.count}"
 
-  # =====================================
-  # TeaProductFlavors
-  # =====================================
-  puts "Linking tea products with flavors..."
-
-  published_products = TeaProduct.where(status: :published)
-  all_flavors = Flavor.all
-
-  published_products.each do |product|
-    # 2〜4個のフレーバーをランダム付与
-    all_flavors.sample(rand(2..4)).each do |flavor|
-      TeaProductFlavor.find_or_create_by!(
-        tea_product: product,
-        flavor: flavor
-      )
-    end
-  end
-
-  puts "TeaProductFlavors created: #{TeaProductFlavor.count}"
-
-  # =====================================
-  # TeaProductPurchaseLocations
-  # =====================================
-  puts "Linking tea products with purchase locations..."
-
-  all_locations = PurchaseLocation.all
-
-  published_products.each do |product|
-    # 1〜3件の購入場所をランダム付与
-    all_locations.sample(rand(1..3)).each do |location|
-      TeaProductPurchaseLocation.find_or_create_by!(
-        tea_product: product,
-        purchase_location: location
-      )
-    end
-  end
-
-  puts "TeaProductPurchaseLocations created: #{TeaProductPurchaseLocation.count}"
 end
 
 puts "✅ Seeding completed successfully!"

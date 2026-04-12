@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-[#F1EFE9] py-8 md:py-12">
+  <div class="max-w-4xl mx-auto px-4 mb-16">
+
+    <div class="mb-10 border-b-2 border-[#B5A89A] pb-6">
+      <h1 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] tracking-widest">
+        FAVORITE TEAS
+      </h1>
+      <p class="text-xs font-bold text-[#8C7B6C] mt-1 uppercase tracking-[0.2em]">
+        お気に入り一覧
+      </p>
+    </div>
+
+    <div class="mb-6">
+      <%= link_to mypage_path, class: "text-sm font-bold text-[#365442] hover:text-[#A75F29] inline-flex items-center gap-1" do %>
+        <span>←</span> <span>マイページに戻る</span>
+      <% end %>
+    </div>
+
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
+      <%# table-auto に戻すことで、中身のサイズに応じて列幅が柔軟に調整されるようになります %>
+      <table class="w-full text-sm border-collapse table-auto">
+
+        <thead class="bg-[#F9F7F2] border-b-2 border-[#D6CEC5]">
+          <tr>
+            <%# 画像列：スマホでは小さく、PCでは固定幅 %>
+            <th class="p-4 w-20 md:w-32 text-center font-bold text-[#365442]">
+              画像
+            </th>
+        
+            <%# 名前列：幅を指定せず、余ったスペースをすべて使う %>
+            <th class="p-4 text-left font-bold text-[#365442]">
+              紅茶名
+            </th>
+        
+            <%# ボタン列：w-px（最小幅）を指定し、中身のサイズ（white-space: nowrap）に合わせる %>
+            <th class="p-4 w-px text-center font-bold text-[#365442] whitespace-nowrap">
+              お気に入り
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y-2 divide-[#F1EFE9]">
+          <% @favorite_tea_products.each do |tea| %>
+            <tr class="hover:bg-[#FDFBF9]">
+          
+              <%# --- 画像エリア --- %>
+              <td class="p-4">
+                <div class="w-12 h-12 md:w-20 md:h-20 mx-auto bg-[#F1EFE9] border overflow-hidden rounded">
+                  <% if tea.image.attached? %>
+                    <%= image_tag tea.image, class: "w-full h-full object-cover" %>
+                  <% end %>
+                </div>
+              </td>
+
+              <%# --- 名前エリア --- %>
+              <td class="p-4">
+                <%= link_to tea_product_path(tea),
+                    class: "font-bold text-[#365442] hover:text-[#A75F29] leading-tight block break-words" do %>
+                  <%= tea.name %>
+                <% end %>
+              </td>
+
+              <%# --- ボタンエリア --- %>
+              <%# whitespace-nowrap を入れることで、タブレットサイズでも「解除」が絶対に縦に並びません %>
+              <td class="p-4 text-center whitespace-nowrap">
+                <div class="inline-block scale-90 sm:scale-100">
+                  <%= render "favorites/button", tea_product: tea %>
+                </div>
+              </td>
+
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

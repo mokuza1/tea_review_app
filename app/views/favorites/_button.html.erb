@@ -1,0 +1,43 @@
+<%= turbo_frame_tag "favorite_button_#{tea_product.id}" do %>
+
+  <% if user_signed_in? %>
+
+    <% if tea_product.favorited_by?(current_user) %>
+
+      <%# --- お気に入り済み（解除ボタン） --- %>
+      <%= button_to tea_product_favorite_path(tea_product),
+            method: :delete,
+            data: { turbo: true },
+            form_class: "inline-block",
+            class: "group flex items-center justify-center p-2 sm:px-3 sm:py-1.5 text-sm font-bold tracking-widest border border-[#A75F29] bg-[#FDFBF9] text-[#A75F29] rounded hover:bg-[#A75F29] hover:text-[#FDFBF9] transition-colors duration-300 shadow-sm" do %>
+        <span class="text-lg sm:text-base leading-none pb-0.5">★</span>
+        <span class="hidden sm:inline sm:ml-1">お気に入り解除</span>
+      <% end %>
+
+    <% else %>
+
+      <%# --- 未お気に入り（登録ボタン） --- %>
+      <%= button_to tea_product_favorite_path(tea_product),
+            method: :post,
+            data: { turbo: true },
+            form_class: "inline-block",
+            class: "group flex items-center justify-center p-2 sm:px-3 sm:py-1.5 text-sm font-bold tracking-widest border border-[#D6CEC5] bg-[#FDFBF9] text-[#8C7B6C] rounded hover:border-[#365442] hover:text-[#365442] transition-colors duration-300 shadow-sm" do %>
+        <span class="text-lg sm:text-base leading-none pb-0.5">☆</span>
+        <span class="hidden sm:inline sm:ml-1">お気に入り</span>
+      <% end %>
+
+    <% end %>
+
+  <% else %>
+
+    <%# --- 未ログイン（ログイン画面へ） --- %>
+    <%= link_to new_user_session_path(favorite_required: true),
+          data: { turbo: false },
+          class: "inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 text-sm font-bold tracking-widest border border-[#D6CEC5] bg-[#FDFBF9] text-[#8C7B6C] rounded hover:border-[#365442] hover:text-[#365442] transition-colors duration-300 shadow-sm" do %>
+      <span class="text-lg sm:text-base leading-none pb-0.5">☆</span>
+      <span class="hidden sm:inline sm:ml-1">お気に入り</span>
+    <% end %>
+
+  <% end %>
+
+<% end %>

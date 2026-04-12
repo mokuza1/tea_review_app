@@ -1,15 +1,20 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" data-turbo-cache="false">
-    <h2>
-      <%= I18n.t("errors.messages.not_saved",
-                 count: resource.errors.count,
-                 resource: resource.class.model_name.human.downcase)
-       %>
-    </h2>
-    <ul>
+  <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-5" data-turbo-cache="false">
+    
+    <!-- タイトル -->
+    <p class="text-sm font-bold text-red-600 tracking-wide mb-3">
+      入力内容に問題があります
+    </p>
+
+    <!-- エラー一覧 -->
+    <ul class="space-y-1 text-sm text-red-700">
       <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <li class="flex items-start gap-2">
+          <span class="mt-[2px]">•</span>
+          <span><%= message %></span>
+        </li>
       <% end %>
     </ul>
+
   </div>
 <% end %>

@@ -1,8 +1,10 @@
 class Admin::BrandsController < Admin::BaseController
+  class InvalidStatusTransition < StandardError; end
   def index
     @brands = Brand
       .includes(:user)
       .order(created_at: :desc)
+      .page(params[:page]).per(20)
 
     @brands = @brands.where(status: params[:status]) if params[:status].present?
   end

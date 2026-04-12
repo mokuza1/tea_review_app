@@ -11,6 +11,9 @@ import BrandController from "./brand_controller"
 import FlavorController from "./flavor_controller"
 import ModalController from "./modal_controller"
 import FlashController from "./flash_controller"
+import PurchaseLocationsController from "./purchase_locations_controller"
+import DiagnosticModalController from "./diagnostic_modal_controller"
+import ReviewModalController from "./review_modal_controller"
 
 application.register("hello", HelloController)
 application.register("brand-suggest", BrandSuggestController)
@@ -19,3 +22,6 @@ application.register("brand", BrandController)
 application.register("flavor", FlavorController)
 application.register("modal", ModalController)
 application.register("flash", FlashController)
+application.register("purchase-locations", PurchaseLocationsController)
+application.register("diagnostic-modal", DiagnosticModalController)
+application.register("review-modal", ReviewModalController)

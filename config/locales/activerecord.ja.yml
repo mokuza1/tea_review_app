@@ -5,6 +5,7 @@ ja:
       tea_product: 紅茶商品
       brand: ブランド
       purchase_location: 購入場所
+      tea_product_purchase_location: 購入場所
 
     # =========================
     # 属性名（ラベル）
@@ -30,6 +31,7 @@ ja:
         caffeine_level: カフェイン
         brand: ブランド
         selected_flavor_category_id: フレーバーカテゴリ
+        tea_product_purchase_locations: 購入場所
 
       # --------------------
       # Brand
@@ -51,6 +53,10 @@ ja:
         name: 場所名
         location_type: 種別
 
+      tea_product_purchase_location:
+        purchase_location: 購入場所
+        purchase_location_id: 購入場所
+
     # =========================
     # enum 翻訳
     # =========================
@@ -64,12 +70,11 @@ ja:
           published: 公開中
 
         tea_type:
-          black: ブラックティー
-          green: グリーンティー
-          oolong: ウーロンティー
-          white: ホワイトティー
+          black: ブラックティー（紅茶）
+          green: グリーンティー（緑茶）
+          oolong: ウーロンティー（烏龍茶）
+          white: ホワイトティー（白茶）
           herbal: ハーブティー
-
         caffeine_level:
           caffeinated: カフェインあり
           non_caffeinated: カフェインなし
@@ -92,6 +97,34 @@ ja:
           online_shop: ネット通販
           other: その他
 
+      tea_product_submission:
+        status:
+          draft: 下書き
+          pending: 承認待ち
+          rejected: 却下
+          approved: 承認
+
+        tea_type:
+          black: ブラックティー（紅茶）
+          green: グリーンティー（緑茶）
+          oolong: ウーロンティー（烏龍茶）
+          white: ホワイトティー（白茶）
+          herbal: ハーブティー
+        caffeine_level:
+          caffeinated: カフェインあり
+          non_caffeinated: カフェインなし
+          decaffeinated: デカフェ
+
+      tea_product_submission_purchase_location:
+        location_type:
+          supermarket: スーパーマーケット
+          convenience_store: コンビニエンスストア
+          department_store: 百貨店（高島屋・三越）
+          tea_specialty_store: 紅茶専門店
+          specialty_store: 専門店（カルディ・成城石井など）
+          online_shop: ネット通販
+          other: その他
+
     # =========================
     # エラーメッセージ
     # =========================
@@ -101,3 +134,18 @@ ja:
           attributes:
             name:
               blank: "商品名を入力してください"
+        tea_product_purchase_location:
+          attributes:
+            purchase_location_id:
+              blank: "購入場所を入力してください"
+        purchase_location:
+          attributes:
+            name:
+              blank: "店舗名を入力してください"
+              too_short: "店舗名は%{count}文字以上で入力してください"
+            location_type:
+              blank: "購入場所の種類を選択してください"
+  errors:
+    messages:
+      blank: を入力してください
+      too_short: "%{count}文字以上で入力してください"
