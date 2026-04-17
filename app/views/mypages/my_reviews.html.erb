@@ -1,0 +1,43 @@
+<h1>自分のレビュー一覧</h1>
+
+<% if @reviews.any? %>
+  <div class="space-y-4">
+    <% @reviews.each do |review| %>
+      <div class="border p-4 rounded">
+
+        <div class="text-sm text-gray-500">
+          <%= review.created_at.strftime("%Y.%m.%d") %>
+        </div>
+
+        <div class="font-bold">
+          <%= link_to review.tea_product.name,
+                tea_product_path(review.tea_product) %>
+        </div>
+
+        <div class="mt-2">
+          おすすめ度：
+          <%= render_stars(review.overall_rating) %>
+        </div>
+
+        <% if review.comment.present? %>
+          <p class="mt-2"><%= review.comment %></p>
+        <% end %>
+
+        <div class="mt-2 flex gap-2 text-sm">
+          <%= link_to "編集",
+              edit_tea_product_review_path(review.tea_product, review) %>
+
+          <%= link_to "削除",
+              tea_product_review_path(review.tea_product, review),
+              data: { turbo_method: :delete, turbo_confirm: "削除しますか？" } %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+
+  <%= paginate @reviews %>
+
+<% else %>
+  <p>レビューはまだありません</p>
+<% end %>

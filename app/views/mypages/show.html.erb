@@ -109,5 +109,25 @@
         </div>
       <% end %>
     </div>
+    
+    <h2>最近のレビュー</h2>
+
+      <% if @recent_reviews.any? %>
+        <% @recent_reviews.each do |review| %>
+          <div>
+            <%= link_to review.tea_product.name,
+                  tea_product_path(review.tea_product) %>
+
+            <div>
+              <%= render_stars(review.overall_rating) %>
+            </div>
+          </div>
+        <% end %>
+
+        <%= link_to "すべて見る", my_reviews_mypage_path %>
+
+      <% else %>
+        <p>レビューはまだありません</p>
+      <% end %>
   </div>
 </div>
