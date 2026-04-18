@@ -18,7 +18,7 @@ class MypagesController < ApplicationController
     @recent_reviews =
         current_user
         .reviews
-        .includes(:tea_product)
+        .includes(tea_product: { image_attachment: :blob })
         .order(created_at: :desc)
         .limit(3)
 
@@ -38,7 +38,7 @@ class MypagesController < ApplicationController
 
   def my_reviews
     @reviews = 
-      current_user.reviews.includes(:tea_product)
+      current_user.reviews.includes(tea_product: { image_attachment: :blob })
                           .order(created_at: :desc)
                           .page(params[:page])
                           .per(10)
