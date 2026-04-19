@@ -1,43 +1,126 @@
-<h1>自分のレビュー一覧</h1>
+<div class="min-h-screen bg-[#F1EFE9] py-8 md:py-12">
+  <div class="max-w-4xl mx-auto px-4 mb-16">
 
-<% if @reviews.any? %>
-  <div class="space-y-4">
-    <% @reviews.each do |review| %>
-      <div class="border p-4 rounded">
+    <div class="mb-10 border-b-2 border-[#B5A89A] pb-6">
+      <h1 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] tracking-widest">
+        MY REVIEWS
+      </h1>
+      <p class="text-xs font-bold text-[#8C7B6C] mt-1 uppercase tracking-[0.2em]">
+        自分のレビュー一覧
+      </p>
+    </div>
 
-        <div class="text-sm text-gray-500">
-          <%= review.created_at.strftime("%Y.%m.%d") %>
-        </div>
+    <div class="mb-6">
+      <%= link_to mypage_path, class: "text-sm font-bold text-[#365442] hover:text-[#A75F29] inline-flex items-center gap-1" do %>
+        <span>←</span> <span>マイページに戻る</span>
+      <% end %>
+    </div>
 
-        <div class="font-bold">
-          <%= link_to review.tea_product.name,
-                tea_product_path(review.tea_product) %>
-        </div>
+    <% if @reviews.any? %>
+      <div class="space-y-8">
+        <% @reviews.each do |review| %>
+          <div class="bg-white border-2 border-[#D6CEC5] rounded-2xl p-6 md:p-8 shadow-sm relative overflow-hidden group">
+            
+            <%# 左側のアクセントしおり %>
+            <div class="absolute left-0 top-0 w-1.5 h-full bg-[#8C7B6C] opacity-30 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-        <div class="mt-2">
-          おすすめ度：
-          <%= render_stars(review.overall_rating) %>
-        </div>
+            <%# 上段：紅茶の情報と管理ボタン %>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-[#F1EFE9]">
+              <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-[#F1EFE9] border rounded-lg overflow-hidden flex-shrink-0 shadow-inner">
+                  <% if review.tea_product.image.attached? %>
+                    <%= image_tag review.tea_product.image, class: "w-full h-full object-cover" %>
+                  <% end %>
+                </div>
+                <div>
+                  <%= link_to review.tea_product.name, tea_product_path(review.tea_product),
+                      class: "text-lg font-bold text-[#365442] hover:text-[#A75F29] leading-tight" %>
+                  <div class="text-[11px] text-[#8C7B6C] font-mono mt-1">
+                    Reviewed on <%= review.created_at.strftime("%Y.%m.%d") %>
+                  </div>
+                </div>
+              </div>
 
-        <% if review.comment.present? %>
-          <p class="mt-2"><%= review.comment %></p>
+              <div class="flex items-center gap-3">
+                <%= link_to edit_tea_product_review_path(review.tea_product, review),
+                    class: "flex-1 md:flex-none text-center px-4 py-2 bg-white border border-[#D6CEC5] text-[#365442] text-xs font-bold rounded hover:bg-[#FDFBF9] transition shadow-sm" do %>
+                  編集する
+                <% end %>
+                <%= link_to tea_product_review_path(review.tea_product, review),
+                    data: { turbo_method: :delete, turbo_confirm: "この記録を完全に削除しますか？" },
+                    class: "flex-1 md:flex-none text-center px-4 py-2 bg-white border border-red-100 text-red-400 text-xs font-bold rounded hover:bg-red-50 hover:text-red-500 transition shadow-sm" do %>
+                  削除
+                <% end %>
+              </div>
+            </div>
+
+            <%# 中段：レーティング %>
+            <div class="mb-6">
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-[15px] font-bold text-[#433D3C] tracking-widest uppercase">おすすめ度</span>
+                <span class="text-[#B08F59] text-xl leading-none"><%= render_stars(review.overall_rating) %></span>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2 bg-[#F2F4F0]/50 rounded-xl p-4 border border-[#365442]/5">
+                <% [
+                  ["香り", review.aroma_rating, "控えめ", "強い"],
+                  ["渋み", review.bitterness_rating, "おだやか", "力強い"],
+                  ["濃厚さ", review.strength_rating, "すっきり", "コク"],
+                  ["甘み", review.sweetness_rating, "キレ", "余韻"]
+                ].each do |label, rating, low, high| %>
+                  <div class="flex flex-col items-center justify-center py-1">
+                    <span class="text-[14px] font-bold text-[#433D3C] mb-1"><%= label %></span>
+                    <span class="text-[#B08F59] text-sm leading-none"><%= render_stars(rating) %></span>
+                    <div class="flex justify-between w-full max-w-[80px] mt-1.5 opacity-60">
+                      <span class="text-[10px] text-[#433D3C] font-bold leading-none"><%= low %></span>
+                      <span class="text-[10px] text-[#433D3C] font-bold leading-none"><%= high %></span>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <%# --- 追加：おすすめの飲み方タグ --- %>
+            <% drinks = [] %>
+            <% drinks << "ストレート" if review.recommended_straight %>
+            <% drinks << "ミルク" if review.recommended_milk %>
+            <% drinks << "アイス" if review.recommended_iced %>
+
+            <% if drinks.any? %>
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
+                <span class="text-[13px] font-bold text-[#433D3C] tracking-wider flex-shrink-0 uppercase">おすすめの飲み方</span>
+                <div class="flex flex-wrap gap-2">
+                  <% drinks.each do |drink| %>
+                    <span class="px-3 py-1 bg-white border border-[#D6CEC5] text-[#A75F29] text-[12px] font-bold rounded shadow-sm">
+                      # <%= drink %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+
+            <%# 下段：コメント %>
+            <% if review.comment.present? %>
+              <div class="relative bg-white/60 border-l-4 border-[#D6CEC5] p-5 rounded-r-xl">
+                <p class="text-[#433D3C] text-sm md:text-base leading-relaxed">
+                  <%= review.comment %>
+                </p>
+              </div>
+            <% end %>
+
+          </div>
         <% end %>
+      </div>
 
-        <div class="mt-2 flex gap-2 text-sm">
-          <%= link_to "編集",
-              edit_tea_product_review_path(review.tea_product, review) %>
+      <div class="mt-12">
+        <%= paginate @reviews %>
+      </div>
 
-          <%= link_to "削除",
-              tea_product_review_path(review.tea_product, review),
-              data: { turbo_method: :delete, turbo_confirm: "削除しますか？" } %>
-        </div>
-
+    <% else %>
+      <div class="bg-white border-2 border-dashed border-[#D6CEC5] rounded-2xl p-12 text-center">
+        <p class="text-[#8C7B6C] font-bold">レビューはまだありません</p>
       </div>
     <% end %>
+
   </div>
-
-  <%= paginate @reviews %>
-
-<% else %>
-  <p>レビューはまだありません</p>
-<% end %>
+</div>
