@@ -37,7 +37,7 @@ class MypagesController < ApplicationController
   end
 
   def my_reviews
-    @reviews = 
+    @reviews =
       current_user.reviews.includes(tea_product: { image_attachment: :blob })
                           .order(created_at: :desc)
                           .page(params[:page])
