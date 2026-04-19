@@ -40,7 +40,12 @@ class ReviewsController < ApplicationController
   def update
     if @review.update(review_params)
       flash[:notice] = "テイスティング記録を更新しました"
-      redirect_to tea_product_path(@tea_product)
+
+      if params[:from] == "mypage"
+        redirect_to my_reviews_mypage_path
+      else
+        redirect_to tea_product_path(@tea_product)
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -48,7 +53,12 @@ class ReviewsController < ApplicationController
 
   def destroy
     @review.destroy
-    redirect_to tea_product_path(@tea_product), notice: "テイスティング記録を削除しました"
+
+    if params[:from] == "mypage"
+      redirect_to my_reviews_mypage_path, notice: "削除しました"
+    else
+      redirect_to tea_product_path(@tea_product), notice: "削除しました"
+    end
   end
 
   private

@@ -1,13 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
+import { Turbo } from "@hotwired/turbo-rails"
 
 export default class extends Controller {
-  // 背景クリックでモーダルを閉じる
   close(event) {
-    // クリックされたのが背景（このコントローラーが付与された要素自身）であるか確認
     if (event.target === this.element) {
-      const frame = document.getElementById("review_modal")
-      frame.src = ""       // 追加：リクエスト先をクリア
-      frame.innerHTML = "" // 中身を消去
+      const returnPath = this.element.dataset.returnPath
+      Turbo.visit(returnPath)
     }
   }
 

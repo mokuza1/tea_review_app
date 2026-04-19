@@ -71,6 +71,51 @@
 
     <div class="flex justify-between items-center mt-12 mb-6">
       <h2 class="text-base font-bold text-[#365442] flex items-center gap-2">
+        <span class="w-1.5 h-4 bg-[#8C7B6C] rounded-full"></span>
+        自分のレビュー
+        <span class="text-xs bg-[#E9F0EC] text-[#365442] px-2 py-1 rounded">
+          <%= @reviews_count %>件
+        </span>
+      </h2>
+      <%= link_to "すべて見る →", my_reviews_mypage_path,
+          class: "text-sm font-bold text-[#365442] hover:text-[#A75F29]" %>
+    </div>
+
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
+      <% if @recent_reviews.any? %>
+        <ul class="divide-y-2 divide-[#F1EFE9]">
+          <% @recent_reviews.each do |review| %>
+            <li class="p-4 hover:bg-[#FDFBF9] transition">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-[#F1EFE9] border rounded overflow-hidden flex-shrink-0">
+                  <% if review.tea_product.image.attached? %>
+                    <%= image_tag review.tea_product.image, class: "w-full h-full object-cover" %>
+                  <% end %>
+                </div>
+                <div class="flex-grow">
+                  <%= link_to review.tea_product.name, tea_product_path(review.tea_product),
+                      class: "font-bold text-[#365442] hover:text-[#A75F29] text-sm" %>
+                  <div class="flex items-center gap-2 mt-1">
+                    <div class="flex text-[#A75F29]">
+                      <%= render_stars(review.overall_rating) %>
+                    </div>
+                    <span class="text-[10px] text-[#8C7B6C]"><%= review.created_at.strftime("%Y.%m.%d") %></span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="p-8 text-center text-[#8C7B6C] text-sm">
+          まだレビューを投稿していません。<br>
+          お気に入りの紅茶に感想を添えてみませんか？
+        </div>
+      <% end %>
+    </div>
+
+    <div class="flex justify-between items-center mt-12 mb-6">
+      <h2 class="text-base font-bold text-[#365442] flex items-center gap-2">
         <span class="w-1.5 h-4 bg-[#365442] rounded-full"></span>
         お気に入りの紅茶
         <span class="text-xs bg-[#E9F0EC] text-[#365442] px-2 py-1 rounded">

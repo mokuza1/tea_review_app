@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resource :mypage, only: %i[show] do
     get :my_tea_products
     get :favorites
+    get :my_reviews
   end
 
   resources :tea_products, only: %i[index show] do
