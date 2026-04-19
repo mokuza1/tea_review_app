@@ -42,11 +42,11 @@
               </div>
 
               <div class="flex items-center gap-3">
-                <%= link_to edit_tea_product_review_path(review.tea_product, review),
+                <%= link_to edit_tea_product_review_path(review.tea_product, review, from: "mypage"),
                     class: "flex-1 md:flex-none text-center px-4 py-2 bg-white border border-[#D6CEC5] text-[#365442] text-xs font-bold rounded hover:bg-[#FDFBF9] transition shadow-sm" do %>
                   編集する
                 <% end %>
-                <%= link_to tea_product_review_path(review.tea_product, review),
+                <%= link_to tea_product_review_path(review.tea_product, review, from: "mypage"),
                     data: { turbo_method: :delete, turbo_confirm: "この記録を完全に削除しますか？" },
                     class: "flex-1 md:flex-none text-center px-4 py-2 bg-white border border-red-100 text-red-400 text-xs font-bold rounded hover:bg-red-50 hover:text-red-500 transition shadow-sm" do %>
                   削除
