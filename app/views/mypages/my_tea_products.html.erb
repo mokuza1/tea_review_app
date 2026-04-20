@@ -100,6 +100,10 @@
       </div>
     </div>
 
+    <div class="mt-12">
+      <%= paginate @posts %>
+    </div>
+
     <div class="mt-10 text-center">
       <%= link_to "新規投稿を作成する", new_tea_product_submission_path,
           class: "inline-block border-2 border-[#365442] text-[#365442]

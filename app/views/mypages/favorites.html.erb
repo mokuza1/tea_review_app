@@ -17,22 +17,18 @@
     </div>
 
     <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
-      <%# table-auto に戻すことで、中身のサイズに応じて列幅が柔軟に調整されるようになります %>
       <table class="w-full text-sm border-collapse table-auto">
 
         <thead class="bg-[#F9F7F2] border-b-2 border-[#D6CEC5]">
           <tr>
-            <%# 画像列：スマホでは小さく、PCでは固定幅 %>
             <th class="p-4 w-20 md:w-32 text-center font-bold text-[#365442]">
               画像
             </th>
         
-            <%# 名前列：幅を指定せず、余ったスペースをすべて使う %>
             <th class="p-4 text-left font-bold text-[#365442]">
               紅茶名
             </th>
         
-            <%# ボタン列：w-px（最小幅）を指定し、中身のサイズ（white-space: nowrap）に合わせる %>
             <th class="p-4 w-px text-center font-bold text-[#365442] whitespace-nowrap">
               お気に入り
             </th>
@@ -61,7 +57,6 @@
               </td>
 
               <%# --- ボタンエリア --- %>
-              <%# whitespace-nowrap を入れることで、タブレットサイズでも「解除」が絶対に縦に並びません %>
               <td class="p-4 text-center whitespace-nowrap">
                 <div class="inline-block scale-90 sm:scale-100">
                   <%= render "favorites/button", tea_product: tea %>
@@ -72,6 +67,10 @@
           <% end %>
         </tbody>
       </table>
+    </div>
+
+    <div class="mt-12">
+      <%= paginate @favorite_tea_products %>
     </div>
   </div>
 </div>
