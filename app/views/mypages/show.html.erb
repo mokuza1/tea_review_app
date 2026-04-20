@@ -1,6 +1,7 @@
 <div class="min-h-screen bg-[#F1EFE9] py-8 md:py-12">
   <div class="max-w-4xl mx-auto px-4 mb-16">
 
+    <%# --- ヘッダー --- %>
     <div class="mb-10 border-b-2 border-[#B5A89A] pb-6">
       <h1 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] tracking-widest">
         MY ARCHIVE
@@ -10,149 +11,171 @@
       </p>
     </div>
 
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-base font-bold text-[#365442] flex items-center gap-2">
+    <%# --- 1. 自分の投稿 --- %>
+    <div class="flex justify-between items-end mb-4">
+      <h2 class="text-[17px] font-bold text-[#365442] flex items-center gap-2">
         <span class="w-1.5 h-4 bg-[#A75F29] rounded-full"></span>
         自分の投稿
-        <span class="text-xs bg-[#EBE5DE] text-[#5D554E] px-2 py-1 rounded">
+        <span class="text-xs bg-[#A75F29]/10 text-[#A75F29] px-2 py-1 rounded">
           <%= @posts_count %>件
         </span>
       </h2>
-      <%= link_to "すべて見る →", my_tea_products_mypage_path,
-          class: "text-sm font-bold text-[#365442] hover:text-[#A75F29]" %>
+      <%= link_to my_tea_products_mypage_path, class: "text-[13px] font-bold text-[#A75F29] hover:underline tracking-wider" do %>
+        すべて見る <span class="text-xs">→</span>
+      <% end %>
     </div>
 
-    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-2xl shadow-sm overflow-hidden mb-6">
       <% if @recent_posts.any? %>
-        <table class="w-full text-sm border-collapse">
-          <tbody class="divide-y-2 divide-[#F1EFE9]">
-            <% @recent_posts.each do |tea| %>
-              <tr class="hover:bg-[#FDFBF9]">
-                <td class="p-4 w-24 text-center">
-                  <div class="w-16 h-16 mx-auto bg-[#F1EFE9] border overflow-hidden rounded">
-                    <% if tea.image.attached? %>
-                      <%= image_tag tea.image, class: "w-full h-full object-cover" %>
-                    <% end %>
-                  </div>
-                </td>
-                <td class="p-4">
-                  <%# モデルによってリンク先を切り替え %>
-                  <% target_path = tea.is_a?(TeaProduct) ? tea_product_path(tea) : edit_tea_product_submission_path(tea) %>
-                  
-                  <%= link_to target_path, class: "font-bold text-[#365442] hover:text-[#A75F29]" do %>
-                    <%= tea.name %>
+        <div class="divide-y divide-[#F1EFE9]">
+          <% @recent_posts.each do |tea| %>
+            <div class="group relative flex items-center p-4 hover:bg-[#FDFBF9] transition-colors">
+              <%# 薄いアクセントライン %>
+              <div class="absolute left-0 top-0 w-1 h-full bg-[#A75F29] opacity-0 group-hover:opacity-40 transition-opacity"></div>
+              
+              <div class="w-14 h-14 bg-[#F1EFE9] border border-[#D6CEC5]/50 rounded-lg overflow-hidden flex-shrink-0">
+                <% if tea.image.attached? %>
+                  <%= image_tag tea.image, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" %>
+                <% end %>
+              </div>
+              
+              <div class="ml-4 flex-grow">
+                <% target_path = tea.is_a?(TeaProduct) ? tea_product_path(tea) : edit_tea_product_submission_path(tea) %>
+                <%= link_to tea.name, target_path, class: "block font-bold text-[#365442] hover:text-[#A75F29] text-base leading-tight mb-1" %>
+                <div class="flex items-center gap-3">
+                  <span class="text-[11px] text-[#8C7B6C] font-mono"><%= tea.created_at.strftime("%Y.%m.%d") %></span>
+                  <% if tea.is_a?(TeaProductSubmission) %>
+                    <span class="text-[10px] px-1.5 py-0.5 bg-[#FFF9F2] text-[#A75F29] border border-[#E0943D]/30 rounded font-bold">
+                      <%= tea.status_i18n %>
+                    </span>
+                  <% else %>
+                    <span class="text-[10px] px-1.5 py-0.5 bg-[#E9F0EC] text-[#365442] border border-[#365442]/20 rounded font-bold">公開済</span>
                   <% end %>
-
-                  <div class="text-xs text-[#8C7B6C]">
-                    <%= tea.created_at.strftime("%Y.%m.%d") %>
-                    <% if tea.is_a?(TeaProductSubmission) %>
-                      <span class="ml-2 text-[10px] px-1 bg-[#FFF9F2] text-[#A75F29] border border-[#E0943D] rounded">作業中</span>
-                    <% end %>
-                  </div>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+                </div>
+              </div>
+              <div class="text-[#D6CEC5] group-hover:text-[#365442] transition-colors pr-2">
+                <span class="text-lg font-serif">→</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
       <% else %>
-        <div class="p-8 text-center text-[#8C7B6C] text-sm">
-          まだ投稿がありません。<br>
-          下のボタンから最初の紅茶を登録してみましょう。
+        <div class="p-10 text-center text-[#8C7B6C] text-sm font-medium italic">
+          No posts.
         </div>
       <% end %>
     </div>
 
-    <div class="mt-6 text-center">
-      <%= link_to "新規投稿を作成する", new_tea_product_submission_path,
-          class: "inline-block border-2 border-[#365442] text-[#365442]
-                 hover:bg-[#365442] hover:text-white
-                 font-bold px-8 py-3 rounded-lg transition-all duration-300 tracking-widest" %>
+    <%# 前回の修正を反映：白背景×緑文字 %>
+    <div class="mb-12 text-right">
+      <%= link_to new_tea_product_submission_path,
+          class: "inline-block bg-white border-2 border-[#365442] text-[#365442]
+                  hover:bg-[#365442] hover:text-white
+                  font-bold px-6 py-2.5 rounded-lg transition-all duration-300 tracking-widest text-sm" do %>
+        ＋ 新規投稿を作成する
+      <% end %>
     </div>
 
-    <div class="flex justify-between items-center mt-12 mb-6">
-      <h2 class="text-base font-bold text-[#365442] flex items-center gap-2">
+    <%# --- 2. 自分のレビュー --- %>
+    <div class="flex justify-between items-end mb-4 mt-12">
+      <h2 class="text-[17px] font-bold text-[#365442] flex items-center gap-2">
         <span class="w-1.5 h-4 bg-[#8C7B6C] rounded-full"></span>
         自分のレビュー
-        <span class="text-xs bg-[#E9F0EC] text-[#365442] px-2 py-1 rounded">
+        <span class="text-xs bg-[#EBE5DE] text-[#5D554E] px-2 py-1 rounded">
           <%= @reviews_count %>件
         </span>
       </h2>
-      <%= link_to "すべて見る →", my_reviews_mypage_path,
-          class: "text-sm font-bold text-[#365442] hover:text-[#A75F29]" %>
+      <%= link_to my_reviews_mypage_path, class: "text-[13px] font-bold text-[#A75F29] hover:underline tracking-wider" do %>
+        すべて見る <span class="text-xs">→</span>
+      <% end %>
     </div>
 
-    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-2xl shadow-sm overflow-hidden mb-12">
       <% if @recent_reviews.any? %>
-        <ul class="divide-y-2 divide-[#F1EFE9]">
+        <div class="divide-y divide-[#F1EFE9]">
           <% @recent_reviews.each do |review| %>
-            <li class="p-4 hover:bg-[#FDFBF9] transition">
-              <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-[#F1EFE9] border rounded overflow-hidden flex-shrink-0">
-                  <% if review.tea_product.image.attached? %>
-                    <%= image_tag review.tea_product.image, class: "w-full h-full object-cover" %>
-                  <% end %>
-                </div>
-                <div class="flex-grow">
-                  <%= link_to review.tea_product.name, tea_product_path(review.tea_product),
-                      class: "font-bold text-[#365442] hover:text-[#A75F29] text-sm" %>
-                  <div class="flex items-center gap-2 mt-1">
-                    <div class="flex text-[#A75F29]">
-                      <%= render_stars(review.overall_rating) %>
-                    </div>
-                    <span class="text-[10px] text-[#8C7B6C]"><%= review.created_at.strftime("%Y.%m.%d") %></span>
+            <div class="group relative flex items-center p-4 hover:bg-[#FDFBF9] transition-colors">
+              <div class="absolute left-0 top-0 w-1 h-full bg-[#8C7B6C] opacity-0 group-hover:opacity-40 transition-opacity"></div>
+              
+              <div class="w-14 h-14 bg-[#F1EFE9] border border-[#D6CEC5]/50 rounded-lg overflow-hidden flex-shrink-0">
+                <% if review.tea_product.image.attached? %>
+                  <%= image_tag review.tea_product.image, class: "w-full h-full object-cover group-hover:scale-105 transition-transform" %>
+                <% end %>
+              </div>
+              
+              <div class="ml-4 flex-grow">
+                <%= link_to review.tea_product.name, tea_product_path(review.tea_product),
+                    class: "block font-bold text-[#365442] hover:text-[#A75F29] text-base leading-tight mb-1" %>
+                <div class="flex items-center gap-3">
+                  <div class="flex text-[#A75F29] text-[11px]">
+                    <%= render_stars(review.overall_rating) %>
                   </div>
+                  <span class="text-[11px] text-[#8C7B6C] font-mono"><%= review.created_at.strftime("%Y.%m.%d") %></span>
                 </div>
               </div>
-            </li>
+              <div class="text-[#D6CEC5] group-hover:text-[#365442] transition-colors pr-2">
+                <span class="text-lg font-serif">→</span>
+              </div>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <div class="p-8 text-center text-[#8C7B6C] text-sm">
-          まだレビューを投稿していません。<br>
-          お気に入りの紅茶に感想を添えてみませんか？
+        <div class="p-10 text-center text-[#8C7B6C] text-sm font-medium italic">
+          No reviews recorded.
         </div>
       <% end %>
     </div>
 
-    <div class="flex justify-between items-center mt-12 mb-6">
-      <h2 class="text-base font-bold text-[#365442] flex items-center gap-2">
+    <%# --- 3. お気に入りの紅茶 --- %>
+    <div class="flex justify-between items-end mb-4 mt-12">
+      <h2 class="text-[17px] font-bold text-[#365442] flex items-center gap-2">
         <span class="w-1.5 h-4 bg-[#365442] rounded-full"></span>
         お気に入りの紅茶
         <span class="text-xs bg-[#E9F0EC] text-[#365442] px-2 py-1 rounded">
           <%= @favorites_count %>件
         </span>
       </h2>
-      <%= link_to "すべて見る →", favorites_mypage_path,
-          class: "text-sm font-bold text-[#365442] hover:text-[#A75F29]" %>
+      <%= link_to favorites_mypage_path, class: "text-[13px] font-bold text-[#A75F29] hover:underline tracking-wider" do %>
+        すべて見る <span class="text-xs">→</span>
+      <% end %>
     </div>
 
-    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg p-4">
+    <div class="bg-white border-2 border-[#D6CEC5] rounded-2xl shadow-sm overflow-hidden">
       <% if @recent_favorite_tea_products.any? %>
-        <ul class="space-y-3">
+        <div class="divide-y divide-[#F1EFE9]">
           <% @recent_favorite_tea_products.each do |tea| %>
-            <li class="flex items-center gap-4">
-              <div class="w-14 h-14 bg-[#F1EFE9] border rounded overflow-hidden">
+            <div class="group relative flex items-center p-4 hover:bg-[#FDFBF9] transition-colors">
+              <div class="absolute left-0 top-0 w-1 h-full bg-[#365442] opacity-0 group-hover:opacity-40 transition-opacity"></div>
+              
+              <div class="w-14 h-14 bg-[#F1EFE9] border border-[#D6CEC5]/50 rounded-lg overflow-hidden flex-shrink-0">
                 <% if tea.image.attached? %>
-                  <%= image_tag tea.image, class: "w-full h-full object-cover" %>
+                  <%= image_tag tea.image, class: "w-full h-full object-cover group-hover:scale-105 transition-transform" %>
                 <% end %>
               </div>
-              <%= link_to tea.name, tea_product_path(tea),
-                  class: "font-bold text-[#365442] hover:text-[#A75F29]" %>
-            </li>
+              
+              <div class="ml-4 flex-grow">
+                <% if tea.brand.present? %>
+                  <p class="text-[11px] font-bold text-[#A75F29] uppercase tracking-tighter mt-0.5">
+                    <%= tea.brand.name_ja || tea.brand.name_en %>
+                  </p>
+                <% end %>
+                <%= link_to tea.name, tea_product_path(tea),
+                    class: "block font-bold text-[#365442] hover:text-[#A75F29] text-base leading-tight" %>
+              </div>
+              <div class="text-[#D6CEC5] group-hover:text-[#365442] transition-colors pr-2">
+                <span class="text-lg font-serif">→</span>
+              </div>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <div class="text-center py-8 text-[#8C7B6C] text-sm">
-          まだお気に入り登録された紅茶はありません。<br>
-          紅茶一覧からお気に入りを見つけてみましょう。
-          <div class="mt-4">
-            <%= link_to "紅茶一覧を見る", tea_products_path,
-                class: "inline-block border border-[#365442] text-[#365442]
-                       px-4 py-2 rounded hover:bg-[#365442] hover:text-white
-                       transition text-xs font-bold" %>
-          </div>
+        <div class="p-10 text-center">
+          <p class="text-[#8C7B6C] text-sm font-medium italic mb-4">No favorites yet.</p>
+          <%= link_to "紅茶を探しに行く", tea_products_path,
+              class: "text-[11px] font-bold text-[#365442] border-b border-[#365442] pb-0.5 hover:text-[#A75F29] hover:border-[#A75F29] transition-colors" %>
         </div>
       <% end %>
     </div>
+
   </div>
 </div>
