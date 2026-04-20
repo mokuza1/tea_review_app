@@ -37,7 +37,7 @@ class MypagesController < ApplicationController
 
   def favorites
     @favorite_tea_products =
-      current_user.favorite_tea_products.includes(:image_attachment)
+      current_user.favorite_tea_products.includes(:brand, :image_attachment)
                                         .order(created_at: :desc)
                                         .page(params[:page])
                                         .per(10)
