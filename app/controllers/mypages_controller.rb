@@ -11,7 +11,7 @@ class MypagesController < ApplicationController
     @recent_favorite_tea_products =
       current_user
         .favorite_tea_products
-        .includes(:image_attachment)
+        .includes(:brand, :image_attachment)
         .order(created_at: :desc)
         .limit(3)
 
