@@ -28,12 +28,19 @@ class MypagesController < ApplicationController
   end
 
   def my_tea_products
-    @posts = fetch_all_posts
+    all_posts = fetch_all_posts
+
+    @posts = Kaminari.paginate_array(all_posts)
+                     .page(params[:page])
+                     .per(10)
   end
 
   def favorites
     @favorite_tea_products =
-      current_user.favorite_tea_products.includes(:image_attachment).order(created_at: :desc)
+      current_user.favorite_tea_products.includes(:image_attachment)
+                                        .order(created_at: :desc)
+                                        .page(params[:page])
+                                        .per(10)
   end
 
   def my_reviews
