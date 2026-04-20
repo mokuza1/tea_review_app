@@ -1,114 +1,131 @@
 <div class="min-h-screen bg-[#F1EFE9] py-8 md:py-12">
   <div class="max-w-4xl mx-auto px-4 mb-16">
 
+    <%# --- ヘッダー --- %>
     <div class="mb-10 border-b-2 border-[#B5A89A] pb-6">
       <h1 class="text-2xl md:text-3xl font-serif font-bold text-[#365442] tracking-widest">
         MY TEA POSTS
       </h1>
       <p class="text-xs font-bold text-[#8C7B6C] mt-1 uppercase tracking-[0.2em]">
-        自分の投稿一覧
+        自分の投稿一覧・管理
       </p>
     </div>
 
-    <div class="mb-6">
-      <%= link_to "← マイページに戻る", mypage_path,
-          class: "text-sm font-bold text-[#365442] hover:text-[#A75F29]" %>
+    <%# ナビゲーション行：マイページへ戻る ＆ 新規投稿作成 %>
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <%= link_to mypage_path, class: "text-sm font-bold text-[#365442] hover:text-[#A75F29] inline-flex items-center gap-1" do %>
+        <span>←</span> <span>マイページに戻る</span>
+      <% end %>
+
+      <%= link_to new_tea_product_submission_path,
+          class: "bg-white border-2 border-[#365442] text-[#365442] text-[13px] md:text-[13px] font-bold px-5 py-2.5 rounded-lg shadow-sm hover:bg-[#365442] hover:text-white transition-all tracking-widest" do %>
+        ＋ 新規投稿を作成
+      <% end %>
     </div>
 
-    <div class="bg-white border-2 border-[#D6CEC5] rounded-lg shadow-lg overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm min-w-[650px] border-collapse">
+    <%# --- カードリスト --- %>
+    <div class="space-y-6">
+      <% if @posts.any? %>
+        <% @posts.each do |tea| %>
+          <div class="bg-white border-2 border-[#D6CEC5] rounded-2xl p-5 md:p-6 shadow-sm relative overflow-hidden group">
+            
+            <%# 左側のアクセントしおり %>
+            <div class="absolute left-0 top-0 w-1.5 h-full bg-[#A75F29]/80 opacity-40 group-hover:opacity-100 transition-opacity"></div>
 
-          <thead class="bg-[#F9F7F2] border-b-2 border-[#D6CEC5]">
-            <tr>
-              <th class="p-4 w-32 text-center font-bold text-[#365442] tracking-wider">画像</th>
-              <th class="p-4 text-left font-bold text-[#365442] tracking-wider">紅茶名 / 商品詳細</th>
-              <th class="p-4 w-32 text-center font-bold text-[#365442] tracking-wider">ステータス</th>
-              <th class="p-4 w-32 text-center font-bold text-[#365442] tracking-wider">操作</th>
-            </tr>
-          </thead>
-
-          <tbody class="divide-y-2 divide-[#F1EFE9]">
-            <% @posts.each do |tea| %>
-              <tr class="hover:bg-[#FDFBF9] transition-colors">
-                <td class="p-4 text-center">
-                  <div class="w-20 h-20 mx-auto bg-[#F1EFE9] border-2 border-[#D6CEC5] flex items-center justify-center overflow-hidden rounded shadow-sm">
-                    <% if tea.image.attached? %>
-                      <%= image_tag tea.image, class: "w-full h-full object-cover" %>
-                    <% else %>
-                      <span class="text-[10px] font-bold text-[#B5A89A] uppercase">No Image</span>
-                    <% end %>
-                  </div>
-                </td>
-
-                <td class="p-4">
-                  <% if tea.is_a?(TeaProduct) %>
-                    <%= link_to tea_product_path(tea), class: "group" do %>
-                      <span class="text-base font-bold text-[#365442] group-hover:text-[#A75F29] group-hover:underline transition decoration-2">
-                        <%= tea.name %>
-                      </span>
-                    <% end %>
+            <div class="flex flex-col md:flex-row md:items-center gap-5">
+              
+              <%# --- 左セクション：画像 ＋ 基本情報 --- %>
+              <div class="flex flex-1 items-center gap-5">
+                <%# 画像エリア %>
+                <div class="w-16 h-16 md:w-24 md:h-24 bg-[#F1EFE9] border border-[#D6CEC5]/50 rounded-xl overflow-hidden flex-shrink-0 shadow-inner">
+                  <% if tea.image.attached? %>
+                    <%= image_tag tea.image, class: "w-full h-full object-cover transition-transform group-hover:scale-105" %>
                   <% else %>
-                    <%= link_to edit_tea_product_submission_path(tea), class: "group" do %>
-                      <span class="text-base font-bold text-[#365442] group-hover:text-[#A75F29]">
-                        <%= tea.name %>
-                      </span>
-                    <% end %>
-                    <div class="text-[10px] text-[#8C7B6C] mt-1 font-semibold uppercase tracking-tighter">
-                      Created at: <%= tea.created_at.strftime("%Y.%m.%d") %>
+                    <div class="w-full h-full flex items-center justify-center text-[#B5A89A] bg-[#FDFBF9]">
+                      <span class="text-[8px] font-bold uppercase">No Image</span>
                     </div>
                   <% end %>
-                </td>
+                </div>
 
-                <td class="p-4 text-center">
-                  <% if tea.is_a?(TeaProductSubmission) %>
-                    <% 
-                      status_styles = case tea.status
-                        when "draft" then "bg-[#EBE5DE] text-[#5D554E] border-[#B5A89A]"
-                        when "pending" then "bg-[#FFF9F2] text-[#A75F29] border-[#E0943D]"
-                        when "published" then "bg-[#E9F0EC] text-[#365442] border-[#365442]"
-                        when "rejected" then "bg-red-50 text-red-700 border-red-200"
-                        else "bg-gray-100 text-gray-600 border-gray-300"
-                      end
-                    %>
-                    <span class="px-3 py-1 rounded border font-bold text-[11px] tracking-wider inline-block <%= status_styles %>">
-                      <%= tea.status_i18n %>
-                    </span>
-                  <% else %>
-                    <%# 公開済みのTeaProduct用表示 %>
-                    <span class="px-3 py-1 rounded border font-bold text-[11px] tracking-wider inline-block bg-[#E9F0EC] text-[#365442] border-[#365442]">
-                      公開済み
-                    </span>
+                <%# テキストエリア %>
+                <div class="min-w-0">
+                  <% if tea.is_a?(TeaProduct) && tea.brand.present? %>
+                    <div class="text-[10px] font-bold text-[#A75F29] tracking-widest uppercase opacity-80 mb-0.5">
+                      <%= tea.brand.name_ja || tea.brand.name_en %>
+                    </div>
                   <% end %>
-                </td>
 
-                <td class="p-4 text-center">
+                  <h3 class="text-base md:text-lg font-bold text-[#365442] leading-tight truncate">
+                    <% if tea.is_a?(TeaProduct) %>
+                      <%= link_to tea.name, tea_product_path(tea), class: "hover:text-[#A75F29] transition-colors" %>
+                    <% else %>
+                      <%= link_to tea.name, edit_tea_product_submission_path(tea), class: "hover:text-[#A75F29] transition-colors" %>
+                    <% end %>
+                  </h3>
+
+                  <div class="text-[11px] text-[#8C7B6C] font-mono mt-1">
+                    Created at: <%= tea.created_at.strftime("%Y.%m.%d") %>
+                  </div>
+                </div>
+              </div>
+
+              <%# --- 右セクション：ステータス ＆ アクション --- %>
+              <div class="flex items-center justify-between md:justify-end gap-3 pt-4 md:pt-0 border-t md:border-t-0 border-[#F1EFE9]">
+                
+                <%# ステータスバッジ %>
+                <% if tea.is_a?(TeaProductSubmission) %>
+                  <% 
+                    status_styles = case tea.status
+                      when "draft" then "bg-[#EBE5DE] text-[#5D554E] border-[#B5A89A]"
+                      when "pending" then "bg-[#FFF9F2] text-[#A75F29] border-[#E0943D]"
+                      when "published" then "bg-[#E9F0EC] text-[#365442] border-[#365442]"
+                      when "rejected" then "bg-red-50 text-red-700 border-red-200"
+                      else "bg-gray-100 text-gray-600 border-gray-300"
+                    end
+                  %>
+                  <span class="px-2.5 py-1 rounded border font-bold text-[11px] md:text-[11px] tracking-wider uppercase whitespace-nowrap <%= status_styles %>">
+                    <%= tea.status_i18n %>
+                  </span>
+                <% else %>
+                  <span class="px-2.5 py-1 rounded border border-[#365442] bg-[#E9F0EC] text-[#365442] font-bold text-[11px] md:text-[11px] tracking-wider uppercase whitespace-nowrap">
+                    公開済み
+                  </span>
+                <% end %>
+
+                <%# アクションボタン %>
+                <div class="flex items-center min-w-[90px] justify-end">
                   <% if tea.is_a?(TeaProductSubmission) && (tea.draft? || tea.rejected?) %>
+                    <%# 編集ボタン（緑背景・白文字） %>
                     <%= link_to edit_tea_product_submission_path(tea),
-                        class: "inline-block bg-[#365442] hover:bg-[#2A4034] text-[#F9F7F2] text-xs font-bold px-4 py-2 rounded shadow transition tracking-widest" do %>
-                      編集
+                        class: "px-5 py-2 bg-[#365442] text-white text-[12px] tracking-normal rounded shadow-sm hover:bg-[#2A4034] transition whitespace-nowrap" do %>
+                      編集する
                     <% end %>
                   <% else %>
-                    <span class="text-[#B5A89A] text-xs font-serif italic">- Locked -</span>
+                    <%# 編集不可（ロック）表示 %>
+                    <div class="flex flex-col items-end opacity-60">
+                      <div class="flex items-center gap-1 text-[#5D554E] mb-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-[12px] font-bold">編集不可　</span>
+                      </div>
+                    </div>
                   <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
+                </div>
+              </div>
 
-        </table>
-      </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="bg-white border-2 border-dashed border-[#D6CEC5] rounded-2xl p-16 text-center">
+          <p class="text-[#8C7B6C] font-bold tracking-widest">投稿した紅茶はまだありません</p>
+        </div>
+      <% end %>
     </div>
 
-    <div class="mt-12">
+    <div class="mt-12 flex justify-center">
       <%= paginate @posts %>
-    </div>
-
-    <div class="mt-10 text-center">
-      <%= link_to "新規投稿を作成する", new_tea_product_submission_path,
-          class: "inline-block border-2 border-[#365442] text-[#365442]
-                 hover:bg-[#365442] hover:text-white
-                 font-bold px-8 py-3 rounded-lg transition-all duration-300 tracking-widest" %>
     </div>
 
   </div>
