@@ -8,9 +8,10 @@
     remote:        data-remote
 -%>
 <% if page.current? %>
-  <span class="px-4 py-2 bg-blue-500 text-white rounded-md font-semibold">
+  <span class="flex items-center justify-center min-w-[42px] h-[42px] px-3 bg-[#365442] border-2 border-[#365442] text-white rounded-xl font-bold shadow-inner cursor-default">
     <%= page %>
   </span>
 <% else %>
-  <%= link_to page, url, class: "px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition", remote: remote %>
+  <%= link_to page, url, remote: remote,
+      class: "flex items-center justify-center min-w-[42px] h-[42px] px-3 bg-white border-2 border-[#D6CEC5] text-[#365442] rounded-xl font-bold hover:border-[#A75F29] hover:text-[#A75F29] hover:-translate-y-0.5 transition-all duration-200 no-underline shadow-sm" %>
 <% end %>
